@@ -1,10 +1,11 @@
 package com.ferra13671.BThack.api.Managers;
 
-import com.ferra13671.BThack.api.Managers.ColourTheme.ColorThemeManager;
-import com.ferra13671.BThack.api.Managers.Destroy.DestroyManager;
-import com.ferra13671.BThack.api.Managers.Memory.MemoryManager;
-import com.ferra13671.BThack.api.Managers.Setting.SettingsManager;
-import com.ferra13671.BThack.api.Managers.TravelChange.TravelChangeManager;
+import com.ferra13671.BThack.api.Managers.managers.*;
+import com.ferra13671.BThack.api.Managers.managers.ColourTheme.ColorThemeManager;
+import com.ferra13671.BThack.api.Managers.managers.Destroy.DestroyManager;
+import com.ferra13671.BThack.api.Managers.managers.Memory.MemoryManager;
+import com.ferra13671.BThack.api.Managers.managers.Setting.SettingsManager;
+import com.ferra13671.BThack.api.Managers.managers.TravelChange.TravelChangeManager;
 
 public class Managers {
     public static final TPSManager TPS_MANAGER = new TPSManager();

@@ -2,15 +2,13 @@ package com.ferra13671.BThack.impl.Modules.CLIENT;
 
 import com.ferra13671.BThack.BThack;
 import com.ferra13671.BThack.Core.Client.Client;
+import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
 import com.ferra13671.BThack.Core.Render.Utils.RainbowUtils;
 import com.ferra13671.BThack.api.Animation.Easing;
-import com.ferra13671.BThack.api.Managers.ColourTheme.ColorTheme;
+import com.ferra13671.BThack.api.Managers.managers.ColourTheme.ColorTheme;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.Setting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.*;
 import com.ferra13671.BThack.api.Module.OneActionModule;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 
@@ -21,11 +19,14 @@ import java.util.Objects;
 
 public class ClickGui extends OneActionModule {
 
+    public static int INT_OPACITY;
+    public static int BACKGROUND_COLOR;
+    public static int BACKGROUND_HOVERED_COLOR;
+
     public static ModeSetting activeTheme;
-    public static NumberSetting redColor;
-    public static NumberSetting greenColor;
-    public static NumberSetting blueColor;
     public static BooleanSetting customColor;
+    public static ColorSetting color;
+    public static ColorSetting backgroundColor;
     public static BooleanSetting rainbow;
     public static NumberSetting rainbowSpeed;
 
@@ -57,13 +58,12 @@ public class ClickGui extends OneActionModule {
         }
 
         activeTheme = new ModeSetting("Theme", this, options);
-
-        redColor = new NumberSetting("Red", this, 25,0,255,true, () -> customColor.getValue());
-        greenColor = new NumberSetting("Green", this, 28,0,255,true, () -> customColor.getValue());
-        blueColor = new NumberSetting("Blue", this, 255,0,255,true, () -> customColor.getValue());
         customColor = new BooleanSetting("Custom Color", this, false, () -> !rainbow.getValue());
+        color = new ColorSetting("ClickGui Color", this, new Color(119, 0, 189), () -> !rainbow.getValue() && customColor.getValue());
+        backgroundColor = new ColorSetting("Background Color", this, new Color(17, 17, 17), () -> !rainbow.getValue() && customColor.getValue()).withBlockedAlpha();
         rainbow = new BooleanSetting("Rainbow", this, false);
         rainbowSpeed = new NumberSetting("Rainbow speed", this, 2, 1, 4, true, () -> rainbow.getValue());
+
 
         frameOutline = new BooleanSetting("Frame Outline", this, true);
         moduleOutline = new BooleanSetting("Module Outline", this, true);
@@ -86,9 +86,8 @@ public class ClickGui extends OneActionModule {
 
         initSettings(
                 activeTheme,
-                redColor,
-                greenColor,
-                blueColor,
+                color,
+                backgroundColor,
                 customColor,
                 rainbow,
                 rainbowSpeed,
@@ -109,8 +108,13 @@ public class ClickGui extends OneActionModule {
     }
 
     @Override
-    public void onChangeSetting(Setting setting) {
+    public void onChangeSetting(Setting<?> setting) {
         updateColorTheme();
+        if (setting == opacity) {
+            INT_OPACITY = Math.min(255, (int) (255 * opacity.getValue()));
+            BACKGROUND_COLOR = ColorUtils.integrateAlpha(ModuleList.clickGui.backgroundColor.getValue().hashCode(), INT_OPACITY);
+            BACKGROUND_HOVERED_COLOR = ColorUtils.integrateAlpha(ModuleList.clickGui.backgroundColor.getBrighterValue().hashCode(), INT_OPACITY);
+        }
     }
 
     @Override
@@ -147,16 +151,20 @@ public class ClickGui extends OneActionModule {
 
     public static int getClickGuiColor(boolean allowRainbow) {
         if (rainbow.getValue() && allowRainbow) {
-            int rainbowType = (int) rainbowSpeed.getValue();
+            int rainbowType = rainbowSpeed.getValue().intValue();
             float speed = RainbowUtils.getRainbowRectSpeed(rainbowType)[0];
             int delay = (int) RainbowUtils.getRainbowRectSpeed(rainbowType)[1];
 
             return ColorUtils.rainbow(delay, speed);
         } else if (customColor.getValue()) {
-            return new Color((int) redColor.getValue(), (int) greenColor.getValue(), (int) blueColor.getValue()).getRGB();
+            return color.getValue().hashCode();
         } else {
             return new Color(Client.clientInfo.getColorTheme().getModuleEnabledColour()).hashCode();
         }
+    }
+
+    public boolean isShaderEnabled() {
+        return rainbow.getValue();
     }
 
     public static float applyGuiScale(float cord) {

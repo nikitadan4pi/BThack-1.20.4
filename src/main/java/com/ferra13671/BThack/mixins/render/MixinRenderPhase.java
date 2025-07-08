@@ -46,7 +46,7 @@ public class MixinRenderPhase implements Mc {
 
     @Unique
     private static void newSetupGlintTexturing(float scale) {
-        scale /= (float) EnchantColor.enchantSize.getValue();
+        scale /= EnchantColor.enchantSize.getValue().floatValue();
         long l = (long)((double) Util.getMeasuringTimeMs() * (mc.options.getGlintSpeed().getValue() * EnchantColor.enchantSpeed.getValue()) * 8.0);
         float f = (float)(l % 110000L) / 110000.0F;
         float g = (float)(l % 30000L) / 30000.0F;

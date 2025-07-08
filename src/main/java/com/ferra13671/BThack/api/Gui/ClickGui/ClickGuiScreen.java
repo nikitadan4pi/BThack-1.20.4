@@ -131,9 +131,9 @@ public class ClickGuiScreen extends BThackScreen implements Mc {
             }
         }
         BThackRender.guiGraphics.getMatrices().push();
-        BThackRender.guiGraphics.getMatrices().scale((float) ClickGui.guiScale.getValue(), (float) ClickGui.guiScale.getValue(), 1);
+        BThackRender.guiGraphics.getMatrices().scale(ClickGui.guiScale.getValue().floatValue(), ClickGui.guiScale.getValue().floatValue(), 1);
         BThackRender.guiGraphics.getMatrices().translate(0, 0, 1);
-        float[] rSettings = RainbowUtils.getRainbowRectSpeed((int) ClickGui.rainbowSpeed.getValue());
+        float[] rSettings = RainbowUtils.getRainbowRectSpeed((int) ClickGui.rainbowSpeed.getValue().intValue());
         int rainbow = ColorUtils.rainbow((int) rSettings[1], (int) rSettings[0]);
         if (descriptionModule.get() != null) {
             if (descriptionModule.get() instanceof PluginModule pluginMod) {

@@ -42,7 +42,7 @@ public abstract class MixinPlayerListHud {
     public void modifyCollectPlayerEntries(CallbackInfoReturnable<List<PlayerListEntry>> cir) {
         if (ModuleList.extraTab.isEnabled()) {
             cir.setReturnValue(client.player.networkHandler.getListedPlayerListEntries()
-                    .stream().sorted(ENTRY_ORDERING).limit((int) ExtraTab.tabSize.getValue()).toList());
+                    .stream().sorted(ENTRY_ORDERING).limit(ExtraTab.tabSize.getValue().intValue()).toList());
             cir.cancel();
         }
     }

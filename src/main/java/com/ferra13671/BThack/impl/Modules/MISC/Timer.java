@@ -3,7 +3,7 @@ package com.ferra13671.BThack.impl.Modules.MISC;
 import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.BThack.impl.Modules.MOVEMENT.ElytraFlight;
@@ -31,7 +31,7 @@ public class Timer extends Module {
     public void onTick(ClientTickEvent e) {
         if (nullCheck()) return;
 
-        float speed = (float) tickSpeed.getValue();
+        float speed = tickSpeed.getValue().floatValue() ;
         Managers.TICK_MANAGER.applyTickModifier((50f / speed) / 50);
     }
 

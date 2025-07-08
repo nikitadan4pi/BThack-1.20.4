@@ -2,8 +2,8 @@ package com.ferra13671.BThack.impl.Modules.RENDER;
 
 import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.api.Events.Render.RenderHudPostEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Social.Clans.Clan;
 import com.ferra13671.BThack.api.Social.Clans.ClansUtils;
@@ -69,15 +69,15 @@ public class Radar extends Module {
     @SuppressWarnings("unused")
     public void onRender(RenderHudPostEvent e) {
         Window sr = mc.getWindow();
-        Color rectColor = new Color(0, 0, 0, (float) opacity.getValue());
+        Color rectColor = new Color(0, 0, 0, opacity.getValue().floatValue());
 
         //Very strong math, yeeaah.
         float yaw = (mc.player.yaw / 360);
-        yaw = yaw - (float)Math.floor(yaw);
+        yaw = (float) (yaw - Math.floor(yaw));
         yaw = yaw * 360;
 
-        float _range = (float) range.getValue();
-        float _scale = (float) scale.getValue();
+        float _range = range.getValue().floatValue();
+        float _scale = scale.getValue().floatValue();
 
         //Drawing a radar map
         BThackRender.drawRect(sr.getScaledWidth(), sr.getScaledHeight(), sr.getScaledWidth() - (int) _scale, sr.getScaledHeight() - (int) _scale, rectColor.hashCode());

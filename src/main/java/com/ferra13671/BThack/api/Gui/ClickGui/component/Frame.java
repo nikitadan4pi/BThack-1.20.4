@@ -1,8 +1,11 @@
 package com.ferra13671.BThack.api.Gui.ClickGui.component;
 
 import com.ferra13671.BThack.Core.Client.Client;
+import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
+import com.ferra13671.BThack.api.Animation.Animation;
+import com.ferra13671.BThack.api.Animation.Easing;
 import com.ferra13671.BThack.api.Category.Category;
 import com.ferra13671.BThack.api.Gui.ClickGui.component.components.ModuleButton;
 import com.ferra13671.BThack.api.Gui.ClickGui.component.components.setting.settings.Slider;
@@ -33,6 +36,7 @@ public class Frame implements Mc {
 	public int dragY;
 	public int height;
 	public boolean buttonHovered = false;
+	private final Animation frameAnimation = new Animation(Easing.CUBIC_OUT, 500);
 
 	public final Data<Slider> writingSlider;
 
@@ -159,10 +163,10 @@ public class Frame implements Mc {
 			}
 		}
 		if (ClickGui.rainbow.getValue()) {
-			int type = (int) ClickGui.rainbowSpeed.getValue();
+			int type = ClickGui.rainbowSpeed.getValue().intValue();
 			BThackRender.drawHorizontalRainbowRect(x, y, x + width, y + BAR_HEIGHT, type);
 		} else {
-			BThackRender.drawRect(x, y, x + width, y + BAR_HEIGHT, ClickGui.customColor.getValue() ? new Color((int) ClickGui.redColor.getValue(), (int) ClickGui.greenColor.getValue(), (int) ClickGui.blueColor.getValue()).getRGB() : new Color(Client.clientInfo.getColorTheme().getFontColour()).hashCode());
+			BThackRender.drawRect(x, y, x + width, y + BAR_HEIGHT, ClickGui.customColor.getValue() ? ModuleList.clickGui.color.getValue().hashCode() : new Color(Client.clientInfo.getColorTheme().getFontColour()).hashCode());
 		}
 		if (ClickGui.frameOutline.getValue())
 			BThackRender.drawOutlineRect(x, y, x + width, y + BAR_HEIGHT, 1, BAR_OUTLINE_COLOR);

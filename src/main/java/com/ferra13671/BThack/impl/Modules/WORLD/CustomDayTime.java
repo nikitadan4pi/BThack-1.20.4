@@ -2,10 +2,10 @@ package com.ferra13671.BThack.impl.Modules.WORLD;
 
 import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.api.Events.Render.RenderWorldEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.Setting;
-import com.ferra13671.BThack.api.Managers.Thread.ThreadManager;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.Setting;
+import com.ferra13671.BThack.api.Managers.managers.Thread.ThreadManager;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
@@ -46,9 +46,9 @@ public class CustomDayTime extends Module {
     }
 
     @Override
-    public void onChangeSetting(Setting setting) {
+    public void onChangeSetting(Setting<?> setting) {
         if (setting == customTime) {
-            time = (long) customTime.getValue();
+            time = customTime.getValue().longValue();
         }
     }
 
@@ -75,11 +75,11 @@ public class CustomDayTime extends Module {
                         time = 13000L;
                     }
                     if (Objects.equals(_mode, "Custom")) {
-                        time = (long) customTime.getValue();
+                        time = customTime.getValue().longValue();
                     }
                     if (Objects.equals(_mode, "Spin")) {
                         double speed = spinSpeed.getValue();
-                        float speedFactor = (float) extraSpin.getValue();
+                        float speedFactor = extraSpin.getValue().floatValue();
 
                         long newTime = (long) (CustomDayTime.time + ((speed * speedFactor) / 50));
                         if (newTime >= 24000L) newTime = 0L;

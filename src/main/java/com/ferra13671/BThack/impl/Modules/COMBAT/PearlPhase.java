@@ -2,9 +2,9 @@ package com.ferra13671.BThack.impl.Modules.COMBAT;
 
 import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.SoundSystem.SoundSystem;
 import com.ferra13671.BThack.api.SoundSystem.Sounds;
@@ -79,7 +79,7 @@ public class PearlPhase extends Module {
     public void playOffSound() {
         if (mode.getValue().equals("Always"))
             if (ModuleList.toggleSound.isEnabled())
-                SoundSystem.playSound(Sounds.MODULE_OFF, (float) ToggleSound.volume.getValue());
+                SoundSystem.playSound(Sounds.MODULE_OFF, ToggleSound.volume.getValue().floatValue());
     }
 
     @Override
@@ -128,7 +128,7 @@ public class PearlPhase extends Module {
     }
 
     public void pearlPhaseAction(float yaw) {
-        GrimUtils.sendPreActionGrimPackets(yaw, (float) phasePitch.getValue());
+        GrimUtils.sendPreActionGrimPackets(yaw, phasePitch.getValue().floatValue());
 
         ItemUtils.useItem(Items.ENDER_PEARL, swingHand.getValue());
 

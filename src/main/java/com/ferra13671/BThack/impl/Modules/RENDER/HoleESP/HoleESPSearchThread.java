@@ -22,14 +22,14 @@ public class HoleESPSearchThread extends Thread implements Mc {
             if (HoleESP.rangeMode.getValue().equals("Normal")) {
                 obsHoles = bedHoles = getNearbyBlocks(mc.player, HoleESP.range.getValue());
             } else {
-                obsHoles = bedHoles = getSphere(new ModifyBlockPos(mc.player.getBlockPos()), (float) HoleESP.rangeH.getValue(), (float) HoleESP.rangeV.getValue(), HoleESP.sphere.getValue());
+                obsHoles = bedHoles = getSphere(new ModifyBlockPos(mc.player.getBlockPos()), HoleESP.rangeH.getValue().floatValue(), HoleESP.rangeV.getValue().floatValue(), HoleESP.sphere.getValue());
             }
             HoleESP.obsidianHoleList = obsHoles.stream().filter(blockPos -> HoleUtils.isMutableHole(blockPos, true))
                     .collect(Collectors.toList());
             HoleESP.bedrockHoleList = bedHoles.stream().filter(HoleUtils::isBedrockHole)
                     .collect(Collectors.toList());
 
-            applySleep((int) HoleESP.updateDelay.getValue());
+            applySleep(HoleESP.updateDelay.getValue().intValue());
         }
     }
 

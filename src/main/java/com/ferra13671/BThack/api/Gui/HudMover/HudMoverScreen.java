@@ -79,7 +79,7 @@ public class HudMoverScreen extends BThackScreen {
         frame.updateButtons(mouseX, mouseY);
 
         BThackRender.guiGraphics.getMatrices().push();
-        BThackRender.guiGraphics.getMatrices().scale((float) ClickGui.guiScale.getValue(), (float) ClickGui.guiScale.getValue(), 1);
+        BThackRender.guiGraphics.getMatrices().scale(ClickGui.guiScale.getValue().floatValue(), ClickGui.guiScale.getValue().floatValue(), 1);
         frame.renderFrame();
         frame.updatePosition((int) (mouseX / ClickGui.guiScale.getValue()), (int) (mouseY / ClickGui.guiScale.getValue()));
         BThackRender.guiGraphics.getMatrices().pop();

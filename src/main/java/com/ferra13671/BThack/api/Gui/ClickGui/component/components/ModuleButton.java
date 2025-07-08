@@ -1,5 +1,6 @@
 package com.ferra13671.BThack.api.Gui.ClickGui.component.components;
 
+import com.ferra13671.BThack.BThack;
 import com.ferra13671.BThack.Core.Client.Client;
 import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
@@ -9,11 +10,11 @@ import com.ferra13671.BThack.api.Gui.ClickGui.component.Component;
 import com.ferra13671.BThack.api.Gui.ClickGui.component.Frame;
 import com.ferra13671.BThack.api.Gui.ClickGui.component.components.setting.AbstractSetting;
 import com.ferra13671.BThack.api.Gui.ClickGui.component.components.setting.settings.*;
-import com.ferra13671.BThack.api.Gui.ClickGui.component.components.setting.settings.Checkbox;
 import com.ferra13671.BThack.api.Interfaces.Mc;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.*;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.Setting;
 import com.ferra13671.BThack.api.Module.Module;
+import com.ferra13671.BThack.api.Utils.Data;
 import com.ferra13671.BThack.impl.Modules.CLIENT.ClickGui;
 
 import java.awt.*;
@@ -30,7 +31,7 @@ public class ModuleButton extends Component implements Mc {
 	public boolean renderOpen = false;
 
 	private boolean isHovered;
-	private final ArrayList<AbstractSetting> settings = new ArrayList<>();
+	private ArrayList<AbstractSetting> settings = new ArrayList<>();
 	private float alphaDelta = 1;
 	private boolean alphaDeltaInverse = true;
 	private Animation animation = new Animation(Easing.CIRC_OUT, 500);
@@ -41,32 +42,31 @@ public class ModuleButton extends Component implements Mc {
 		this.module = module;
 		this.parent = parent;
 		this.offset = offset;
-		int opY = offset + BUTTON_HEIGHT;
-		AbstractSetting setting;
-		if(Managers.SETTINGS_MANAGER.getSettingsByMod(module) != null) {
-			for(Setting s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)){
-				setting = s instanceof ModeSetting set ? new ModeButton(set, this, opY, set.getIndex(), module) :
-					    	s instanceof NumberSetting set ? new Slider(set, this, opY, module) :
-								  s instanceof BooleanSetting set ? new Checkbox(set, this, opY, module) :
-										s instanceof KeyCodeSetting set ? new KeyCode(this, opY, set, module) :
-												s instanceof GuiButtonSetting set ? new OpenGuiButton(set, this, opY, module) :
-														s instanceof ColorSetting set ? new ColorPicker(set, this, opY, module) :
-																null;
-				settings.add(setting);
-				opY += setting.getHeight();
+		int opYValue = offset + 14;
+
+		for (Setting<?> s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
+			if (s == null) continue;
+
+			AbstractSetting<?> comp = s.asSettingButton(this, opYValue);
+			if (comp != null) {
+				settings.add(comp);
+				opYValue += comp.getHeight();
 			}
 		}
 
-		int h = 0;
 		if (module.allowRemapVisible) {
-			setting = new Visible(this, opY, module);
-			h = setting.getHeight();
-			settings.add(setting);
+			Visible visibleComp = new Visible(this, opYValue, module);
+			if (visibleComp != null) {
+				settings.add(visibleComp);
+				opYValue += visibleComp.getHeight();
+			}
 		}
+
 		if (module.allowRemapKeyCode) {
-			if (module.allowRemapVisible)
-				opY += h;
-			settings.add(new Keybind(this, opY));
+			Keybind keybindComp = new Keybind(this, opYValue);
+			if (keybindComp != null) {
+				settings.add(keybindComp);
+			}
 		}
 	}
 
@@ -207,7 +207,7 @@ public class ModuleButton extends Component implements Mc {
 				module.toggle();
 			if (button == 1) {
 				if (renderOpen == open) {
-					animation = new Animation(ClickGui.getCurrentEasing(), (int) ClickGui.animationTime.getValue());
+					animation = new Animation(ClickGui.getCurrentEasing(), ClickGui.animationTime.getValue().intValue());
 					open = !open;
 					animation.reset();
 					parent.refresh();

@@ -8,8 +8,8 @@ import com.ferra13671.BThack.api.Events.Render.RenderHudPostEvent;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Gui.HudMover.HudMoverScreen;
 import com.ferra13671.BThack.api.HudComponent.HudComponent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.BThack.api.Utils.SpeedMathThread;
@@ -93,7 +93,7 @@ public class HUD extends Module {
 
     public static int getHUDColor() {
         if (rainbow.getValue()) {
-            return ColorUtils.rainbowType((int) rainbowType.getValue());
+            return ColorUtils.rainbowType(rainbowType.getValue().intValue());
         } else {
             return ClickGui.getClickGuiColor(false);
         }

@@ -133,6 +133,7 @@ public final class BThack implements ClientModInitializer, Mc {
                     socialManager.load();
                 }
             }
+            initLog("successfully");
         } catch (Exception e) {
             initErr("There was an error loading social info!");
             e.printStackTrace(); //Okay
@@ -222,10 +223,12 @@ public final class BThack implements ClientModInitializer, Mc {
 
     private void checkForOutdate() {
         try {
+            initLog("outdate check");
             String text = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/Ferra13671/BThack/" + MC_VERSION + "/currentVersion.txt").openStream())).readLine();
             if (!text.equals(VERSION)) {
                 versionInfo.setOutdated(true);
                 versionInfo.setNewVersion(text);
+                initLog("okay");
             }
         } catch (Exception ignored) {
             error("Failed getting information on the current release.");

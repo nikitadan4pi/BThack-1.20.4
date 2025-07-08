@@ -2,9 +2,9 @@ package com.ferra13671.BThack.impl.Modules.CLIENT;
 
 import com.ferra13671.BTbot.api.Utils.Generate.GenerateNumber;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.Setting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.Setting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Shader.MainMenu.MainMenuShader;
 import com.ferra13671.BThack.api.Shader.MainMenu.MainMenuShaders;
@@ -50,7 +50,7 @@ public class MenuShader extends Module {
     }
 
     @Override
-    public void onChangeSetting(Setting setting) {
+    public void onChangeSetting(Setting<?> setting) {
         if (this.isEnabled())
             Managers.MAIN_MENU_SHADER_MANAGER.setMainMenuShader(getShader());
     }

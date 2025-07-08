@@ -3,9 +3,9 @@ package com.ferra13671.BThack.impl.Modules.MOVEMENT;
 import com.ferra13671.BThack.api.Events.PacketEvent;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
@@ -84,10 +84,10 @@ public class Velocity extends Module {
         if ((mc.player.isTouchingWater() || mc.player.isSubmergedInWater() || mc.player.isInLava()) && !liquid.getValue())
             return;
 
-        int velV = (int) explosionV.getValue();
-        int velH = (int) explosionH.getValue();
-        float explV = (float) explosionV.getValue();
-        float explH = (float) explosionH.getValue();
+        int velV = explosionV.getValue().intValue();
+        int velH = explosionH.getValue().intValue();
+        float explV = explosionV.getValue().floatValue();
+        float explH = explosionH.getValue().floatValue();
 
         if (ticks > 0) {
             ticks--;

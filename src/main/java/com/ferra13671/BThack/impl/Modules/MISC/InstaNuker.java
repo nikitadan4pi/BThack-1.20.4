@@ -2,8 +2,8 @@ package com.ferra13671.BThack.impl.Modules.MISC;
 
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.BlockUtils;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -88,7 +88,7 @@ public class InstaNuker extends Module {
     }
 
     public void filterAction() {
-        for (BlockPos pos : BlockUtils.getSphere(mc.player.getBlockPos(), (float) range.getValue(), (float) range.getValue(), false, true, 0)) {
+        for (BlockPos pos : BlockUtils.getSphere(mc.player.getBlockPos(),range.getValue().floatValue(), range.getValue().floatValue(), false, true, 0)) {
             if (pos.getY() >= (int) mc.player.getY()) {
                 Block _block = mc.world.getBlockState(pos).getBlock();
                 if (BlockUtils.canBreak(pos) || _block != Blocks.OBSIDIAN || _block != Blocks.CRYING_OBSIDIAN) {

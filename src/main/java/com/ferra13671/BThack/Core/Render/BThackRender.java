@@ -2,6 +2,7 @@ package com.ferra13671.BThack.Core.Render;
 
 
 import com.ferra13671.BThack.Core.Render.Box.BThackBoxRender;
+import com.ferra13671.BThack.Core.Render.Drawers.GradientRectDrawer;
 import com.ferra13671.BThack.Core.Render.Line.BThackLineRender;
 import com.ferra13671.BThack.Core.Render.Utils.BThackWorldRenderContext;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;

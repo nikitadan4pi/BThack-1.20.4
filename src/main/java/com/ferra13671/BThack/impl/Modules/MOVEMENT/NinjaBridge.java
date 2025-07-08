@@ -1,10 +1,10 @@
 package com.ferra13671.BThack.impl.Modules.MOVEMENT;
 
 
-import com.ferra13671.BThack.api.Managers.Build.BuildManager;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.Thread.IThread;
-import com.ferra13671.BThack.api.Managers.Thread.ThreadManager;
+import com.ferra13671.BThack.api.Managers.managers.Build.BuildManager;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Thread.IThread;
+import com.ferra13671.BThack.api.Managers.managers.Thread.ThreadManager;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.ChatUtils;
 import com.ferra13671.BThack.api.Utils.InventoryUtils;
@@ -78,10 +78,10 @@ public class NinjaBridge extends Module {
             while (isEnabled()) {
 
                 //Retrieving settings from the module
-                int _actionDelay = (int) actionDelay.getValue();
-                int _placeTime = (int) placeTime.getValue();
-                int _placeFactor = (int) placeFactor.getValue();
-                float extraAirDistance = (float) airCheck.getValue();
+                int _actionDelay = actionDelay.getValue().intValue();
+                int _placeTime = placeTime.getValue().intValue();
+                int _placeFactor = placeFactor.getValue().intValue();
+                float extraAirDistance = airCheck.getValue().floatValue();
                 //
 
                 BlockPos block = getBlockPos(yaw, extraAirDistance);

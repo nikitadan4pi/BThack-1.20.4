@@ -118,7 +118,7 @@ public abstract class MixinChatHud {
 
     @Unique
     public int getMaxChatSize() {
-        if (Client.inited && ModuleList.moreChatHistory.isEnabled()) return (int) MoreChatHistory.size.getValue();
+        if (Client.inited && ModuleList.moreChatHistory.isEnabled()) return MoreChatHistory.size.getValue().intValue();
         else return 100;
     }
 }

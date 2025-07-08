@@ -4,11 +4,11 @@ import com.ferra13671.BThack.Core.Client.Client;
 import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Events.GuiOpenEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.Setting;
-import com.ferra13671.BThack.api.Managers.Thread.ThreadManager;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.Setting;
+import com.ferra13671.BThack.api.Managers.managers.Thread.ThreadManager;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.ChatUtils;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -60,7 +60,7 @@ public class ChestStealer extends Module {
     public static boolean active = false;
 
     @Override
-    public void onChangeSetting(Setting setting) {
+    public void onChangeSetting(Setting<?> setting) {
         if (setting == steal) {
             if (steal.getValue().equals("Select"))
                 ChatUtils.sendMessage(Formatting.GRAY + "Use: " + Client.clientInfo.getChatPrefix() + ItemLists.get("ChestStealer").editBlockListCommand.getUsage());
@@ -95,7 +95,7 @@ public class ChestStealer extends Module {
                                 if (filterStack(container.getInventory().getStack(index))) {
                                     pc.clickSlot(container.syncId, index, 0, SlotActionType.QUICK_MOVE);
                                     try {
-                                        thread.sleep((long) stealDelay.getValue());
+                                        thread.sleep(stealDelay.getValue().longValue());
                                     } catch (InterruptedException ignored) {}
                                 }
 

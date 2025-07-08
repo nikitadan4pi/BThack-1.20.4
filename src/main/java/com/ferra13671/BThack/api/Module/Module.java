@@ -6,7 +6,7 @@ import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.api.Category.Categories;
 import com.ferra13671.BThack.api.Category.Category;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.Setting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.Setting;
 import com.ferra13671.BThack.api.SoundSystem.SoundSystem;
 import com.ferra13671.BThack.api.SoundSystem.Sounds;
 import com.ferra13671.BThack.api.Utils.ChatUtils;
@@ -23,7 +23,7 @@ public class Module {
     private final boolean autoEnabled;
     private int keyCode;
     private final Category category;
-    public static final MinecraftClient mc = MinecraftClient.getInstance();
+    public static MinecraftClient mc = MinecraftClient.getInstance();
     public final ClientPlayerController pc;
 
     public String arrayListInfo = "";
@@ -71,16 +71,16 @@ public class Module {
         BThack.EVENT_BUS.unregister(this);
     }
 
-    public void onChangeSetting(Setting setting) {}
+    public void onChangeSetting(Setting<?> setting) {}
 
     public void playOnSound() {
         if (ModuleList.toggleSound.isEnabled())
-            SoundSystem.playSound(Sounds.MODULE_ON, (float) ToggleSound.volume.getValue());
+            SoundSystem.playSound(Sounds.MODULE_ON, ToggleSound.volume.getValue().floatValue());
     }
 
     public void playOffSound() {
         if (ModuleList.toggleSound.isEnabled())
-            SoundSystem.playSound(Sounds.MODULE_OFF, (float) ToggleSound.volume.getValue());
+            SoundSystem.playSound(Sounds.MODULE_OFF, ToggleSound.volume.getValue().floatValue());
     }
 
 
@@ -168,8 +168,8 @@ public class Module {
         }
     }
 
-    public void initSettings(Setting... settings) {
-        for (Setting setting : settings)
+    public void initSettings(Setting<?>... settings) {
+        for (Setting<?> setting : settings)
             Managers.SETTINGS_MANAGER.addModuleSetting(setting);
     }
 

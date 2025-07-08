@@ -1,7 +1,6 @@
 package com.ferra13671.BThack.impl.Modules.MISC;
 
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Memory.MemoryManager;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 

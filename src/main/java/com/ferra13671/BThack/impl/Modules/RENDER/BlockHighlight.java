@@ -3,7 +3,7 @@ package com.ferra13671.BThack.impl.Modules.RENDER;
 import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.Core.Render.Box.RenderBox;
 import com.ferra13671.BThack.api.Events.Render.RenderWorldEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.BlockUtils;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -48,11 +48,11 @@ public class BlockHighlight extends Module {
     public void onBlockOutlineRender(RenderWorldEvent.BlockOutline e) {
         e.setCancelled(true);
 
-        float red = (float) renderRed.getValue() / 255f;
-        float green = (float) renderGreen.getValue() / 255f;
-        float blue = (float) renderBlue.getValue() / 255f;
-        float alpha = (float) renderAlpha.getValue() / 255f;
-        float lAlpha = (float) linesAlpha.getValue() / 255f;
+        float red = renderRed.getValue().floatValue() / 255f;
+        float green = renderGreen.getValue().floatValue() / 255f;
+        float blue = renderBlue.getValue().floatValue() / 255f;
+        float alpha = renderAlpha.getValue().floatValue() / 255f;
+        float lAlpha = linesAlpha.getValue().floatValue() / 255f;
 
         Box box = BlockUtils.getBoundingBox(e.getBlockOutlineContext().blockPos());
         if (box == null) {

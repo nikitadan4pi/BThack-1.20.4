@@ -7,10 +7,10 @@ import com.ferra13671.BThack.api.Events.Block.AttackBlockEvent;
 import com.ferra13671.BThack.api.Events.Block.UseBlockEvent;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Events.Render.RenderWorldEvent;
-import com.ferra13671.BThack.api.Managers.Destroy.DestroyManager;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Destroy.DestroyManager;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Social.SocialManagers;
 import com.ferra13671.BThack.api.Utils.BlockUtils;
@@ -317,9 +317,9 @@ public class PacketMine extends Module {
 
         ArrayList<RenderBox> renderBoxes = new ArrayList<>();
         double currentDestroyBlockSize = currentBreakingBlock.currentDestroyProgress / 2;
-        float boxR = (float) boxRed.getValue() / 255f;
-        float boxG = (float) boxGreen.getValue() / 255f;
-        float boxB = (float) boxBlue.getValue() / 255f;
+        float boxR = boxRed.getValue().floatValue() / 255f;
+        float boxG = boxGreen.getValue().floatValue()  / 255f;
+        float boxB = boxBlue.getValue().floatValue()  / 255f;
         renderBoxes.add(
                 new RenderBox(
                         BlockUtils.createBox(
@@ -588,7 +588,7 @@ public class PacketMine extends Module {
             if (bestSlot < 9) {
                 mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(bestSlot));
             } else {
-                currentInventoryModeHotbarSlot = (int) hotbarSlot.getValue() - 1;
+                currentInventoryModeHotbarSlot = hotbarSlot.getValue().intValue() - 1;
                 pc.packetClickSlot(0, bestSlot, currentInventoryModeHotbarSlot, SlotActionType.SWAP);
                 currentInventoryModeSlot = bestSlot;
                 mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(currentInventoryModeHotbarSlot));

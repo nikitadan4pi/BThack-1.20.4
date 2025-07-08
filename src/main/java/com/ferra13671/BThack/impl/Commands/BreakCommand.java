@@ -1,8 +1,8 @@
 package com.ferra13671.BThack.impl.Commands;
 
 import com.ferra13671.BThack.api.CommandSystem.command.AbstractCommand;
-import com.ferra13671.BThack.api.Managers.Destroy.DestroyManager;
-import com.ferra13671.BThack.api.Managers.Destroy.DestroyThread3D;
+import com.ferra13671.BThack.api.Managers.managers.Destroy.DestroyManager;
+import com.ferra13671.BThack.api.Managers.managers.Destroy.DestroyThread3D;
 import com.ferra13671.BThack.api.Utils.ChatUtils;
 import com.ferra13671.BThack.api.Utils.MathUtils;
 import com.ferra13671.BThack.api.Utils.ModifyBlockPos;

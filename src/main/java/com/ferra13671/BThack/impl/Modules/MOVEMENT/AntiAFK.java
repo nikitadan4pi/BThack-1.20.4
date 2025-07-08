@@ -2,7 +2,7 @@ package com.ferra13671.BThack.impl.Modules.MOVEMENT;
 
 import com.ferra13671.BTbot.impl.AntiAFK.Start.StartAntiAFK;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
@@ -57,7 +57,7 @@ public class AntiAFK extends Module {
     public void onClientTick(ClientTickEvent e) {
         if (correct) {
             StartAntiAFK.walkRadius = walkRadius.getValue();
-            StartAntiAFK.messageSize = (int) messageSize.getValue();
+            StartAntiAFK.messageSize = messageSize.getValue().intValue();
             StartAntiAFK.delay = delay.getValue();
         }
     }

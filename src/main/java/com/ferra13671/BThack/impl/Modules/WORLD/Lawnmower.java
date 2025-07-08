@@ -1,8 +1,8 @@
 package com.ferra13671.BThack.impl.Modules.WORLD;
 
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.BlockUtils;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -50,7 +50,7 @@ public class Lawnmower extends Module {
 
         arrayListInfo = "" + range.getValue();
 
-        BlockPos positions = BlockUtils.getSphere(mc.player.getBlockPos(), (float) range.getValue(), (float) range.getValue(), false, true, 0).stream()
+        BlockPos positions = BlockUtils.getSphere(mc.player.getBlockPos(), range.getValue().floatValue(), range.getValue().floatValue(), false, true, 0).stream()
                 .filter(this::isValidBlockPos)
                 .min(Comparator.comparing(pos -> MathUtils.getDistance(mc.player.getPos(), pos.toCenterPos())))
                 .orElse(null);

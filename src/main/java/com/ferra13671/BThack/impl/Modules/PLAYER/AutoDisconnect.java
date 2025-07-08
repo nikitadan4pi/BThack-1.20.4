@@ -1,8 +1,8 @@
 package com.ferra13671.BThack.impl.Modules.PLAYER;
 
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Social.SocialManagers;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -88,7 +88,7 @@ public class AutoDisconnect extends Module {
         for (PlayerEntity player : mc.world.getPlayers()) {
             if (player == mc.player) continue;
 
-            if (player.distanceTo(mc.player) < (float) range.getValue()) {
+            if (player.distanceTo(mc.player) < range.getValue().floatValue()) {
                 if (friends.getValue()) {
                     mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(Text.of(getChatName() + " You were disconnected because a player was detected near you.")));
                     if (autoToggle.getValue()) {

@@ -5,8 +5,8 @@ import com.ferra13671.BThack.Core.Render.Box.RenderBox;
 import com.ferra13671.BThack.Core.Render.Line.RenderLine;
 import com.ferra13671.BThack.api.Events.Render.RenderWorldEvent;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
@@ -57,9 +57,9 @@ public class Search extends Module {
         ArrayList<RenderBox> boxes = new ArrayList<>();
         ArrayList<RenderLine> lines = new ArrayList<>();
 
-        float red = ((int) searchRed.getValue()) / 255f;
-        float green = ((int) searchGreen.getValue()) / 255f;
-        float blue = ((int) searchBlue.getValue()) / 255f;
+        float red = (searchRed.getValue().floatValue()) / 255f;
+        float green = (searchGreen.getValue().floatValue()) / 255f;
+        float blue = (searchBlue.getValue().floatValue()) / 255f;
 
         for (BlockPos pos : Managers.BLOCK_SEARCH_MANAGER.getResults()) {
             Box box = new Box(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);

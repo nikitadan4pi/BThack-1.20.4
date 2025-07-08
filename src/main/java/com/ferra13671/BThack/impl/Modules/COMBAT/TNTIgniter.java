@@ -1,9 +1,9 @@
 package com.ferra13671.BThack.impl.Modules.COMBAT;
 
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.BlockUtils;
 import com.ferra13671.BThack.api.Utils.InventoryUtils;
@@ -49,7 +49,7 @@ public class TNTIgniter extends Module {
     public void onTick(ClientTickEvent e) {
         if (nullCheck()) return;
 
-        List<BlockPos> poses = BlockUtils.getAllInBox(mc.player.getBlockPos(), (int) range.getValue()).stream().
+        List<BlockPos> poses = BlockUtils.getAllInBox(mc.player.getBlockPos(), range.getValue().intValue()).stream().
                 filter(pos -> mc.world.getBlockState(pos).getBlock() instanceof TntBlock).toList();
         
         for (BlockPos pos : poses) {

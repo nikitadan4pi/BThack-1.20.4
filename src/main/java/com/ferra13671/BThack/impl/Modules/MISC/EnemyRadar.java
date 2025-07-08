@@ -2,9 +2,9 @@ package com.ferra13671.BThack.impl.Modules.MISC;
 
 
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.Thread.ThreadManager;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Thread.ThreadManager;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Social.SocialManagers;
 import com.ferra13671.BThack.api.Utils.ChatUtils;
@@ -68,7 +68,7 @@ public class EnemyRadar extends Module {
                 if (autoDisconnect.getValue()) {
                     ThreadManager.startNewThread(thread -> {
 
-                        int delay = (int) shutdownDelay.getValue();
+                        int delay = shutdownDelay.getValue().intValue();
 
                         ChatUtils.sendMessage(Formatting.RED + LanguageSystem.translate("lang.module.radars.disconnectCountdown"));
 

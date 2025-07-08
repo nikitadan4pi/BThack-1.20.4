@@ -2,9 +2,9 @@ package com.ferra13671.BThack.impl.Modules.PLAYER;
 
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Events.PacketEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.BThack.mixins.accessor.IMinecraftClient;
@@ -126,7 +126,7 @@ public class FastUse extends Module {
         if (mc.options.useKey.isPressed()) {
             sending = true;
             try {
-                for (int i = 0; i < (int) times.getValue(); i++) {
+                for (int i = 0; i < times.getValue().intValue(); i++) {
                     ((IMinecraftClient) mc).useItem();
                     mc.itemUseCooldown = 0;
                 }

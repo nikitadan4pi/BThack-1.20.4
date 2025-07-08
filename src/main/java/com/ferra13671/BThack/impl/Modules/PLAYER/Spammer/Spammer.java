@@ -2,10 +2,10 @@ package com.ferra13671.BThack.impl.Modules.PLAYER.Spammer;
 
 import com.ferra13671.BTbot.api.Utils.Generate.AntiSpamGenerate;
 import com.ferra13671.BTbot.api.Utils.Generate.GenerateNumber;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.Thread.ThreadManager;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Thread.ThreadManager;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.ChatUtils;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -91,7 +91,7 @@ public class Spammer extends Module {
                     this.arrayListInfo = spamMode.getValue();
 
                     String space = "";
-                    for (int i = 0; i < (int) aSpamSpace.getValue(); i++) {
+                    for (int i = 0; i < aSpamSpace.getValue().intValue(); i++) {
                         space = space + " ";
                     }
 
@@ -157,9 +157,9 @@ public class Spammer extends Module {
 
                     if (delaySpread.getValue()) {
                         if (!random.nextBoolean()) {
-                            a = (int) (a * GenerateNumber.generateFloat(1, 1f + (float) spreadRange.getValue()));
+                            a = (int) (a * GenerateNumber.generateFloat(1, 1f + spreadRange.getValue().floatValue()));
                         } else {
-                            a = (int) (a * GenerateNumber.generateFloat((float) spreadRange.getValue(), 1));
+                            a = (int) (a * GenerateNumber.generateFloat(spreadRange.getValue().floatValue(), 1));
                         }
                     }
 
@@ -175,7 +175,7 @@ public class Spammer extends Module {
 
     private String genAntiSpam() {
         return AntiSpamGenerate.generateNextString(
-                (int) aSpamLength.getValue(),
+                aSpamLength.getValue().intValue(),
                 aSpamCaps.getValue(),
                 aSpamNumbers.getValue(),
                 aSpamSymbols.getValue()

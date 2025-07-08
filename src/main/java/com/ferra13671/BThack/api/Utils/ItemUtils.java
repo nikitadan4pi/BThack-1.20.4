@@ -1,7 +1,7 @@
 package com.ferra13671.BThack.api.Utils;
 
 import com.ferra13671.BThack.api.Interfaces.Mc;
-import com.ferra13671.BThack.api.Managers.Build.BuildManager;
+import com.ferra13671.BThack.api.Managers.managers.Build.BuildManager;
 import net.minecraft.block.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;

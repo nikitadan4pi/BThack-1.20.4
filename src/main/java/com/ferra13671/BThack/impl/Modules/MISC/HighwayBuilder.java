@@ -6,14 +6,14 @@ import com.ferra13671.BTbot.api.Utils.Motion.Goto.CollisionAction;
 import com.ferra13671.BTbot.api.Utils.Motion.Goto.Goto;
 import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
-import com.ferra13671.BThack.api.Managers.Build.BuildManager;
-import com.ferra13671.BThack.api.Managers.Build.BuildThread3D;
-import com.ferra13671.BThack.api.Managers.Destroy.DestroyManager;
-import com.ferra13671.BThack.api.Managers.Destroy.DestroyThread3D;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.Thread.ThreadManager;
+import com.ferra13671.BThack.api.Managers.managers.Build.BuildManager;
+import com.ferra13671.BThack.api.Managers.managers.Build.BuildThread3D;
+import com.ferra13671.BThack.api.Managers.managers.Destroy.DestroyManager;
+import com.ferra13671.BThack.api.Managers.managers.Destroy.DestroyThread3D;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Thread.ThreadManager;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.ChatUtils;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -122,7 +122,7 @@ public class HighwayBuilder extends Module {
 
                 while (BuildManager.isBuilding) {
                     try {
-                        thread.sleep((int) actDelay.getValue());
+                        thread.sleep(actDelay.getValue().intValue());
                     } catch (Exception ignored) {
                     }
                 }
@@ -176,7 +176,7 @@ public class HighwayBuilder extends Module {
         } catch (Exception ignored) {}
         while (DestroyManager.isDestroying) {
             try {
-                thread.sleep((int) actDelay.getValue());
+                thread.sleep(actDelay.getValue().intValue());
             } catch (Exception ignored) {
             }
         }
@@ -198,7 +198,7 @@ public class HighwayBuilder extends Module {
         } catch (Exception ignored) {}
         while (gotoN.isMoving()) {
             try {
-                thread.sleep((int) actDelay.getValue());
+                thread.sleep(actDelay.getValue().intValue());
             } catch (Exception ignored) {
             }
         }
@@ -228,7 +228,7 @@ public class HighwayBuilder extends Module {
         if (!mode.getValue().equals("Tunnel")) {
             ArrayList<Vec3i> schematic = getBuildSchematic(highwayYaw);
             BuildThread3D buildThread3D = new BuildThread3D();
-            buildThread3D.set3DSchematic((int) buildTicks.getValue(), schematic, BlockPos.ofFloored(mc.player.getX(), Math.round(mc.player.getY()) - 1, mc.player.getZ()));
+            buildThread3D.set3DSchematic(buildTicks.getValue().intValue(), schematic, BlockPos.ofFloored(mc.player.getX(), Math.round(mc.player.getY()) - 1, mc.player.getZ()));
             buildThread3D.setNeedBlocks(onlyObsidian.getValue() ? Arrays.asList(Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN) : new ArrayList<>());
             buildThread3D.start();
             try {
@@ -236,7 +236,7 @@ public class HighwayBuilder extends Module {
             } catch (Exception ignored) {}
             while (BuildManager.isBuilding) {
                 try {
-                    thread.sleep((int) actDelay.getValue());
+                    thread.sleep(actDelay.getValue().longValue());
                 } catch (Exception ignored) {
                 }
             }
@@ -265,7 +265,7 @@ public class HighwayBuilder extends Module {
         } catch (Exception ignored) {}
         while (BuildManager.isBuilding) {
             try {
-                thread.sleep((int) actDelay.getValue());
+                thread.sleep(actDelay.getValue().intValue());
             } catch (Exception ignored) {
             }
         }

@@ -2,7 +2,7 @@ package com.ferra13671.BThack.impl.Modules.RENDER;
 
 import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.api.Events.Render.RenderHudPostEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.BThack.api.Utils.Ticker;
@@ -67,7 +67,7 @@ public class Caipirinha extends Module {
             ticker.reset();
         }
 
-        int _size = mc.getWindow().getScaledWidth() / (int) size.getValue();
+        int _size = mc.getWindow().getScaledWidth() / size.getValue().intValue();
 
         float x = (mc.getWindow().getScaledWidth() / 2f) + ((mc.getWindow().getScaledWidth() / 4f) - (_size / 2f));
         float y = (float) ((mc.getWindow().getScaledHeight() - _size) + (_size * 0.065));

@@ -6,7 +6,7 @@ import com.ferra13671.BThack.api.Events.Block.UseBlockEvent;
 import com.ferra13671.BThack.api.Events.GuiOpenEvent;
 import com.ferra13671.BThack.api.Events.Render.RenderWorldEvent;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.BlockUtils;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -89,9 +89,9 @@ public class LastOpenChest extends Module {
     @EventSubscriber
     public void onRender(RenderWorldEvent.Last e) {
         if (chestPos != null && needRender) {
-            float _red = (float) red.getValue() / 255f;
-            float _green = (float) green.getValue() / 255f;
-            float _blue = (float) blue.getValue() / 255f;
+            float _red = red.getValue().floatValue() / 255f;
+            float _green = green.getValue().floatValue() / 255f;
+            float _blue = blue.getValue().floatValue() / 255f;
 
             Box box = BlockUtils.getBoundingBox(chestPos);
             if (box == null) return;

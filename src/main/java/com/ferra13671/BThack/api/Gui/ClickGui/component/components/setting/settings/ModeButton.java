@@ -2,43 +2,43 @@ package com.ferra13671.BThack.api.Gui.ClickGui.component.components.setting.sett
 
 
 import com.ferra13671.BThack.Core.Client.Client;
+import com.ferra13671.BThack.Core.Client.ModuleList;
+import com.ferra13671.BThack.Core.Render.BThackMatrix;
 import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
 import com.ferra13671.BThack.api.Gui.ClickGui.component.components.ModuleButton;
 import com.ferra13671.BThack.api.Gui.ClickGui.component.components.setting.AbstractSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ColorSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
 import com.ferra13671.BThack.api.Module.Module;
+import com.ferra13671.BThack.api.SoundSystem.SoundSystem;
+import com.ferra13671.BThack.api.SoundSystem.Sounds;
 import com.ferra13671.BThack.impl.Modules.CLIENT.ClickGui;
 
 import java.awt.*;
 
-public class ModeButton extends AbstractSetting {
+public class ModeButton extends AbstractSetting<ModeSetting> {
 
-	private final ModeSetting set;
+	public ModeButton(ModeSetting setting, ModuleButton button, int offset, int modeIndex, Module module) {
+		super(offset, button, module, setting);
 
-	public ModeButton(ModeSetting option, ModuleButton button, int offset, int modeIndex, Module module) {
-		super(offset, button, module, option);
-		set = option;
-		x = button.parent.getX() + button.parent.getWidth();
-		y = button.parent.getY() + button.offset;
-
-		set.setValue(option.getOptions().get(modeIndex));
+		setting.setValue(setting.getOptions().get(modeIndex));
 	}
-	
+
 	@Override
 	public void renderComponent() {
-		BThackRender.drawRect(parent.parent.getX(), parent.parent.getY() + offset, parent.parent.getX() + parent.parent.getWidth(), parent.parent.getY() + offset + 15, this.hovered ? ColorUtils.integrateAlpha(new Color(Client.clientInfo.getColorTheme().getBackgroundFontHoveredColour()).hashCode(), (int) (255 * Math.min(1, ClickGui.opacity.getValue() + 0.13))) : ColorUtils.integrateAlpha(new Color(Client.clientInfo.getColorTheme().getBackgroundFontColour()).hashCode(), (int) (255 * Math.min(1, ClickGui.opacity.getValue() + 0.13))));
-
+		super.renderComponent();
+		BThackRender.drawRect(parent.parent.getX(), parent.parent.getY() + offset, parent.parent.getX() + parent.parent.getWidth(), parent.parent.getY() + offset + 15, this.hovered ? ColorUtils.integrateAlpha(new Color(ClickGui.BACKGROUND_HOVERED_COLOR).hashCode(), (int) (255 * Math.min(1, ClickGui.opacity.getValue() + 0.13))) : ColorUtils.integrateAlpha(new Color(ClickGui.BACKGROUND_COLOR).hashCode(), (int) (255 * Math.min(1, ClickGui.opacity.getValue() + 0.13))));
 		String text = getModeString();
 		float scale = getTextScale(text);
 
 		if (scale != 1) {
-			BThackRender.guiGraphics.getMatrices().push();
-			BThackRender.guiGraphics.getMatrices().scale(scale, scale, 1);
+			BThackMatrix.push();
+			BThackMatrix.scale(scale, scale, 1);
 		}
-		BThackRender.drawString(text, (parent.parent.getX() + 2) / scale, (parent.parent.getY() + offset + 4) / scale, Client.clientInfo.getColorTheme().getModuleDisabledColour());
+		BThackRender.drawString(text, (getX() + 2) / scale, (getY() + 4) / scale, ColorUtils.WHITE);
 		if (scale != 1)
-			BThackRender.guiGraphics.getMatrices().pop();
+			BThackMatrix.pop();
 	}
 
 	private float getTextScale(String text) {
@@ -47,7 +47,7 @@ public class ModeButton extends AbstractSetting {
 	}
 
 	private String getModeString() {
-		return this.op.getName() + ": " + (!set.getOptions().contains(set.getValue()) ? "NULL" : (set.getOptions().size() < set.getIndex() ? set.getValue() : set.getOptions().get(set.getIndex())));
+		return setting.getName() + ": " + (!setting.getOptions().contains(setting.getValue()) ? "NULL" : (setting.getOptions().size() < setting.getIndex() ? setting.getValue() : setting.getOptions().get(setting.getIndex())));
 	}
 
 	@Override
@@ -55,6 +55,7 @@ public class ModeButton extends AbstractSetting {
 		if (!getVisible() || !parent.open) return true;
 
 		hovered = isMouseOnButton(mouseX, mouseY);
+
 		y = parent.parent.getY() + offset;
 		x = parent.parent.getX();
 
@@ -66,17 +67,17 @@ public class ModeButton extends AbstractSetting {
 		if (!getVisible() || !parent.open) return false;
 
 		if (isMouseOnButton(mouseX, mouseY) && button == 0 && this.parent.open) {
-			int maxIndex = set.getOptions().size();
+			int maxIndex = setting.getOptions().size();
 
-			if (set.getIndex() + 1 >= maxIndex) {
-				set.setIndex(0);
+			if (setting.getIndex() + 1 >= maxIndex) {
+				setting.setIndex(0);
 			} else {
-				int currentIndex = set.getIndex();
-				set.setIndex(currentIndex + 1);
+				int currentIndex = setting.getIndex();
+				setting.setIndex(currentIndex + 1);
 			}
 
-			set.setValue(set.getOptions().get(set.getIndex()));
-			set.module.onChangeSetting(set);
+			setting.setValue(setting.getOptions().get(setting.getIndex()));
+			setting.module.onChangeSetting(setting);
 		}
 
 		return isMouseOnButton(mouseX, mouseY);

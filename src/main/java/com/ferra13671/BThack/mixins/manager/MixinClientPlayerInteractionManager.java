@@ -240,7 +240,7 @@ public abstract class MixinClientPlayerInteractionManager {
         if (ModuleList.reach.isEnabled()) {
             cir.cancel();
             float reach = gameMode.isCreative() ? 5.0f : 4.5f;
-            cir.setReturnValue(reach + (float)ModuleList.reach.range.getValue());
+            cir.setReturnValue(reach + ModuleList.reach.range.getValue().floatValue());
         }
     }
 }

@@ -2,11 +2,11 @@ package com.ferra13671.BThack.impl.Modules.COMBAT;
 
 import com.ferra13671.BTbot.api.Utils.Motion.Align.AlignWithXZ;
 import com.ferra13671.BTbot.api.Utils.Motion.Align.WhereToAlign;
-import com.ferra13671.BThack.api.Managers.Build.BuildManager;
-import com.ferra13671.BThack.api.Managers.Build.BuildThread3D;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Build.BuildManager;
+import com.ferra13671.BThack.api.Managers.managers.Build.BuildThread3D;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.ChatUtils;
 import com.ferra13671.BThack.api.Utils.InventoryUtils;
@@ -120,7 +120,7 @@ public class Surround extends Module {
 
         BuildThread3D thread = new BuildThread3D();
 
-        thread.set3DSchematic((int) tickDelay.getValue(), surroundVector, blockPos);
+        thread.set3DSchematic(tickDelay.getValue().intValue(), surroundVector, blockPos);
         thread.start();
         toggle();
     }

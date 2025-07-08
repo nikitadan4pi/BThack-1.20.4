@@ -2,8 +2,8 @@ package com.ferra13671.BThack.impl.Modules.PLAYER;
 
 import com.ferra13671.BThack.Core.Client.Client;
 import com.ferra13671.BThack.api.Events.SendMessageEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.Setting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.Setting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.BaritoneUtils;
 import com.ferra13671.BThack.api.Utils.ChatUtils;
@@ -79,7 +79,7 @@ public class AutoMine extends Module {
     }
 
     @Override
-    public void onChangeSetting(Setting setting) {
+    public void onChangeSetting(Setting<?> setting) {
         if (this.isEnabled())
             reMineAction();
         if (setting.equals(extraBlocks))

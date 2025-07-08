@@ -4,8 +4,8 @@ import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.api.Events.Block.AttackBlockEvent;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.BlockUtils;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -84,7 +84,7 @@ public class SuperInstaMine extends Module {
         if (e.getBlockPos() == null || mc.world.isAir(e.getBlockPos()) || mc.world.getBlockState(e.getBlockPos()).getBlock() instanceof FluidBlock) return;
 
         BlockPos pos = e.getBlockPos();
-        addBlocks(pos, (int) length.getValue(), (int) extraWidth.getValue(), (int) extraHeight.getValue());
+        addBlocks(pos, length.getValue().intValue(), extraWidth.getValue().intValue(), extraHeight.getValue().intValue());
     }
 
     public void mineAction() {

@@ -6,7 +6,7 @@ import com.ferra13671.BThack.api.Events.Camera.RotateCameraEvent;
 import com.ferra13671.BThack.api.Events.Player.ChangePlayerLookEvent;
 import com.ferra13671.BThack.api.Events.SetOpaqueCubeEvent;
 import com.ferra13671.BThack.api.Interfaces.Mc;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
@@ -96,7 +96,7 @@ public class FreeCam extends Module {
         @Override
         public void tick(boolean slowDown, float slowDownFactor) {
             unset();
-            float _speed = (float) speed.getValue() / 10f;
+            float _speed = speed.getValue().floatValue() / 10f;
             float fakeMovementForward = getMovementMultiplier(options.forwardKey.isPressed(), options.backKey.isPressed());
             float fakeMovementSideways = getMovementMultiplier(options.leftKey.isPressed(), options.rightKey.isPressed());
             Vec2f dir = handleVanillaMotion(_speed, fakeMovementForward, fakeMovementSideways);

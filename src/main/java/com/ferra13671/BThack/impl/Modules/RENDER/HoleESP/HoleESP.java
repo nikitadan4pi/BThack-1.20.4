@@ -3,9 +3,9 @@ package com.ferra13671.BThack.impl.Modules.RENDER.HoleESP;
 import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.Core.Render.Box.RenderBox;
 import com.ferra13671.BThack.api.Events.Render.RenderWorldEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.*;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -123,7 +123,7 @@ public class HoleESP extends Module {
         if (rangeMode.getValue().equals("Normal")) {
             obsHoles = BlockUtils.getNearbyBlocks(mc.player, range.getValue(), false);
         } else {
-            obsHoles = BlockUtils.getSphere(new ModifyBlockPos(mc.player.getBlockPos()), (float) rangeH.getValue(), (float) rangeV.getValue(), false, sphere.getValue(), 0);
+            obsHoles = BlockUtils.getSphere(new ModifyBlockPos(mc.player.getBlockPos()), rangeH.getValue().floatValue(), rangeV.getValue().floatValue(), false, sphere.getValue(), 0);
         }
         return obsHoles.stream()
                 .filter(blockPos -> HoleUtils.isMutableHole(blockPos, true))
@@ -135,7 +135,7 @@ public class HoleESP extends Module {
         if (rangeMode.getValue().equals("Normal")) {
             bedHoles = BlockUtils.getNearbyBlocks(mc.player, range.getValue(), false);
         } else {
-            bedHoles = BlockUtils.getSphere(new ModifyBlockPos(mc.player.getBlockPos()), (float) rangeH.getValue(), (float) rangeV.getValue(), false, sphere.getValue(), 0);
+            bedHoles = BlockUtils.getSphere(new ModifyBlockPos(mc.player.getBlockPos()), rangeH.getValue().floatValue(), rangeV.getValue().floatValue(), false, sphere.getValue(), 0);
         }
         return bedHoles.stream()
                 .filter(HoleUtils::isBedrockHole)
@@ -163,9 +163,9 @@ public class HoleESP extends Module {
 
         if (obsidianHoles.getValue() && obsidianHoleList != null) {
 
-            float oRed = (float) obsidianRed.getValue() / 255f;
-            float oGreen = (float) obsidianGreen.getValue() / 255f;
-            float oBlue = (float) obsidianBlue.getValue() / 255f;
+            float oRed = obsidianRed.getValue().floatValue() / 255f;
+            float oGreen = obsidianGreen.getValue().floatValue() / 255f;
+            float oBlue = obsidianBlue.getValue().floatValue() / 255f;
 
             for (BlockPos obsidianHole : obsidianHoleList) {
                 Box box = BlockUtils.createBox(obsidianHole, boxLength.getValue(), boxWidth.getValue(), boxHeight.getValue(), false);
@@ -174,9 +174,9 @@ public class HoleESP extends Module {
         }
 
         if (bedrockHoles.getValue() && bedrockHoleList != null) {
-            float bRed = (float) bedrockRed.getValue() / 255f;
-            float bGreen = (float) bedrockGreen.getValue() / 255f;
-            float bBlue = (float) bedrockBlue.getValue() / 255f;
+            float bRed = bedrockRed.getValue().floatValue() / 255f;
+            float bGreen = bedrockGreen.getValue().floatValue() / 255f;
+            float bBlue =  bedrockBlue.getValue().floatValue() / 255f;
 
             for (BlockPos bedrockHole : bedrockHoleList) {
                 Box box = BlockUtils.createBox(bedrockHole, boxLength.getValue(), boxWidth.getValue(), boxHeight.getValue(), false);

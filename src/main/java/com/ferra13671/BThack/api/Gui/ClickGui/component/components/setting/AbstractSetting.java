@@ -2,34 +2,40 @@ package com.ferra13671.BThack.api.Gui.ClickGui.component.components.setting;
 
 import com.ferra13671.BThack.api.Gui.ClickGui.component.Component;
 import com.ferra13671.BThack.api.Gui.ClickGui.component.components.ModuleButton;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.Setting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.Setting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.impl.Modules.CLIENT.ClickGui;
+import org.joml.Vector2i;
 
-public abstract class AbstractSetting extends Component {
+public abstract class AbstractSetting<T extends Setting<?>> extends Component {
 
     public int x;
     public int y;
-
     public int offset;
+    public final Vector2i position = new Vector2i(0, 0);
+
 
     public boolean hovered;
 
     private boolean visible = true;
 
+    public T setting;
+
+
     public final ModuleButton parent;
     public final Module module;
-    public final Setting op;
 
-    public AbstractSetting(int offset, ModuleButton button, Module module, Setting op) {
+    public AbstractSetting(int offset, ModuleButton button, Module module, T setting) {
         this.offset = offset;
         this.parent = button;
         this.module = module;
-        this.op = op;
+        this.setting = setting;
     }
 
     @Override
-    public abstract void renderComponent();
+    public void renderComponent() {
+        position.set(parent.parent.getX(), parent.parent.getY() + offset);
+    }
 
     @Override
     public void setOff(int newOff) {
@@ -38,14 +44,23 @@ public abstract class AbstractSetting extends Component {
 
     @Override
     public void updateDependencies(int offset) {
-        if (op.dependence != null)
-            setVisible(op.dependence.get());
+        if (setting.dependence != null)
+            setVisible(setting.dependence.get());
     }
 
     @Override
     public int getHeight() {
         return 15;
     }
+
+    public int getX() {
+        return position.x;
+    }
+
+    public int getY() {
+        return position.y;
+    }
+
 
     @Override
     public abstract boolean updateComponent(int mouseX, int mouseY);

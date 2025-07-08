@@ -2,7 +2,7 @@ package com.ferra13671.BThack.impl.Modules.PLAYER;
 
 import com.ferra13671.BThack.api.Events.PacketEvent;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.InventoryUtils;
 import com.ferra13671.BThack.api.Utils.ItemUtils;
@@ -87,25 +87,25 @@ public class AutoFish extends Module {
             if(castRodTimer > 0)
                 return;
 
-            reelInTimer = 20 * (int) patience.getValue();
+            reelInTimer = 20 * patience.getValue().intValue();
 
             ItemUtils.useItem(Hand.MAIN_HAND, true);
-            castRodTimer = (int) retryDelay.getValue();
+            castRodTimer = retryDelay.getValue().intValue();
             return;
         }
 
         if(soundBiteDetected) {
-            reelInTimer = (int) biteDelay.getValue();
+            reelInTimer = biteDelay.getValue().intValue();
             soundBiteDetected = false;
         } else if (mc.player.fishHook.getHookedEntity() != null) {
-            reelInTimer = (int) biteDelay.getValue();
+            reelInTimer = biteDelay.getValue().intValue();
         }
 
         if(reelInTimer == 0)
         {
             ItemUtils.useItem(Hand.MAIN_HAND, true);
-            reelInTimer = (int) retryDelay.getValue();
-            castRodTimer = (int) retryDelay.getValue();
+            reelInTimer = retryDelay.getValue().intValue();
+            castRodTimer = retryDelay.getValue().intValue();
         }
     }
 

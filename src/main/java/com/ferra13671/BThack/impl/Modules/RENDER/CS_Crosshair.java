@@ -5,8 +5,8 @@ import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
 import com.ferra13671.BThack.api.Events.Entity.AttackEntityEvent;
 import com.ferra13671.BThack.api.Events.Render.RenderHudPostEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
@@ -100,13 +100,13 @@ public class CS_Crosshair extends Module {
 
         Window window = mc.getWindow();
 
-        Color color = rainbow.getValue() ? new Color(ColorUtils.rainbow(100)) : new Color((int) redColor.getValue(), (int) greenColor.getValue(), (int) blueColor.getValue());
+        Color color = rainbow.getValue() ? new Color(ColorUtils.rainbow(100)) : new Color(redColor.getValue().intValue(), greenColor.getValue().intValue(), blueColor.getValue().intValue());
 
         BThackRender.guiGraphics.getMatrices().translate(window.getScaledWidth() / 2f, window.getScaledHeight() / 2f, 0);
         BThackRender.guiGraphics.getMatrices().peek().getPositionMatrix().rotate((float) Math.toRadians(rotate.getValue()), 0, 0, 1);
 
         if (centerRect.getValue())
-            BThackRender.drawRect((int)-height.getValue(), (int)- height.getValue(), (int)height.getValue(), (int)height.getValue(), color.hashCode());
+            BThackRender.drawRect((int)-height.getValue(), (int)- height.getValue(), height.getValue().intValue(), height.getValue().intValue(), color.hashCode());
 
         if (upRect.getValue())
             BThackRender.drawRect((int)(0 -height.getValue()), (int)(0 - height.getValue() - distance.getValue() - spread), (int)(0 + height.getValue()), (int)(0 - height.getValue() - distance.getValue() - width.getValue() - spread), color.hashCode());
@@ -123,7 +123,7 @@ public class CS_Crosshair extends Module {
         BThackRender.guiGraphics.getMatrices().peek().getPositionMatrix().rotate((float) -Math.toRadians(rotate.getValue()), 0, 0, 1);
         BThackRender.guiGraphics.getMatrices().translate(-(window.getScaledWidth() / 2f), -(window.getScaledHeight() / 2f), 0);
 
-        spread -= (float) scatterSpeed.getValue();
+        spread -= (float) scatterSpeed.getValue().floatValue();
         if (spread < 0)
             spread = 0;
 
@@ -137,7 +137,7 @@ public class CS_Crosshair extends Module {
         if (e.getPlayer() == mc.player) {
             spread += 6;
             if (spread > scatterLimit.getValue())
-                spread = (int) scatterLimit.getValue();
+                spread = scatterLimit.getValue().intValue();
         }
     }
 }

@@ -3,9 +3,9 @@ package com.ferra13671.BThack.api.Social.Clans;
 import com.ferra13671.BThack.BThack;
 import com.ferra13671.BThack.Core.FileSystem.ConfigSystem.ConfigSystem;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.Setting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.Setting;
 import com.ferra13671.BThack.api.Module.Module;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -194,8 +194,8 @@ public final class ClansUtils {
         return new ModeSetting("Target", module, clanNames, () -> clanManager.getValue()  && clanMode.equals("Target Clan"));
     }
 
-    public static ArrayList<Setting> addClanManagerInModule(Module module) {
-        ArrayList<Setting> settings = new ArrayList<>();
+    public static ArrayList<Setting<?>> addClanManagerInModule(Module module) {
+        ArrayList<Setting<?>> settings = new ArrayList<>();
         ArrayList<String> targetMode = new ArrayList<>(Arrays.asList(
                 "Only Enemy",
                 "Neutral Also",

@@ -2,10 +2,10 @@ package com.ferra13671.BThack.impl.Modules.RENDER;
 
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Events.LightmapGammaColorEvent;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.Setting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.Setting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
@@ -52,7 +52,7 @@ public class FullBright extends Module {
     private boolean hasAppliedNightVision = false;
 
     @Override
-    public void onChangeSetting(Setting setting) {
+    public void onChangeSetting(Setting<?> setting) {
         arrayListInfo = mode.getValue();
     }
 
@@ -78,7 +78,7 @@ public class FullBright extends Module {
         }
         e.setCancelled(true);
         if (customColor.getValue())
-            e.gammaColor = new Color((int) blue.getValue(), (int) green.getValue(), (int) red.getValue()).hashCode();
+            e.gammaColor = new Color((int) blue.getValue().intValue(), (int) green.getValue().intValue(), (int) red.getValue().intValue()).hashCode();
         else
             e.gammaColor = -1;
     }

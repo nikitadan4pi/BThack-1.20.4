@@ -10,7 +10,7 @@ import com.ferra13671.BThack.api.Gui.MainMenu.SelectWallpaper.SelectWallpaperScr
 import com.ferra13671.BThack.api.Gui.MainMenu.SelectWallpaper.Wallpaper;
 import com.ferra13671.BThack.api.HudComponent.HudComponent;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.*;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.*;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Plugin.Plugin;
 import com.ferra13671.BThack.api.Plugin.PluginSystem;
@@ -112,7 +112,7 @@ public final class ConfigSystem {
                 add(jsonObject, "Visible", module.visible);
 
                 if (Managers.SETTINGS_MANAGER.getSettingsByMod(module) != null) {
-                    for (Setting s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
+                    for (Setting<?> s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
                         s.save(settingObject);
                     }
                 }
@@ -129,7 +129,7 @@ public final class ConfigSystem {
                 JsonObject settingObject = jsonObject.get("Settings").getAsJsonObject();
 
                 if (Managers.SETTINGS_MANAGER.getSettingsByMod(module) != null) {
-                    for (Setting s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
+                    for (Setting<?> s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
                         JsonElement settingValueObject;
 
                         settingValueObject = settingObject.get(s.getName());
@@ -177,7 +177,7 @@ public final class ConfigSystem {
                 add(moduleObject, "Visible", module.visible);
 
                 if (Managers.SETTINGS_MANAGER.getSettingsByMod(module) != null) {
-                    for (Setting s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
+                    for (Setting<?> s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
                         s.save(settingObject);
                     }
                 }
@@ -205,7 +205,7 @@ public final class ConfigSystem {
                             JsonObject settingObject = moduleObject.get("Settings").getAsJsonObject();
 
                             if (Managers.SETTINGS_MANAGER.getSettingsByMod(module) != null) {
-                                for (Setting s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
+                                for (Setting<?> s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
                                     JsonElement settingValueObject;
 
                                     settingValueObject = settingObject.get(s.getName());
@@ -281,7 +281,7 @@ public final class ConfigSystem {
                 add(jsonObject, "Enabled", hudComponent.isEnabled());
 
                 if (Managers.SETTINGS_MANAGER.getSettingsByMod(module) != null) {
-                    for (Setting s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
+                    for (Setting<?> s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
                         s.save(settingObject);
                     }
                 }
@@ -314,7 +314,7 @@ public final class ConfigSystem {
                                 JsonObject settingObject = jsonObject.get("Settings").getAsJsonObject();
 
                                 if (Managers.SETTINGS_MANAGER.getSettingsByMod(module) != null) {
-                                    for (Setting s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
+                                    for (Setting<?> s : Managers.SETTINGS_MANAGER.getSettingsByMod(module)) {
                                         JsonElement settingValueObject;
 
                                         settingValueObject = settingObject.get(s.getName());

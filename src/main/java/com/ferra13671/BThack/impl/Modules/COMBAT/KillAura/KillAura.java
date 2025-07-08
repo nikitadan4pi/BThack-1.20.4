@@ -4,10 +4,10 @@ import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Events.PacketEvent;
 import com.ferra13671.BThack.api.Managers.Managers;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.ModeSetting;
-import com.ferra13671.BThack.api.Managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.TravelChange.TravelChanger;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.ferra13671.BThack.api.Managers.managers.TravelChange.TravelChanger;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Social.Clans.ClansUtils;
 import com.ferra13671.BThack.api.Utils.Grim.GrimUtils;
@@ -230,9 +230,9 @@ public class KillAura extends Module {
     public void attackTargetAction() {
         if (targetedEntity != null) {
             if (!Managers.TRAVEL_CHANGE_MANAGER.containsChanger(travelChanger)) Managers.TRAVEL_CHANGE_MANAGER.addChanger(travelChanger);
-            if (targetedEntity.lockTicks >= (int) lockTicks.getValue()) {
+            if (targetedEntity.lockTicks >= lockTicks.getValue().intValue()) {
                 RotateMode rotateMode = getRotateMode();
-                KillAuraUtils.preAttackRotate(rotateMode, rotations, (int) packets.getValue());
+                KillAuraUtils.preAttackRotate(rotateMode, rotations, packets.getValue().intValue());
                 KillAuraUtils.attackNoRotate(targetedEntity.entity);
                 //KillAuraUtils.postAttackRotate(rotateMode);
                 delayTicker.reset();
@@ -241,11 +241,11 @@ public class KillAura extends Module {
             } else {
                 Vec3d rotateVector = targetedEntity.entity.getPos();
                 rotations = AimBotUtils.rotations(rotateVector);
-                KillAuraUtils.preAttackRotate(getRotateMode(), rotations, (int) packets.getValue());
+                KillAuraUtils.preAttackRotate(getRotateMode(), rotations, packets.getValue().intValue());
                 if (rotateMode.getValue().equals("Grim") || !instaAttack.getValue()) {
                     targetedEntity = new Target(targetedEntity.entity, targetedEntity.lockTicks + 1);
                 } else {
-                    targetedEntity = new Target(targetedEntity.entity, (int) lockTicks.getValue());
+                    targetedEntity = new Target(targetedEntity.entity, lockTicks.getValue().intValue());
                 }
             }
         } else {
