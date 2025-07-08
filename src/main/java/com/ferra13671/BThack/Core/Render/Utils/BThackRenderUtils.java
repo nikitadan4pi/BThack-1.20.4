@@ -5,10 +5,7 @@ import com.ferra13671.BThack.api.Utils.RegionPos;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.Vec3d;
@@ -79,6 +76,10 @@ public final class BThackRenderUtils implements Mc {
 
     public static void drawNoReset() {
         Tessellator.getInstance().draw();
+    }
+
+    public static void drawNoReset(BufferBuilder.BuiltBuffer buffer) {
+        BufferRenderer.drawWithGlobalProgram(buffer);
     }
 
     public static void resetShader() {

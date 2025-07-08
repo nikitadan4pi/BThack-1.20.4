@@ -208,6 +208,7 @@ public final class ModuleList {
     public static Reach reach;
     public static SkyColor skyColor;
     public static WorldElements worldElements;
+    public static CustomFont customFont;
 
 
     static void initModules() {
@@ -219,6 +220,7 @@ public final class ModuleList {
         bthackMainMenu = register(new BThackMainMenu());
         chatNotifications = register(new ChatNotifications());
         clickGui = register(new ClickGui());
+        //customFont = register(new CustomFont());
         discordRPC = register(new DiscordRPC());
         fpsReducer = register(new FPSReducer());
         HUD = register(new HUD());
@@ -432,11 +434,11 @@ public final class ModuleList {
                 new GappleCountComponent(),
                 new TotemCountComponent(),
 
-                new TextRadarComponent(),
+                new TextRadarComponent()
 
 
 
-                new ArrayListComponent()
+                //new ArrayListComponent()
         ));
 
 

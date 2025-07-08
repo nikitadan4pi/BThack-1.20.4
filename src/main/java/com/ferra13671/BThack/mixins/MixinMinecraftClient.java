@@ -53,7 +53,11 @@ public abstract class MixinMinecraftClient implements Mc {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void modifyMinecraftInit(RunArgs args, CallbackInfo ci) {
-        BThack.instance.onInitializePost();
+        try {
+            BThack.instance.onInitializePost();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Inject(method = "getFramerateLimit", at = @At("HEAD"), cancellable = true)

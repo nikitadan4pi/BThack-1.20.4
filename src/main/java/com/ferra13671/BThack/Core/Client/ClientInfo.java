@@ -11,6 +11,7 @@ public final class ClientInfo implements Mc {
     private final String cName = "BThack " + BThack.instance.VERSION;
     private final GLTexture defaultMainMenuImage = GLTexture.fromPath("assets/bthack/bthack_mainmenu.jpg", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA);
     private String chatPrefix = "$";
+    private String font = "default";
     private String currentConfigName = "";
     private ColorTheme colorTheme;
 
@@ -26,6 +27,10 @@ public final class ClientInfo implements Mc {
 
     public String getCName() {
         return cName;
+    }
+
+    public String getFont() {
+        return font;
     }
 
     public GLTexture getDefaultMainMenuImage() {

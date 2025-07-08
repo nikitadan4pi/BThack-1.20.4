@@ -145,7 +145,7 @@ public final class BThack implements ClientModInitializer, Mc {
         PluginSystem.getLoadedPlugins().forEach(Plugin::preInit);
     }
 
-    public void onInitializePost() {
+    public void onInitializePost() throws Exception {
         if (initStage == InitStage.NOT_INITED) throw new UnsupportedOperationException("You cannot call post initialization if Client initialization has not been performed");
         if (initStage == InitStage.POST_INIT) throw new UnsupportedOperationException("You cannot call post initialization inside post initialization");
         if (initStage == InitStage.FULL_INITED) throw new UnsupportedOperationException("You cannot call initialization after a full initialization has been performed");
@@ -201,8 +201,7 @@ public final class BThack implements ClientModInitializer, Mc {
         });
 
          */
-
-        BThackRender.init();
+            BThackRender.init();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             ModuleList.timer.setToggled(false);

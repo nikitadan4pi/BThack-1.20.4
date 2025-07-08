@@ -1,8 +1,6 @@
 package com.ferra13671.BThack.Core.Render;
 
-
 import com.ferra13671.BThack.Core.Render.Box.BThackBoxRender;
-import com.ferra13671.BThack.Core.Render.Drawers.GradientRectDrawer;
 import com.ferra13671.BThack.Core.Render.Line.BThackLineRender;
 import com.ferra13671.BThack.Core.Render.Utils.BThackWorldRenderContext;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
@@ -26,6 +24,10 @@ import net.minecraft.world.chunk.Chunk;
 import org.joml.Matrix4f;
 import com.ferra13671.BThack.api.Interfaces.Mc;
 
+import java.awt.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static com.ferra13671.BThack.Core.Render.Utils.BThackRenderUtils.*;
 
 public final class BThackRender implements Mc {
@@ -35,14 +37,25 @@ public final class BThackRender implements Mc {
     public static final BThackWorldRenderContext worldRenderContext = new BThackWorldRenderContext();
     public static final BThackBoxRender boxRender = new BThackBoxRender();
     public static final BThackLineRender lineRender = new BThackLineRender();
+    //public static Font defaultFont;
+    //public static FontRenderManager fontRenderManager = new FontRenderManager(defaultFont);
 
     private static final ScissorStack scissorStack = new ScissorStack();
 
     private static boolean inited = false;
 
-    public static void init() {
+    public static void init()  {
         if (!inited) {
             boxRender.init();
+            //now font system is crashing client. I can't fix it now XD
+            /*if (DeviceSystem.getLaunchDevice() == DeviceSystem.LaunchDevice.PC && false) {
+                try {
+                    defaultFont = FontUtils.createFontNoThrow(ConfigUtils.newInputStream("assets/bthack/fonts/defaultFont.ttf", PathMode.INSIDEJAR), 17);
+                    reloadFontRenderManager();
+                } catch (Exception e) {
+                    BThack.error(e.getMessage());
+                }
+            }*/
         }
         RenderSystem.recordRenderCall(() -> Shaders.INSTANCE = new Shaders());
         inited = true;
@@ -285,6 +298,25 @@ public final class BThackRender implements Mc {
         draw();
     }
 
+    /*public static void drawString(String text, float x, float y, int color, boolean shadow, FontRenderManager.DrawMode drawMode) {
+
+        if (text == null || text.isEmpty()) return;
+
+        if (ModuleList.customFont == null || !ModuleList.customFont.isEnabled()) {
+            BThackMatrix.push();
+            float size = drawMode.getSize();
+            if (size != 1f)
+                BThackMatrix.scale(size, size, size);
+            mc.textRenderer.draw(text, x * (1 / size), y * (1 / size), color, shadow, BThackMatrix.peek().getPositionMatrix(), bufferSource, TextRenderer.TextLayerType.NORMAL, 0, 15728880, mc.textRenderer.isRightToLeft());
+            guiGraphics.draw();
+            resetShader();
+            BThackMatrix.pop();
+        } else {
+            RenderSystem.enableDepthTest();
+            fontRenderManager.draw(text, x, y, color, shadow, drawMode);
+        }
+    }*/
+
     public static void drawString(String text, float x1, float y1, int color, boolean shadow, float size) {
 
         if (text == null || text.isEmpty()) return;
@@ -295,6 +327,7 @@ public final class BThackRender implements Mc {
         guiGraphics.tryDraw();
         guiGraphics.getMatrices().pop();
         resetShader();
+        //drawString(text, x1, y1, color, shadow, FontRenderManager.DrawMode.NORMAL_BOLD);
     }
 
     public static void drawString(String text, float x1, float y1, int color, boolean shadow) {
@@ -344,6 +377,14 @@ public final class BThackRender implements Mc {
         bufferBuilder.vertex(matrix4f, x1, y1, 0.0f).texture(0, 0).next();
         draw();
     }
+
+   /* public static void reloadFontRenderManager() throws Exception {
+        if (fontRenderManager != null)
+            fontRenderManager.close();
+        if (Client.clientInfo.getFont().equals("default")) fontRenderManager = new FontRenderManager(defaultFont);
+        else if (Files.exists(Paths.get("BThack/Fonts/" + Client.clientInfo.getFont()))) fontRenderManager = new FontRenderManager(FontUtils.createFont(ConfigUtils.newInputStream("BThack/Fonts/" + Client.clientInfo.getFont(), PathMode.OUTSIDEJAR), 17));
+        ArrayListComponent.updateSizes();
+    }*/
 
 
     /**
@@ -414,5 +455,9 @@ public final class BThackRender implements Mc {
     public static void applyRegionalRenderOffset(MatrixStack matrixStack, RegionPos region) {
         Vec3d offset = region.toVec3d().subtract(getCameraPos());
         matrixStack.translate(offset.x, offset.y, offset.z);
+    }
+
+    public static DrawContext getGuiGraphics() {
+        return guiGraphics;
     }
 }

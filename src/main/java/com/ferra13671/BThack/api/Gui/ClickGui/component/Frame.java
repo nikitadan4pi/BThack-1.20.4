@@ -170,7 +170,7 @@ public class Frame implements Mc {
 		}
 		if (ClickGui.frameOutline.getValue())
 			BThackRender.drawOutlineRect(x, y, x + width, y + BAR_HEIGHT, 1, BAR_OUTLINE_COLOR);
-		BThackRender.drawString(frameName, x + (width / 2f) - (mc.textRenderer.getWidth(frameName) / 2f), y + (BAR_HEIGHT / 2f) - (mc.textRenderer.fontHeight / 2f), Client.clientInfo.getColorTheme().getModuleDisabledColour());
+		BThackRender.drawString(frameName, x + (width / 2f) - (mc.textRenderer.getWidth(frameName) / 2f), y + (BAR_HEIGHT / 2f) - (mc.textRenderer.fontHeight / 2f), Client.clientInfo.getColorTheme().getModuleDisabledColour(), false);
 	}
 	
 	public void refresh() {

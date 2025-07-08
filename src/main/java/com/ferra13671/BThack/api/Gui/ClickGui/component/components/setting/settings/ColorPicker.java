@@ -152,21 +152,22 @@ public class ColorPicker extends AbstractSetting<ColorSetting> {
             BThackRender.draw4ColorRect(colorRect.getStartX(), colorRect.getStartY(), colorRect.getEndX(), colorRect.getEndY(), ColorUtils.TRANSPARENT, ColorUtils.TRANSPARENT, ColorUtils.BLACK, ColorUtils.BLACK);
 
             //alphaRect
-            BThackRender.draw4ColorRect(alphaRect.getStartX(), alphaRect.getStartY(), alphaRect.getEndX(), alphaRect.getEndY(), new Color(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue()).hashCode(), new Color(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue()).hashCode(), ColorUtils.TRANSPARENT, ColorUtils.TRANSPARENT);
+            if(!setting.isBlockedAlpha())BThackRender.draw4ColorRect(alphaRect.getStartX(), alphaRect.getStartY(), alphaRect.getEndX(), alphaRect.getEndY(), new Color(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue()).hashCode(), new Color(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue()).hashCode(), ColorUtils.TRANSPARENT, ColorUtils.TRANSPARENT);
 
             //hueRect
             float hue = 0;
-            float hueFactor = 1 / 26f;
+            float hueFactor = 1 / 52f;
             float hueY = 0;
-            for (int i = 0; i < 26; i++) {
+            for (int i = 0; i < 52; i++) {
                 Color hueColor = Color.getHSBColor(hue, 1f, 1f);
-                BThackRender.drawRect(hueRect.getStartX(), hueRect.getStartY() + hueY, hueRect.getEndX(), hueRect.getStartY() + (hueY + 2), hueColor.hashCode());
+                BThackRender.drawRect(hueRect.getStartX(), hueRect.getStartY() + hueY, hueRect.getEndX(), hueRect.getStartY() + (hueY + 1), hueColor.hashCode());
                 hue += hueFactor;
-                hueY += 2;
+                hueY += 1;
             }
             drawHueCrosshair();
             drawColorCrosshair();
             drawAlphaCrosshair();
+            BThackRender.drawString("R:" + rgbColor.getRed() + " G:" + rgbColor.getGreen() + " B:" + rgbColor.getBlue() + " A:" + rgbColor.getAlpha(), getX() + 2, colorRect.getEndY() + 4, -1, true);
         }
         BThackRender.drawString(setting.getName(), getX() + 2, getY() + 2, ColorUtils.WHITE);
         BThackRender.drawRect(getX() + Constants.CLICKGUI_FRAME_WIDTH - 12, getY() + 2, getX() + Constants.CLICKGUI_FRAME_WIDTH - 2, getY() + 12, rgbColor.hashCode());
@@ -235,7 +236,7 @@ public class ColorPicker extends AbstractSetting<ColorSetting> {
     public boolean mouseClicked(int mouseX, int mouseY, int button) {
         if (!this.getVisible()) return false;
 
-        if (isMouseOnButton(mouseX, mouseY)) {
+        if (isMouseOnButton(mouseX, mouseY) && button == 0 && this.parent.open) {
             opened = !opened;
             parent.parent.refresh();
             animation.reset();

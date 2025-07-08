@@ -88,7 +88,7 @@ public class ClickGuiScreen extends BThackScreen implements Mc {
         buttons.add(Button.of(9
                 , scWidth - 150, scHeight - 40, 40, 10, "Confirm"));
 
-        guiScaleSlider = new SliderButton(10, scWidth / 2, scHeight - 15, 50, 10, "Gui Scale", ClickGui.guiScale.getValue(), 0.5, 1.5);
+        guiScaleSlider = new SliderButton(10, scWidth / 2, scHeight - 15, 50, 10, "Gui Scale", ModuleList.clickGui.guiScale.getValue(), 0.5, 1.5);
         buttons.add(guiScaleSlider);
 
         getButtonFromId(8).hided = !startSaving;
