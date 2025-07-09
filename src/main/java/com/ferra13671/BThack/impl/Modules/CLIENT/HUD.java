@@ -6,7 +6,7 @@ import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
 import com.ferra13671.BThack.api.Events.Render.RenderHudPostEvent;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
-import com.ferra13671.BThack.api.Gui.HudMover.HudMoverScreen;
+import com.ferra13671.BThack.api.Gui.Screen.HudEditor.HudEditorScreen;
 import com.ferra13671.BThack.api.HudComponent.HudComponent;
 import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
 import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
@@ -45,7 +45,7 @@ public class HUD extends Module {
         );
     }
 
-    public static final GLTexture bthack_logo = GLTexture.fromPath("assets/bthack/bthacklogo.png", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA);
+    public static final GLTexture bthack_logo = GLTexture.fromPath("assets/bthack/textures/bthacklogo.png", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA);
 
 
     int updateTickDelay = 0;
@@ -59,7 +59,7 @@ public class HUD extends Module {
     @EventSubscriber
     public void onTick(ClientTickEvent e) {
         if (nullCheck()) return;
-        if (mc.currentScreen instanceof HudMoverScreen) return;
+        if (mc.currentScreen instanceof HudEditorScreen) return;
 
         updateTickDelay++;
         if (updateTickDelay < 3) return;
@@ -78,7 +78,7 @@ public class HUD extends Module {
 
     @EventSubscriber(priority = Integer.MAX_VALUE)
     public void onRender(RenderHudPostEvent e) {
-        if (mc.currentScreen instanceof HudMoverScreen) return;
+        if (mc.currentScreen instanceof HudEditorScreen) return;
         BThackRender.guiGraphics.getMatrices().push();
         BThackRender.guiGraphics.getMatrices().translate(0,0,3000);
 

@@ -26,6 +26,10 @@ public final class ColorUtils {
         return Color.getHSBColor((float) (rainbowState / rSpeed), 0.5f, 1f).getRGB();
     }
 
+    public static int rainbow() {
+        return rainbow(1, 1);
+    }
+
     public static int rainbowType(int type) {
         float speed = RainbowUtils.getRainbowSpeed(type)[0];
         int delay = (int)RainbowUtils.getRainbowSpeed(type)[1];

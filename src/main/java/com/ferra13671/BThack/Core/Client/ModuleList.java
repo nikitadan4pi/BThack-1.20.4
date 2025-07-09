@@ -10,6 +10,7 @@ import com.ferra13671.BThack.impl.HudComponents.*;
 import com.ferra13671.BThack.impl.HudComponents.OneTextComponents.*;
 import com.ferra13671.BThack.impl.Modules.CLIENT.*;
 import com.ferra13671.BThack.impl.Modules.COMBAT.*;
+import com.ferra13671.BThack.impl.Modules.COMBAT.CrystalAura.CrystalAura;
 import com.ferra13671.BThack.impl.Modules.COMBAT.KillAura.KillAura;
 import com.ferra13671.BThack.impl.Modules.MISC.*;
 import com.ferra13671.BThack.impl.Modules.MISC.PacketMine.PacketMine;
@@ -30,6 +31,7 @@ public final class ModuleList {
     public static BThackMainMenu bthackMainMenu;
     public static ChatNotifications chatNotifications;
     public static ClickGui clickGui;
+    public static ClientSettings clientSettings;
     public static DiscordRPC discordRPC;
     public static FPSReducer fpsReducer;
     public static HUD HUD;
@@ -49,7 +51,7 @@ public final class ModuleList {
     public static AutoSword autoSword;
     public static AutoTotemFall autoTotemFall;
     public static Criticals criticals;
-    //public static CrystalAura crystalAura;
+    public static CrystalAura crystalAura;
     public static FastBow fastBow;
     public static FireBallAura fireBallAura;
     public static HitSound hitSound;
@@ -220,6 +222,7 @@ public final class ModuleList {
         bthackMainMenu = register(new BThackMainMenu());
         chatNotifications = register(new ChatNotifications());
         clickGui = register(new ClickGui());
+        clientSettings = register(new ClientSettings());
         //customFont = register(new CustomFont());
         discordRPC = register(new DiscordRPC());
         fpsReducer = register(new FPSReducer());
@@ -240,7 +243,7 @@ public final class ModuleList {
         autoSword = register(new AutoSword());
         autoTotemFall = register(new AutoTotemFall());
         criticals = register(new Criticals());
-        //crystalAura = register(new CrystalAura());
+        crystalAura = register(new CrystalAura());
         fastBow = register(new FastBow());
         fireBallAura = register(new FireBallAura());
         hitSound = register(new HitSound());
