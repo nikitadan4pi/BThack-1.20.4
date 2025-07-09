@@ -1,6 +1,5 @@
 package com.ferra13671.BThack.api.Gui.ClickGui.component.components;
 
-import com.ferra13671.BThack.BThack;
 import com.ferra13671.BThack.Core.Client.Client;
 import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
@@ -14,7 +13,6 @@ import com.ferra13671.BThack.api.Interfaces.Mc;
 import com.ferra13671.BThack.api.Managers.Managers;
 import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.Setting;
 import com.ferra13671.BThack.api.Module.Module;
-import com.ferra13671.BThack.api.Utils.Data;
 import com.ferra13671.BThack.impl.Modules.CLIENT.ClickGui;
 
 import java.awt.*;

@@ -166,7 +166,7 @@ public class ColorPicker extends AbstractSetting<ColorSetting> {
             }
             drawHueCrosshair();
             drawColorCrosshair();
-            drawAlphaCrosshair();
+            if (!setting.isBlockedAlpha())drawAlphaCrosshair();
             BThackRender.drawString("R:" + rgbColor.getRed() + " G:" + rgbColor.getGreen() + " B:" + rgbColor.getBlue() + " A:" + rgbColor.getAlpha(), getX() + 2, colorRect.getEndY() + 4, -1, true);
         }
         BThackRender.drawString(setting.getName(), getX() + 2, getY() + 2, ColorUtils.WHITE);
