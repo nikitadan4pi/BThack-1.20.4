@@ -8,9 +8,11 @@ import com.ferra13671.BThack.Core.FileSystem.ConfigSystem.ConfigUtils;
 import com.ferra13671.BThack.Core.FileSystem.FileSystem;
 import com.ferra13671.BThack.Core.FileSystem.JsonUtils;
 import com.ferra13671.BThack.Core.Render.BThackRender;
-import com.ferra13671.BThack.api.Gui.HudMover.HudMoverScreen;
-import com.ferra13671.BThack.api.Gui.MainMenu.BThackMainMenuScreen;
-import com.ferra13671.BThack.api.Gui.ClickGui.ClickGuiScreen;
+import com.ferra13671.BThack.api.Gui.Screen.HudEditor.HudEditorScreen;
+import com.ferra13671.BThack.api.Gui.Screen.MainMenu.BThackMainMenuScreen;
+import com.ferra13671.BThack.api.Gui.Screen.ClickGui.ClickGuiScreen;
+import com.ferra13671.BThack.api.GuiSystem.BThackScreens;
+import com.ferra13671.BThack.api.GuiSystem.BThackWidgets;
 import com.ferra13671.BThack.api.Interfaces.Mc;
 import com.ferra13671.BThack.api.Plugin.Plugin;
 import com.ferra13671.BThack.api.Plugin.PluginSystem;
@@ -51,7 +53,8 @@ public final class BThack implements ClientModInitializer, Mc {
 
     public ClickGuiScreen clickGui;
     public BThackMainMenuScreen mainMenu;
-    public HudMoverScreen hudMoverScreen;
+    public HudEditorScreen hudEditorScreen;
+    public BThackWidgets bThackWidgets;
 
     public BThack() {
         ModMetadata mod = FabricLoader.getInstance().getModContainer("bthack").get().getMetadata();
@@ -85,6 +88,7 @@ public final class BThack implements ClientModInitializer, Mc {
         initLog("BThack initialization has begun. Your nickname: " + mc.getSession().getUsername());
 
         PluginSystem.loadPlugins();
+        BThackWidgets.init();
 
         try {
             initLog("Starting to create BThack directory...");
@@ -172,7 +176,8 @@ public final class BThack implements ClientModInitializer, Mc {
 
         BThack.instance.clickGui = new ClickGuiScreen();
         BThack.instance.mainMenu = new BThackMainMenuScreen();
-        BThack.instance.hudMoverScreen = new HudMoverScreen();
+        BThack.instance.hudEditorScreen = new HudEditorScreen();
+        BThack.instance.bThackWidgets = new BThackWidgets();
 
         BThack.initLog("Starting loading the config...");
         try {

@@ -2,10 +2,7 @@ package com.ferra13671.BThack.Core.Render;
 
 import com.ferra13671.BThack.Core.Render.Box.BThackBoxRender;
 import com.ferra13671.BThack.Core.Render.Line.BThackLineRender;
-import com.ferra13671.BThack.Core.Render.Utils.BThackWorldRenderContext;
-import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
-import com.ferra13671.BThack.Core.Render.Utils.RainbowUtils;
-import com.ferra13671.BThack.Core.Render.Utils.ScissorStack;
+import com.ferra13671.BThack.Core.Render.Utils.*;
 import com.ferra13671.BThack.api.Shader.ShaderProgram;
 import com.ferra13671.BThack.api.Shader.Shaders;
 import com.ferra13671.BThack.api.Utils.RegionPos;
@@ -23,12 +20,14 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.Chunk;
 import org.joml.Matrix4f;
 import com.ferra13671.BThack.api.Interfaces.Mc;
+import org.joml.Vector3f;
 
 import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static com.ferra13671.BThack.Core.Render.Utils.BThackRenderUtils.*;
+import static com.ferra13671.BThack.Core.Render.Utils.ColorUtils.hashCodeToRGBA;
 
 public final class BThackRender implements Mc {
 
@@ -73,8 +72,54 @@ public final class BThackRender implements Mc {
         draw();
     }
 
+    public static void drawRoundedRectWithOutline(float x1, float y1, float x2, float y2, float radius, int color, int outlineColor, float depth) {
+        BufferBuilder buffer = BThackRenderUtils.prepareToDraw(() -> Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.shader.getProgram());
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
+
+        Matrix4f matrix4f = BThackMatrix.peek().getPositionMatrix();
+        Vector3f startPos = matrix4f.transformPosition(x1, y1, 0, new Vector3f());
+        Vector3f endPos = matrix4f.transformPosition(x2, y2, 0, new Vector3f());
+
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("resolution", (float) mc.getWindow().getWidth(), (float) mc.getWindow().getHeight());
+        float scale = mc.getWindow().getScaledHeight() / (float) mc.getWindow().getHeight();
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("position", startPos.x / scale, startPos.y / scale);
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("size", (endPos.x - startPos.x) / scale, (endPos.y - startPos.y) / scale);
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("radius", radius / scale);
+        float[] rgba1 = ColorUtils.hashCodeToRGBA(color);
+        float[] rgba2 = ColorUtils.hashCodeToRGBA(outlineColor);
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("color", rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("outlineColor", rgba2[0], rgba2[1], rgba2[2], rgba2[3]);
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("depth", depth / scale);
+
+        buffer.vertex(matrix4f, x1 - 1, y1 - 1, 0);
+        buffer.vertex(matrix4f, x1 - 1, y2 + 1, 0);
+        buffer.vertex(matrix4f, x2 + 1, y2 + 1, 0);
+        buffer.vertex(matrix4f, x2 + 1, y1 - 1, 0);
+
+        buffer.end();
+        BThackRenderUtils.draw();
+    }
+
     public static void drawRect(float x1, float y1, float x2, float y2, int color) {
         drawRect(x1, y1, x2, y2, color, guiGraphics.getMatrices().peek().getPositionMatrix());
+    }
+
+    public static void drawRectDraw(int color, float x1, float y1, float x2, float y2){
+        float[] c = hashCodeToRGBA(color);
+
+        Shaders.INSTANCE.POSITION.use();
+        Shaders.INSTANCE.POSITION.setUniformValue("color", c[0], c[1], c[2], c[3]);
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
+        Matrix4f matrix4f = BThackMatrix.peek().getPositionMatrix();
+        buffer.vertex(matrix4f, x1, y1, 0);
+        buffer.vertex(matrix4f, x1, y2, 0);
+        buffer.vertex(matrix4f, x2, y2, 0);
+        buffer.vertex(matrix4f, x2, y1, 0);
+        buffer.end();
+        draw();
+        Shaders.INSTANCE.POSITION.release();
+        buffer = null;
     }
 
     public static void drawRect(float x1, float y1, float x2, float y2, int color, Matrix4f matrix4f) {
@@ -159,7 +204,14 @@ public final class BThackRender implements Mc {
         draw();
     }
 
-    public static void drawHorizontalGradientRect(float x1, float y1, float x2, float y2, int startColor, int endColor) {
+    public static void drawVerticalGradientOutlineRect(float x1, float y1, float x2, float y2, float depth, int upColor, int downColor) {
+        BThackRender.drawRect(x1 + depth, y1, x2 - depth, y1 + depth, upColor); //up
+        BThackRender.drawRect(x1 + depth, y2 - depth, x2, y2, downColor); //down
+        drawVerticalGradientRect(x1,y1, x1 + depth, y2, upColor, downColor);
+        drawVerticalGradientRect(x2 - depth, y1, x2, y2 - depth, upColor, downColor);
+    }
+
+        public static void drawHorizontalGradientRect(float x1, float y1, float x2, float y2, int startColor, int endColor) {
         Matrix4f matrix4f = guiGraphics.getMatrices().peek().getPositionMatrix();
 
         float[] startC = hashCodeToRGBA(startColor);
