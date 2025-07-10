@@ -1,6 +1,8 @@
 package com.ferra13671.BThack.api.Gui.ClickGui.component.components;
 
+import com.ferra13671.BThack.Constants;
 import com.ferra13671.BThack.Core.Client.Client;
+import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
 import com.ferra13671.BThack.api.Animation.Animation;
@@ -33,6 +35,7 @@ public class ModuleButton extends Component implements Mc {
 	private float alphaDelta = 1;
 	private boolean alphaDeltaInverse = true;
 	private Animation animation = new Animation(Easing.CIRC_OUT, 500);
+	private final Animation toggleAnimation = new Animation(Easing.LINEAR, 250);
 	private double lastAnimFactor = 0;
 	private int animatedSettingsHeight = 0;
 
@@ -92,6 +95,29 @@ public class ModuleButton extends Component implements Mc {
 		}
 	}
 
+	protected void drawNormalBackground() {
+		BThackRender.drawRect(parent.getX(), parent.getY() + offset, parent.getX() + Constants.CLICKGUI_FRAME_WIDTH, parent.getY() + Constants.CLICKGUI_BUTTON_HEIGHT + offset,
+				ColorUtils.integrateAlpha(
+						isHovered ?
+								ModuleList.clickGui.backgroundColor.getBrighterValue().hashCode() :
+								ModuleList.clickGui.backgroundColor.getValue().hashCode(),
+						ClickGui.INT_OPACITY
+				)
+		);
+	}
+
+	protected void drawEnabledBackground() {
+		float _alpha = (int) (ClickGui.INT_OPACITY * (module.isEnabled() ? toggleAnimation.getEase() : 1 - toggleAnimation.getEase())) / 255f;
+			BThackRender.drawRect(parent.getX(), parent.getY() + offset, parent.getX() + Constants.CLICKGUI_FRAME_WIDTH, parent.getY() + Constants.CLICKGUI_BUTTON_HEIGHT + offset,
+					ColorUtils.integrateAlpha(
+							isHovered ?
+									new Color(ClickGui.getClickGuiColor(true)).hashCode() :
+									new Color(ClickGui.getClickGuiColor(true)).darker().hashCode(),
+							(int) (_alpha * 255)
+					)
+			);
+		}
+
 	@Override
 	public void renderComponent() {
 		if (animation.getPassedMillis() <= animation.getMillis() + 50) {
@@ -102,37 +128,8 @@ public class ModuleButton extends Component implements Mc {
 			parent.refresh();
 		}
 
-		BThackRender.drawRect(parent.getX(), parent.getY() + offset, parent.getX() + parent.getWidth(), parent.getY() + BUTTON_HEIGHT + offset,
-				isHovered ?
-						ColorUtils.integrateAlpha(
-								module.isEnabled() ?
-										new Color(ClickGui.getClickGuiColor(true)).darker().hashCode()
-										:
-										ColorUtils.fastRGBA(Client.clientInfo.getColorTheme().getBackgroundFontHoveredColour())
-								, (int) (255 * ClickGui.opacity.getValue()))
-						:
-						ColorUtils.integrateAlpha(
-								module.isEnabled() ?
-										new Color(ClickGui.getClickGuiColor(true)).darker().darker().hashCode()
-										:
-										ColorUtils.fastRGBA(Client.clientInfo.getColorTheme().getBackgroundFontColour())
-								, (int) (255 * ClickGui.opacity.getValue())));
-		if (ClickGui.moduleOutline.getValue())
-			BThackRender.drawOutlineRect(parent.getX(), parent.getY() + offset, parent.getX() + parent.getWidth(), parent.getY() + BUTTON_HEIGHT + offset, 1,
-					isHovered ?
-							ColorUtils.integrateAlpha(
-									module.isEnabled() ?
-											new Color(ClickGui.getClickGuiColor(true)).darker().hashCode()
-											:
-											ColorUtils.fastRGBA(Client.clientInfo.getColorTheme().getBackgroundFontHoveredColour())
-									, (int) (255 * ClickGui.opacity.getValue()))
-							:
-							ColorUtils.integrateAlpha(
-									module.isEnabled() ?
-											new Color(ClickGui.getClickGuiColor(true)).darker().darker().hashCode()
-											:
-											ColorUtils.fastRGBA(Client.clientInfo.getColorTheme().getBackgroundFontColour())
-									, (int) (255 * ClickGui.opacity.getValue())));
+		if (module.isEnabled()) drawEnabledBackground();
+		else drawNormalBackground();
 		BThackRender.drawString(module.getName(), (parent.getX() + 5), (parent.getY() + offset + 2), ColorUtils.fastRGBA(Client.clientInfo.getColorTheme().getModuleDisabledColour()));
 
 		if (!settings.isEmpty())

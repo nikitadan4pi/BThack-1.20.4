@@ -2,14 +2,12 @@ package com.ferra13671.BThack.Core.Render;
 
 import com.ferra13671.BThack.Core.Render.Box.BThackBoxRender;
 import com.ferra13671.BThack.Core.Render.Line.BThackLineRender;
-import com.ferra13671.BThack.Core.Render.Utils.BThackWorldRenderContext;
-import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
-import com.ferra13671.BThack.Core.Render.Utils.RainbowUtils;
-import com.ferra13671.BThack.Core.Render.Utils.ScissorStack;
+import com.ferra13671.BThack.Core.Render.Utils.*;
 import com.ferra13671.BThack.api.Shader.ShaderProgram;
 import com.ferra13671.BThack.api.Shader.Shaders;
 import com.ferra13671.BThack.api.Utils.RegionPos;
 import com.ferra13671.TextureUtils.GLTexture;
+import com.ferra13671.TextureUtils.GlTex;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -362,6 +360,21 @@ public final class BThackRender implements Mc {
         bufferBuilder.vertex(matrix4f, x2, y1, 0.0f).texture(1, 0).next();
         bufferBuilder.vertex(matrix4f, x1, y1, 0.0f).texture(0, 0).next();
         draw();
+    }
+
+    public static void drawTextureRect(GlTex texture, float x1, float y1, float x2, float y2){
+        BufferBuilder buffer;
+        RenderSystem.setShaderTexture(0, texture.getTexId());
+        buffer = BThackRenderUtils.prepareToDraw(GameRenderer::getPositionTexProgram);
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        Matrix4f matrix4f = BThackRender.guiGraphics.getMatrices().peek().getPositionMatrix();
+        buffer.vertex(matrix4f, x1, y2, 0.0f).texture(0, 1);
+        buffer.vertex(matrix4f, x2, y2, 0.0f).texture(1, 1);
+        buffer.vertex(matrix4f, x2, y1, 0.0f).texture(1, 0);
+        buffer.vertex(matrix4f, x1, y1, 0.0f).texture(0, 0);
+        buffer.end();
+        draw();
+        buffer = null;
     }
 
     public static void drawTextureRect(GLTexture texture, float x1, float y1, float x2, float y2) {

@@ -48,6 +48,12 @@ public abstract class AbstractSetting<T extends Setting<?>> extends Component {
             setVisible(setting.dependence.get());
     }
 
+    public void refresh(int newOff) {
+        offset = newOff;
+        if (setting != null && setting.dependence != null)
+            setVisible(setting.dependence.get());
+    }
+
     @Override
     public int getHeight() {
         return 15;

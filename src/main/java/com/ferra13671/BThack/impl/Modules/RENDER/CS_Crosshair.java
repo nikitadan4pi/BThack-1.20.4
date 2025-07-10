@@ -6,6 +6,7 @@ import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
 import com.ferra13671.BThack.api.Events.Entity.AttackEntityEvent;
 import com.ferra13671.BThack.api.Events.Render.RenderHudPostEvent;
 import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ColorSetting;
 import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
@@ -29,9 +30,7 @@ public class CS_Crosshair extends Module {
     public static BooleanSetting downRect;
     public static BooleanSetting centerRect;
 
-    public static NumberSetting redColor;
-    public static NumberSetting greenColor;
-    public static NumberSetting blueColor;
+    public static ColorSetting colorS;
 
     public static NumberSetting rotate;
 
@@ -61,9 +60,7 @@ public class CS_Crosshair extends Module {
         downRect = new BooleanSetting("Down Rect", this, true);
         centerRect = new BooleanSetting("Center Rect", this, true);
 
-        redColor = new NumberSetting("Red", this, 0, 0, 255, true, () -> !rainbow.getValue());
-        greenColor = new NumberSetting("Green", this, 255, 0, 255, true, () -> !rainbow.getValue());
-        blueColor = new NumberSetting("Blue", this, 0, 0, 255, true, () -> !rainbow.getValue());
+        colorS = new ColorSetting("Color", this, Color.GREEN).withBlockedAlpha();
 
         rotate = new NumberSetting("Rotate", this, 0, 0, 90, true);
 
@@ -81,9 +78,7 @@ public class CS_Crosshair extends Module {
                 upRect,
                 downRect,
                 centerRect,
-                redColor,
-                greenColor,
-                blueColor,
+                colorS,
                 rotate,
                 rainbow
         );
@@ -100,7 +95,7 @@ public class CS_Crosshair extends Module {
 
         Window window = mc.getWindow();
 
-        Color color = rainbow.getValue() ? new Color(ColorUtils.rainbow(100)) : new Color(redColor.getValue().intValue(), greenColor.getValue().intValue(), blueColor.getValue().intValue());
+        Color color = rainbow.getValue() ? new Color(ColorUtils.rainbow(100)) : colorS.getValue();
 
         BThackRender.guiGraphics.getMatrices().translate(window.getScaledWidth() / 2f, window.getScaledHeight() / 2f, 0);
         BThackRender.guiGraphics.getMatrices().peek().getPositionMatrix().rotate((float) Math.toRadians(rotate.getValue()), 0, 0, 1);

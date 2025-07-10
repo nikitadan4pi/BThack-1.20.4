@@ -21,6 +21,7 @@ public class HUD extends Module {
 
     public static BooleanSetting rainbow;
     public static NumberSetting rainbowType;
+    public static NumberSetting scale;
 
     public HUD() {
         super("HUD",
@@ -38,6 +39,7 @@ public class HUD extends Module {
 
         rainbow = new BooleanSetting("Rainbow", this, true);
         rainbowType = new NumberSetting("Rainbow type", this, 3, 1, 8, true, () -> rainbow.getValue());
+        scale = new NumberSetting("Scale", this, 1, 0.5, 1.5, false);
 
         initSettings(
                 rainbow,
@@ -47,23 +49,15 @@ public class HUD extends Module {
 
     public static final GLTexture bthack_logo = GLTexture.fromPath("assets/bthack/bthacklogo.png", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA);
 
-
-    int updateTickDelay = 0;
-
     @Override
     public void onDisable() {
         super.onDisable();
-        updateTickDelay = 0;
     }
 
     @EventSubscriber
     public void onTick(ClientTickEvent e) {
         if (nullCheck()) return;
         if (mc.currentScreen instanceof HudMoverScreen) return;
-
-        updateTickDelay++;
-        if (updateTickDelay < 3) return;
-        updateTickDelay = 0;
 
         for (HudComponent hudComponent : Client.hudComponents) {
             if (hudComponent.isEnabled()) {

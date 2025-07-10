@@ -108,4 +108,14 @@ public final class MathUtils {
     public static long applyRange(long number, long min, long max) {
         return Math.min(Math.max(min, number), max);
     }
+
+    public static boolean hasInRange(int value, int min, int max) {
+        return value >= min && value <= max;
+    }
+
+    public static int nearest(int value, int min, int max) {
+        double n = Math.abs(min - max) / 2d;
+        if (value <= min + n) return min;
+        else return max;
+    }
 }

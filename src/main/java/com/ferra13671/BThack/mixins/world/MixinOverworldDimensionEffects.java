@@ -22,7 +22,7 @@ public class MixinOverworldDimensionEffects {
                 Color color = new Color(ColorUtils.rainbowType(2));
                 cir.setReturnValue(new Vec3d(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f));
             } else
-                cir.setReturnValue(new Vec3d(FogColor.fogRed.getValue() / 255, FogColor.fogGreen.getValue() / 255, FogColor.fogBlue.getValue() / 255));
+                cir.setReturnValue(new Vec3d(FogColor.fogColor.getValue().getRed() / 255, FogColor.fogColor.getValue().getGreen() / 255, FogColor.fogColor.getValue().getBlue() / 255));
         }
     }
 }

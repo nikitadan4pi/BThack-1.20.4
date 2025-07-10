@@ -44,7 +44,7 @@ public final class DiscordUtils implements Mc {
         String imageKey = "bthack_icon";
 
         if (com.ferra13671.BThack.impl.Modules.CLIENT.DiscordRPC.secret.getValue()) {
-            int percent = GenerateNumber.generateInt(1, 100);
+            int percent = GenerateNumber.generateInt(1, 50);
             if (percent > 0 && percent <= 10) {
                 imageKey = "hentai_face1";
             } else if (percent > 10 && percent <= 20) {

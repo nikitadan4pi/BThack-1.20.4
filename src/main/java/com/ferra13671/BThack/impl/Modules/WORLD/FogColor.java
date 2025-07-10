@@ -1,15 +1,17 @@
 package com.ferra13671.BThack.impl.Modules.WORLD;
 
+import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
 import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ColorSetting;
 import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 
+import java.awt.*;
+
 public class FogColor extends Module {
 
-    public static NumberSetting fogRed;
-    public static NumberSetting fogGreen;
-    public static NumberSetting fogBlue;
+    public static ColorSetting fogColor;
     public static BooleanSetting rainbow;
 
     public static BooleanSetting overworld;
@@ -24,9 +26,7 @@ public class FogColor extends Module {
                 false
         );
 
-        fogRed = new NumberSetting("Red", this, 255, 0, 255, false, () -> !rainbow.getValue());
-        fogGreen = new NumberSetting("Green", this, 255, 0, 255, false, () -> !rainbow.getValue());
-        fogBlue = new NumberSetting("Blue", this, 255, 0, 255, false, () -> !rainbow.getValue());
+        fogColor = new ColorSetting("Color", this, Color.white, () -> !rainbow.getValue());
         rainbow = new BooleanSetting("Rainbow", this, false);
 
         overworld = new BooleanSetting("Overworld", this, true);
@@ -34,9 +34,7 @@ public class FogColor extends Module {
         end = new BooleanSetting("End", this, true);
 
         initSettings(
-                fogRed,
-                fogGreen,
-                fogBlue,
+                fogColor,
                 rainbow,
                 overworld,
                 nether,

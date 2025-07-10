@@ -3,10 +3,13 @@ package com.ferra13671.BThack.impl.Modules.RENDER;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
 import com.ferra13671.BThack.Core.Render.Utils.RainbowUtils;
 import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ColorSetting;
 import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Utils.KeyboardUtils;
 import net.minecraft.util.math.ColorHelper;
+
+import java.awt.*;
 
 public class EnchantColor extends Module {
 
@@ -14,9 +17,7 @@ public class EnchantColor extends Module {
     public static NumberSetting enchantSize;
 
     public static NumberSetting alphaColor;
-    public static NumberSetting redColor;
-    public static NumberSetting greenColor;
-    public static NumberSetting blueColor;
+    public static ColorSetting color;
 
     public static BooleanSetting rainbow;
     public static NumberSetting rainbowSpeed;
@@ -32,11 +33,8 @@ public class EnchantColor extends Module {
         enchantSpeed = new NumberSetting("Ench. Speed", this, 1, 0, 2, false);
         enchantSize = new NumberSetting("Ench. Size", this, 1, 0.1, 5, false);
 
+        color = new ColorSetting("Color", this, Color.BLACK).withBlockedAlpha();
         alphaColor = new NumberSetting("Alpha", this, 180, 0, 255, true);
-
-        redColor = new NumberSetting("Red", this, 255, 0, 255, true, () -> !rainbow.getValue());
-        greenColor = new NumberSetting("Green", this, 255, 0, 255, true, () -> !rainbow.getValue());
-        blueColor = new NumberSetting("Blue", this, 255, 0, 255, true, () -> !rainbow.getValue());
 
         rainbow = new BooleanSetting("Rainbow", this, false);
         rainbowSpeed = new NumberSetting("Rainbow Speed", this, 2, 1, 4, true, rainbow::getValue);
@@ -45,11 +43,8 @@ public class EnchantColor extends Module {
                 enchantSpeed,
                 enchantSize,
 
+                color,
                 alphaColor,
-
-                redColor,
-                greenColor,
-                blueColor,
 
                 rainbow,
                 rainbowSpeed
@@ -63,9 +58,9 @@ public class EnchantColor extends Module {
         float alpha = (float) (alphaColor.getValue() / 255d);
 
         if (!rainbow.getValue()) {
-            red = (float) (redColor.getValue() / 255d);
-            green = (float) (greenColor.getValue() / 255d);
-            blue = (float) (blueColor.getValue() / 255d);
+            red = (float) (color.getValue().getRed() / 255d);
+            green = (float) (color.getValue().getGreen() / 255d);
+            blue = (float) (color.getValue().getBlue() / 255d);
         } else {
             int rainbowType = rainbowSpeed.getValue().intValue();
             float speed = RainbowUtils.getRainbowRectSpeed(rainbowType)[0];

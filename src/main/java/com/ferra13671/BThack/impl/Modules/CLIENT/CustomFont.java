@@ -17,13 +17,13 @@ public class CustomFont extends Module {
 
     @Override
     public void onEnable() {
-        ArrayListComponent.updateSizes();
+        //ArrayListComponent.updateSizes();
         super.onEnable();
     }
 
     @Override
     public void onDisable() {
-        ArrayListComponent.updateSizes();
+        //ArrayListComponent.updateSizes();
         super.onDisable();
     }
 }

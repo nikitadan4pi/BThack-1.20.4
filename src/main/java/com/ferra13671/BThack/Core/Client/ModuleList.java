@@ -10,6 +10,7 @@ import com.ferra13671.BThack.impl.HudComponents.*;
 import com.ferra13671.BThack.impl.HudComponents.OneTextComponents.*;
 import com.ferra13671.BThack.impl.Modules.CLIENT.*;
 import com.ferra13671.BThack.impl.Modules.COMBAT.*;
+import com.ferra13671.BThack.impl.Modules.COMBAT.CrystalAura.CrystalAura;
 import com.ferra13671.BThack.impl.Modules.COMBAT.KillAura.KillAura;
 import com.ferra13671.BThack.impl.Modules.MISC.*;
 import com.ferra13671.BThack.impl.Modules.MISC.PacketMine.PacketMine;
@@ -49,7 +50,7 @@ public final class ModuleList {
     public static AutoSword autoSword;
     public static AutoTotemFall autoTotemFall;
     public static Criticals criticals;
-    //public static CrystalAura crystalAura;
+    public static CrystalAura crystalAura;
     public static FastBow fastBow;
     public static FireBallAura fireBallAura;
     public static HitSound hitSound;
@@ -98,6 +99,7 @@ public final class ModuleList {
     public static AntiAFK antiAFK;
     public static AutoJump autoJump;
     public static AutoWalk autoWalk;
+    public static Blink blink;
     public static CameraRotator cameraRotator;
     public static ElytraFastClose elytraFastClose;
     public static ElytraFlight elytraFlight;
@@ -240,7 +242,7 @@ public final class ModuleList {
         autoSword = register(new AutoSword());
         autoTotemFall = register(new AutoTotemFall());
         criticals = register(new Criticals());
-        //crystalAura = register(new CrystalAura());
+        crystalAura = register(new CrystalAura());
         fastBow = register(new FastBow());
         fireBallAura = register(new FireBallAura());
         hitSound = register(new HitSound());
@@ -289,6 +291,7 @@ public final class ModuleList {
         antiAFK = register(new AntiAFK());
         autoJump = register(new AutoJump());
         autoWalk = register(new AutoWalk());
+        blink =  register(new Blink());
         cameraRotator = register(new CameraRotator());
         elytraFastClose = register(new ElytraFastClose());
         elytraFlight = register(new ElytraFlight());
@@ -412,6 +415,7 @@ public final class ModuleList {
 
         Client.hudComponents.addAll(Arrays.asList(
                 new WatermarkComponent(),
+                //new CompanionComponent(),
                 new FPSComponent(),
                 new CoordinatesComponent(),
                 new RotationComponent(),
@@ -434,13 +438,12 @@ public final class ModuleList {
                 new GappleCountComponent(),
                 new TotemCountComponent(),
 
-                new TextRadarComponent()
+                new TextRadarComponent(),
 
 
 
-                //new ArrayListComponent()
+                new ArrayListComponent()
         ));
-
 
         Client.hudComponents.addAll(PluginUtils.getPluginsHudComponents());
         Client.modules.addAll(Client.hudComponents);

@@ -1,5 +1,6 @@
 package com.ferra13671.BThack.api.Utils.Modules;
 
+import com.ferra13671.BThack.api.Utils.MathUtils;
 import net.minecraft.entity.Entity;
 
 public final class NoRotateMathUtils {
@@ -124,5 +125,43 @@ public final class NoRotateMathUtils {
     protected static void checkPitchRotate(double maxValue, double minValue, double pitch) {
         checkPitch1 = maxValue - pitch;
         checkPitch2 = pitch - minValue;
+    }
+
+    private static int invertIfNeed(boolean invert, int value) {
+        if (invert) return -value;
+        return value;
+    }
+
+    public static int getNearestYawAxis(Entity entity) {
+        return getNearestYawAxis((int) entity.getYaw());
+    }
+
+    public static int getNearestYawAxis(int yaw) {
+        boolean invert = false;
+
+        if (yaw < 0) {
+            invert = true;
+            yaw *= -1;
+        }
+
+        yaw = yaw % 360;
+
+        if (MathUtils.hasInRange(yaw, 0, 45))
+            return invertIfNeed(invert, MathUtils.nearest(yaw, 0, 45));
+        if (MathUtils.hasInRange(yaw, 45, 90))
+            return invertIfNeed(invert, MathUtils.nearest(yaw, 45, 90));
+        if (MathUtils.hasInRange(yaw, 90, 135))
+            return invertIfNeed(invert, MathUtils.nearest(yaw, 90, 135));
+        if (MathUtils.hasInRange(yaw, 135, 180))
+            return invertIfNeed(invert, MathUtils.nearest(yaw, 135, 180));
+        if (MathUtils.hasInRange(yaw, 180, 225))
+            return invertIfNeed(invert, MathUtils.nearest(yaw, 180, 225));
+        if (MathUtils.hasInRange(yaw, 225, 270))
+            return invertIfNeed(invert, MathUtils.nearest(yaw, 225, 270));
+        if (MathUtils.hasInRange(yaw, 270, 315))
+            return invertIfNeed(invert, MathUtils.nearest(yaw, 270, 315));
+        if (MathUtils.hasInRange(yaw, 315, 360))
+            return invertIfNeed(invert, MathUtils.nearest(yaw, 315, 360));
+        return yaw;
     }
 }

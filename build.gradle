@@ -9,9 +9,9 @@ plugins {
       YES --- Baritone will be integrated into the jar file.
       NO --- Baritone will not be integrated into the jar file.
  */
-project.ext.withBaritone = WithBaritone.YES
+project.ext.withBaritone = WithBaritone.NO
 // Version under which BThack jar file will be created and customized
-project.ext.version = "1.4"
+project.ext.version = "devel-1.4+"
 
 version = project.ext.version + (project.ext.withBaritone == WithBaritone.YES ? "" : "-NoBaritone")
 group = "com.ferra13671"

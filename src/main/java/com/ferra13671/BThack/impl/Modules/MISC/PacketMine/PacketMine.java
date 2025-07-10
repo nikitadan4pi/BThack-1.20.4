@@ -8,9 +8,7 @@ import com.ferra13671.BThack.api.Events.Block.UseBlockEvent;
 import com.ferra13671.BThack.api.Events.ClientTickEvent;
 import com.ferra13671.BThack.api.Events.Render.RenderWorldEvent;
 import com.ferra13671.BThack.api.Managers.managers.Destroy.DestroyManager;
-import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
-import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
-import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
+import com.ferra13671.BThack.api.Managers.managers.Setting.Settings.*;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.api.Social.SocialManagers;
 import com.ferra13671.BThack.api.Utils.BlockUtils;
@@ -35,6 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,8 +41,6 @@ import java.util.List;
 import static com.ferra13671.BThack.BThack.initLog;
 
 public class PacketMine extends Module {
-
-    public static ModeSetting page;
 
     public static BooleanSetting swingHand;
     public static BooleanSetting visibleBreaking;
@@ -76,9 +73,7 @@ public class PacketMine extends Module {
     public static NumberSetting hotbarSlot;
 
     public static BooleanSetting renderBox;
-    public static NumberSetting boxRed;
-    public static NumberSetting boxGreen;
-    public static NumberSetting boxBlue;
+    public static ColorSetting box;
     public static BooleanSetting conveyorRender;
     public static NumberSetting conveyorAlpha;
 
@@ -90,54 +85,46 @@ public class PacketMine extends Module {
                 MCategory.MISC,
                 false
         );
+        
+        swingHand = new BooleanSetting("Swing Hand", this, false);
+        visibleBreaking = new BooleanSetting("Visible Breaking", this, false);
+        packetRotate = new BooleanSetting("Packet Rotate", this, false);
+        clientDestroy = new BooleanSetting("Client Destroy", this, false);
+        extraPackets = new BooleanSetting("Extra Packets", this, false);
 
-        page = new ModeSetting("Page", this, new ArrayList<>(Arrays.asList("General", "Render")));
+        removeUse = new BooleanSetting("Remove If Use", this, true);
+        stopPackets = new BooleanSetting("Stop Packets", this, true, () -> removeUse.getValue());
 
-        swingHand = new BooleanSetting("Swing Hand", this, false, () -> page.getValue().equals("General"));
-        visibleBreaking = new BooleanSetting("Visible Breaking", this, false, () -> page.getValue().equals("General"));
-        packetRotate = new BooleanSetting("Packet Rotate", this, true, () -> page.getValue().equals("General"));
-        clientDestroy = new BooleanSetting("Client Destroy", this, false, () -> page.getValue().equals("General"));
-        extraPackets = new BooleanSetting("Extra Packets", this, false, () -> page.getValue().equals("General"));
+        speedMine = new BooleanSetting("Speed Mine", this, false, () -> !doubleMode.getValue());
+        mineSpeed = new NumberSetting("Mine Speed", this, 1.2, 1, 10, false, () -> speedMine.getValue() && !doubleMode.getValue());
 
-        removeUse = new BooleanSetting("Remove If Use", this, true, () -> page.getValue().equals("General"));
-        stopPackets = new BooleanSetting("Stop Packets", this, true, () -> removeUse.getValue() && page.getValue().equals("General"));
+        doubleMode = new BooleanSetting("Double Mode", this, false, () -> conveyorMode.getValue());
+        fastSpeed = new NumberSetting("Fast Speed", this, 5, 5, 50, false, () -> conveyorMode.getValue() && doubleMode.getValue());
+        normalSpeed = new NumberSetting("Normal Speed", this, 1.05, 0.9, 1.3, false, () -> conveyorMode.getValue() && doubleMode.getValue());
+        switchToOld = new BooleanSetting("Switch To Old", this, false, () -> conveyorMode.getValue() && doubleMode.getValue());
 
-        speedMine = new BooleanSetting("Speed Mine", this, false, () -> !doubleMode.getValue() && page.getValue().equals("General"));
-        mineSpeed = new NumberSetting("Mine Speed", this, 1.2, 1, 10, false, () -> speedMine.getValue() && !doubleMode.getValue() && page.getValue().equals("General"));
+        rebreak = new BooleanSetting("Rebreak", this, false);
+        instaRebreak = new BooleanSetting("Instant", this, false);
 
-        doubleMode = new BooleanSetting("Double Mode", this, false, () -> conveyorMode.getValue() && page.getValue().equals("General"));
-        fastSpeed = new NumberSetting("Fast Speed", this, 5, 5, 50, false, () -> conveyorMode.getValue() && doubleMode.getValue() && page.getValue().equals("General"));
-        normalSpeed = new NumberSetting("Normal Speed", this, 1.05, 0.9, 1.3, false, () -> conveyorMode.getValue() && doubleMode.getValue() && page.getValue().equals("General"));
-        switchToOld = new BooleanSetting("Switch To Old", this, false, () -> conveyorMode.getValue() && doubleMode.getValue() && page.getValue().equals("General"));
+        conveyorMode = new BooleanSetting("Conveyor Mode", this, false);
+        conveyorLimitState = new BooleanSetting("ConveyorLimit", this, false);
+        conveyorLimit = new NumberSetting("Limit", this, 2, 1, 10, true && conveyorLimitState.getValue());
 
-        rebreak = new BooleanSetting("Rebreak", this, false, () -> page.getValue().equals("General"));
-        instaRebreak = new BooleanSetting("Instant", this, false, () -> page.getValue().equals("General"));
+        autoCityMode = new BooleanSetting("Auto City", this, false);
+        friends = new BooleanSetting("Friends", this, false, () -> autoCityMode.getValue());
 
-        conveyorMode = new BooleanSetting("Conveyor Mode", this, false, () -> page.getValue().equals("General"));
-        conveyorLimitState = new BooleanSetting("ConveyorLimit", this, false, () -> page.getValue().equals("General"));
-        conveyorLimit = new NumberSetting("Limit", this, 2, 1, 10, true, () -> page.getValue().equals("General") && conveyorLimitState.getValue());
+        inventoryMode = new BooleanSetting("Inventory Mode", this, false);
+        hotbarSlot = new NumberSetting("Hotbar Slot", this, 1, 1, 9, true, () ->inventoryMode.getValue());
 
-        autoCityMode = new BooleanSetting("Auto City", this, false, () -> page.getValue().equals("General"));
-        friends = new BooleanSetting("Friends", this, false, () -> autoCityMode.getValue() && page.getValue().equals("General"));
-
-        inventoryMode = new BooleanSetting("Inventory Mode", this, false, () -> page.getValue().equals("General"));
-        hotbarSlot = new NumberSetting("Hotbar Slot", this, 1, 1, 9, true, () ->inventoryMode.getValue() && page.getValue().equals("General"));
-
-        renderBox = new BooleanSetting("Render Box", this, true, () -> page.getValue().equals("Render"));
-        boxRed = new NumberSetting("Box Red", this, 0, 0, 255, true, () -> renderBox.getValue() && page.getValue().equals("Render"));
-        boxGreen = new NumberSetting("Box Green", this, 255, 0, 255, true, () -> renderBox.getValue() && page.getValue().equals("Render"));
-        boxBlue = new NumberSetting("Box Blue", this, 0, 0, 255, true, () -> renderBox.getValue() && page.getValue().equals("Render"));
-        conveyorRender = new BooleanSetting("Conveyor Render", this, true, () -> renderBox.getValue() && page.getValue().equals("Render"));
-        conveyorAlpha = new NumberSetting("Conv. Alpha", this, 255, 0, 255, true, () -> renderBox.getValue() && conveyorRender.getValue() && page.getValue().equals("Render"));
+        renderBox = new BooleanSetting("Render Box", this, true);
+        box = new ColorSetting("Box Red", this, new Color(0, 255, 0), () -> renderBox.getValue());
+        conveyorRender = new BooleanSetting("Conveyor Render", this, true, () -> renderBox.getValue());
+        conveyorAlpha = new NumberSetting("Conv. Alpha", this, 255, 0, 255, true, () -> renderBox.getValue() && conveyorRender.getValue());
 
 
         initSettings(
-                page,
-
                 swingHand,
-                visibleBreaking,
                 packetRotate,
-                clientDestroy,
                 extraPackets,
 
                 removeUse,
@@ -164,10 +151,11 @@ public class PacketMine extends Module {
                 inventoryMode,
                 hotbarSlot,
 
+                visibleBreaking,
+                clientDestroy,
+
                 renderBox,
-                boxRed,
-                boxGreen,
-                boxBlue
+                box
         );
 
     }
@@ -317,9 +305,9 @@ public class PacketMine extends Module {
 
         ArrayList<RenderBox> renderBoxes = new ArrayList<>();
         double currentDestroyBlockSize = currentBreakingBlock.currentDestroyProgress / 2;
-        float boxR = boxRed.getValue().floatValue() / 255f;
-        float boxG = boxGreen.getValue().floatValue()  / 255f;
-        float boxB = boxBlue.getValue().floatValue()  / 255f;
+        float boxR = box.getValue().getRed()/ 255f;
+        float boxG = box.getValue().getGreen() / 255f;
+        float boxB = box.getValue().getBlue() / 255f;
         renderBoxes.add(
                 new RenderBox(
                         BlockUtils.createBox(

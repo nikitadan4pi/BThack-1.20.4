@@ -1,12 +1,16 @@
 package com.ferra13671.BThack.api.Gui.ClickGui.component.components.setting.settings;
 
 
+import com.ferra13671.BThack.Constants;
 import com.ferra13671.BThack.Core.Client.Client;
+import com.ferra13671.BThack.Core.Client.ModuleList;
 import com.ferra13671.BThack.Core.Render.BThackRender;
 import com.ferra13671.BThack.Core.Render.Utils.ColorUtils;
 import com.ferra13671.BThack.api.Gui.ClickGui.component.components.ModuleButton;
 import com.ferra13671.BThack.api.Module.Module;
 import com.ferra13671.BThack.impl.Modules.CLIENT.ClickGui;
+
+import java.awt.*;
 
 public class Visible extends Checkbox {
 
@@ -20,11 +24,13 @@ public class Visible extends Checkbox {
     @Override
     public void renderComponent() {
         BThackRender.drawRect(parent.parent.getX(), parent.parent.getY() + offset, parent.parent.getX() + (parent.parent.getWidth()), parent.parent.getY() + offset + 15, this.hovered ? ColorUtils.integrateAlpha(ColorUtils.fastRGBA(Client.clientInfo.getColorTheme().getBackgroundFontHoveredColour()), (int) (255 * Math.min(1, ClickGui.opacity.getValue() + 0.13))) : ColorUtils.integrateAlpha(ColorUtils.fastRGBA(Client.clientInfo.getColorTheme().getBackgroundFontColour()), (int) (255 * Math.min(1, ClickGui.opacity.getValue() + 0.13))));
-
         if (module.visible) {
+            if (ModuleList.clickGui.oldStyle.getValue())
             BThackRender.drawHorizontalGradientRect(parent.parent.getX() + 1, parent.parent.getY() + offset, parent.parent.getX() + (parent.parent.getWidth() / 2f), parent.parent.getY() + offset + 15, ClickGui.getClickGuiColor(true), ColorUtils.TRANSPARENT);
-        }
+            else BThackRender.drawRect(parent.parent.getX(), parent.parent.getY() + offset, parent.parent.getX() + (parent.parent.getWidth()), parent.parent.getY() + offset + 15, ColorUtils.integrateAlpha(this.hovered ? new Color(ClickGui.getClickGuiColor(true)).hashCode() : new Color(ClickGui.getClickGuiColor(true)).darker().hashCode(),  255 * ModuleList.clickGui.opacity.getValue()));
 
+        }
+        BThackRender.drawOutlineRect(parent.parent.getX() + 1, parent.parent.getY() + offset, parent.parent.getX() + (parent.parent.getWidth()), parent.parent.getY() + offset + 15, 1, Constants.CLICKGUI_BUTTON_OUTLINE_COLOR);
         BThackRender.drawString("Visible", parent.parent.getX() + 7, parent.parent.getY() + offset + 4, Client.clientInfo.getColorTheme().getModuleDisabledColour());
     }
 

@@ -36,6 +36,8 @@ public class ClickGui extends OneActionModule {
 
     public static NumberSetting opacity;
 
+    public static BooleanSetting oldStyle;
+
     public static NumberSetting animationTime;
     public static ModeSetting easing;
 
@@ -69,6 +71,7 @@ public class ClickGui extends OneActionModule {
         moduleOutline = new BooleanSetting("Module Outline", this, true);
         settingsOutline = new BooleanSetting("Settings Outline", this, true);
 
+        oldStyle = new BooleanSetting("Old Style", this, false);
         opacity = new NumberSetting("Opacity", this, 0.76, 0.1, 1, false);
 
         animationTime = new NumberSetting("Anim Time", this, 400, 250, 1500, true);
@@ -95,6 +98,8 @@ public class ClickGui extends OneActionModule {
                 frameOutline,
                 moduleOutline,
                 settingsOutline,
+
+                oldStyle,
 
                 opacity,
 

@@ -56,6 +56,14 @@ public final class ColorUtils {
         return fastRGBA(red, green, blue, alpha);
     }
 
+    public static int integrateAlpha(int colorHashcode, double alpha) {
+        int red = (colorHashcode >> 16 & 255);
+        int green = (colorHashcode >> 8 & 255);
+        int blue = (colorHashcode & 255);
+
+        return fastRGBA(red, green, blue, (int) alpha);
+    }
+
     public static int fastRGBA(int red, int green, int blue, int alpha) {
         return ((MathUtils.applyRange(alpha, 0, 255) & 0xFF) << 24) |
                 ((MathUtils.applyRange(red, 0, 255) & 0xFF) << 16) |
