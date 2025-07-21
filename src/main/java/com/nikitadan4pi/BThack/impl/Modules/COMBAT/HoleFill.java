@@ -1,0 +1,61 @@
+package com.nikitadan4pi.BThack.impl.Modules.COMBAT;
+
+import com.nikitadan4pi.BThack.api.Events.ClientTickEvent;
+import com.nikitadan4pi.BThack.api.Managers.managers.Build.BuildManager;
+import com.nikitadan4pi.BThack.api.Managers.managers.Build.BuildThread3D;
+import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.nikitadan4pi.BThack.api.Module.Module;
+import com.nikitadan4pi.BThack.api.Utils.BlockUtils;
+import com.nikitadan4pi.BThack.api.Utils.HoleUtils;
+import com.nikitadan4pi.BThack.api.Utils.KeyboardUtils;
+import com.nikitadan4pi.BThack.api.Utils.MathUtils;
+import com.ferra13671.MegaEvents.Base.EventSubscriber;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class HoleFill extends Module {
+
+    public static BooleanSetting onlyObsidian;
+
+    public HoleFill() {
+        super("HoleFill",
+                "lang.module.HoleFill",
+                KeyboardUtils.RELEASE,
+                MCategory.COMBAT,
+                false
+        );
+
+        onlyObsidian = new BooleanSetting("Only Obsidian", this, true);
+
+        initSettings(
+                onlyObsidian
+        );
+    }
+
+    @EventSubscriber
+    public void onTick(ClientTickEvent e) {
+        if (nullCheck() || BuildManager.isBuilding) return;
+
+        ArrayList<BlockPos> blockPoses = new ArrayList<>();
+        for (PlayerEntity player : mc.world.getPlayers()) {
+            if (HoleUtils.isMutableHole(mc.player.getBlockPos(), false)) {
+                blockPoses.add(player.getBlockPos());
+            }
+        }
+
+        BlockPos blockPos = BlockUtils.getSphere(mc.player.getBlockPos(), 4, 4, false, true, 0).stream().filter(blockPos1 -> HoleUtils.isMutableHole(blockPos1, false) && !blockPoses.contains(blockPos1))
+                .min(Comparator.comparing(blockPos2 -> MathUtils.getDistance(mc.player.getPos(), blockPos2.toCenterPos()))).orElse(null);
+
+        if (blockPos == null) return;
+
+        BuildThread3D buildThread3D = new BuildThread3D();
+        buildThread3D.set3DSchematic(0, new ArrayList<>(Arrays.asList(blockPos)), new BlockPos(0,0,0));
+        buildThread3D.setNeedBlocks(onlyObsidian.getValue() ? Arrays.asList(Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN) : new ArrayList<>());
+        buildThread3D.start();
+    }
+}

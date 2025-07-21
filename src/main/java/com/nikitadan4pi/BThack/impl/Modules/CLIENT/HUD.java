@@ -1,0 +1,95 @@
+package com.nikitadan4pi.BThack.impl.Modules.CLIENT;
+
+import com.nikitadan4pi.BThack.Core.Client.Client;
+import com.nikitadan4pi.BThack.Core.Client.ModuleList;
+import com.nikitadan4pi.BThack.Core.Render.BThackRender;
+import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
+import com.nikitadan4pi.BThack.api.Events.Render.RenderHudPostEvent;
+import com.nikitadan4pi.BThack.api.Events.ClientTickEvent;
+import com.nikitadan4pi.BThack.api.Gui.HudMover.HudMoverScreen;
+import com.nikitadan4pi.BThack.api.HudComponent.HudComponent;
+import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.nikitadan4pi.BThack.api.Module.Module;
+import com.nikitadan4pi.BThack.api.Utils.KeyboardUtils;
+import com.nikitadan4pi.BThack.api.Utils.SpeedMathThread;
+import com.ferra13671.MegaEvents.Base.EventSubscriber;
+import com.ferra13671.TextureUtils.GLTexture;
+import com.ferra13671.TextureUtils.PathMode;
+
+public class HUD extends Module {
+
+    public static BooleanSetting rainbow;
+    public static NumberSetting rainbowType;
+    public static NumberSetting scale;
+
+    public HUD() {
+        super("HUD",
+                "lang.module.HUD",
+                KeyboardUtils.RELEASE,
+                MCategory.CLIENT,
+                true
+        );
+
+        ModuleList.HUD = this;
+
+        allowRemapKeyCode = false;
+
+        mc.getWindow().swapBuffers();
+
+        rainbow = new BooleanSetting("Rainbow", this, true);
+        rainbowType = new NumberSetting("Rainbow type", this, 3, 1, 8, true, () -> rainbow.getValue());
+        scale = new NumberSetting("Scale", this, 1, 0.5, 1.5, false);
+
+        initSettings(
+                rainbow,
+                rainbowType
+        );
+    }
+
+    public static final GLTexture bthack_logo = GLTexture.fromPath("assets/bthack/bthacklogo.png", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA);
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+    }
+
+    @EventSubscriber
+    public void onTick(ClientTickEvent e) {
+        if (nullCheck()) return;
+        if (mc.currentScreen instanceof HudMoverScreen) return;
+
+        for (HudComponent hudComponent : Client.hudComponents) {
+            if (hudComponent.isEnabled()) {
+                hudComponent.tick();
+            }
+        }
+
+        if (!SpeedMathThread.active) {
+            new SpeedMathThread().start();
+        }
+    }
+
+    @EventSubscriber(priority = Integer.MAX_VALUE)
+    public void onRender(RenderHudPostEvent e) {
+        if (mc.currentScreen instanceof HudMoverScreen) return;
+        BThackRender.guiGraphics.getMatrices().push();
+        BThackRender.guiGraphics.getMatrices().translate(0,0,3000);
+
+        for (HudComponent hudComponent : Client.hudComponents) {
+            if (hudComponent.isEnabled()) {
+                hudComponent.render();
+            }
+        }
+
+        BThackRender.guiGraphics.getMatrices().pop();
+    }
+
+    public static int getHUDColor() {
+        if (rainbow.getValue()) {
+            return ColorUtils.rainbowType(rainbowType.getValue().intValue());
+        } else {
+            return ClickGui.getClickGuiColor(false);
+        }
+    }
+}

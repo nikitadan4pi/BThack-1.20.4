@@ -4,7 +4,7 @@
   "version": "${minecraft_version}-${bthack_version}",
   "name": "BThack",
   "description": "Version of BThack, ported to ${minecraft_version} mc version.",
-  "authors": ["Bebra_tyan"],
+  "authors": ["nikitadan4pi, Bebra_tyan"],
   "contact": {
     "sources": "https://github.com/Ferra13671/BThack/tree/${minecraft_version}",
     "issues": "https://github.com/Ferra13671/BThack/issues"
@@ -14,7 +14,7 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.ferra13671.BThack.BThack"
+      "com.nikitadan4pi.BThack.BThack"
     ],
     "bthack": []
   },

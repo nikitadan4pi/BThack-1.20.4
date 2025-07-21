@@ -1,0 +1,26 @@
+package com.nikitadan4pi.BThack.api.Utils.Grim;
+
+import com.nikitadan4pi.BThack.api.Events.DisconnectEvent;
+import com.nikitadan4pi.BThack.api.Utils.ChatUtils;
+import com.ferra13671.MegaEvents.Base.EventSubscriber;
+
+public class GrimNoFallUtils {
+    private static int takenFallDamage = 0;
+
+
+    @EventSubscriber
+    public void onDisconnect(DisconnectEvent e) {
+        takenFallDamage = 0;
+    }
+
+    public static void updateFallDamage() {
+        if (takenFallDamage < 5) {
+            takenFallDamage++;
+            ChatUtils.sendMessage(String.format("[Grim NoFall] Fall damage taken %s times", takenFallDamage));
+        }
+    }
+
+    public static int getTakenFallDamage() {
+        return takenFallDamage;
+    }
+}
