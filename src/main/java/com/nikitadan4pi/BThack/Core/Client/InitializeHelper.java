@@ -91,6 +91,7 @@ public final class InitializeHelper implements Mc {
                 new DisableAllCommand(),
                 new ClientGamemodeCommand(),
                 new AutoAuthCommand(),
+                new AccountCommand(),
 
                 new HClipCommand(),
                 new VClipCommand()

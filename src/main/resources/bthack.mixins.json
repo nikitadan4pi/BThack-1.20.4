@@ -37,6 +37,7 @@
     "accessor.IMinecraftClient",
     "accessor.IProjection",
     "accessor.IScreen",
+    "accessor.MinecraftClientAccessor",
     "entity.MixinClientPlayerEntity",
     "gui_and_hud.MixinDeathScreen",
     "gui_and_hud.MixinEntryListWidget",
