@@ -19,7 +19,7 @@ public class AutoSign extends Module {
         super("AutoSign",
                 "lang.module.AutoSign",
                 KeyboardUtils.RELEASE,
-                MCategory.WORLD,
+                MCategory.PLAYER,
                 false
         );
 

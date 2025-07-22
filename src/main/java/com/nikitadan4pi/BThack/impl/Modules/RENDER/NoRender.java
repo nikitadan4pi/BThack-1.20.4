@@ -1,17 +1,25 @@
 package com.nikitadan4pi.BThack.impl.Modules.RENDER;
 
+import com.nikitadan4pi.BThack.api.Events.ClientTickEvent;
 import com.nikitadan4pi.BThack.api.Events.PacketEvent;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.nikitadan4pi.BThack.api.Module.Module;
 import com.nikitadan4pi.BThack.api.Utils.KeyboardUtils;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
+import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
 import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class NoRender extends Module {
 
+    public static BooleanSetting noWeather;
+    public static BooleanSetting noFog;
     public static BooleanSetting explosions;
     public static BooleanSetting particles;
     public static BooleanSetting overlay;
@@ -24,6 +32,8 @@ public class NoRender extends Module {
     public static BooleanSetting fallingBlocks;
     public static BooleanSetting armorStands;
 
+    public static BooleanSetting noSwing;
+    public static ModeSetting mode;
     public static BooleanSetting chestRender;
     public static NumberSetting chestRadius;
 
@@ -41,6 +51,8 @@ public class NoRender extends Module {
                 false
         );
 
+        noWeather = new BooleanSetting("Weather", this, true);
+        noFog = new BooleanSetting("Fog", this, true);
         explosions = new BooleanSetting("Explosions", this, true);
         particles = new BooleanSetting("Particles", this, false);
         overlay = new BooleanSetting("Overlay", this, true);
@@ -53,6 +65,9 @@ public class NoRender extends Module {
         fallingBlocks = new BooleanSetting("Falling Blocks", this, true);
         armorStands = new BooleanSetting("Armor Stands", this, false);
 
+        noSwing = new BooleanSetting("No Swing", this, false);
+        mode = new ModeSetting("Mode", this, new ArrayList<>(Arrays.asList("Client", "Server")));
+
         chestRender = new BooleanSetting("Chest Render", this, false);
         chestRadius = new NumberSetting("CRender Range", this, 10, 5, 50, false, chestRender::getValue);
 
@@ -64,6 +79,8 @@ public class NoRender extends Module {
 
 
         initSettings(
+                noWeather,
+                noFog,
                 explosions,
                 particles,
                 overlay,
@@ -75,6 +92,9 @@ public class NoRender extends Module {
                 nausea,
                 fallingBlocks,
                 armorStands,
+
+                noSwing,
+                mode,
 
                 chestRender,
                 chestRadius,
@@ -96,5 +116,22 @@ public class NoRender extends Module {
             mc.world.playSound(mc.player ,packet.getX(), packet.getY(), packet.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE);
             e.setCancelled(true);
         }
+    }
+
+    @EventSubscriber
+    public void onPacket(PacketEvent.Send e) {
+        if (!noSwing.getValue()) return;
+        if (mode.getValue().equals("Server")  && e.getPacket() instanceof HandSwingC2SPacket) {
+            e.setCancelled(true);
+        }
+    }
+
+    @EventSubscriber
+    public void onClientTick(ClientTickEvent e) {
+        if (nullCheck() || !noSwing.getValue()) return;
+        mc.player.handSwinging = false;
+        mc.player.handSwingTicks = 0;
+        mc.player.handSwingProgress = 0.0f;
+        mc.player.lastHandSwingProgress = 0.0f;
     }
 }

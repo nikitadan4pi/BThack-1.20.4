@@ -20,7 +20,6 @@ import com.nikitadan4pi.BThack.impl.Modules.PLAYER.ActionBot.ActionBot;
 import com.nikitadan4pi.BThack.impl.Modules.PLAYER.Spammer.Spammer;
 import com.nikitadan4pi.BThack.impl.Modules.RENDER.*;
 import com.nikitadan4pi.BThack.impl.Modules.RENDER.HoleESP.HoleESP;
-import com.nikitadan4pi.BThack.impl.Modules.WORLD.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -162,6 +161,7 @@ public final class ModuleList {
 
     //RENDER
     public static Africa africa;
+    public static Ambience ambience;
     public static AntiHazard antiHazard;
     public static AttackTrace attackTrace;
     public static BetterChat betterChat;
@@ -183,10 +183,8 @@ public final class ModuleList {
     public static MotionBlur motionBlur;
     public static Nametags nametags;
     public static NewChunks newChunks;
-    public static NoFog noFog;
     public static NoOverlay noOverlay;
     public static NoRender noRender;
-    public static NoSwing noSwing;
     public static PasswordHider passwordHider;
     public static PhaseESP phaseESP;
     public static Radar radar;
@@ -194,23 +192,6 @@ public final class ModuleList {
     public static Tooltips tooltips;
     public static Tracers tracers;
     public static Xray xray;
-
-    //WORLD
-    //public static AutoFarm autoFarm;
-    public static AutoFarmland autoFarmland;
-    public static AutoSign autoSign;
-    public static CloudsColor cloudsColor;
-    public static CustomDayTime customDayTime;
-    public static Fly fly;
-    public static FogColor fogColor;
-    public static Lawnmower lawnmower;
-    public static LiquidFiller liquidFiller;
-    public static NoWeather noWeather;
-    public static Reach reach;
-    public static SkyColor skyColor;
-    public static WorldElements worldElements;
-    public static CustomFont customFont;
-
 
     static void initModules() {
         PluginSystem.getLoadedPlugins().forEach(Plugin::onInitModules);
@@ -373,6 +354,7 @@ public final class ModuleList {
 
         //RENDER
         africa = register(new Africa());
+        ambience = register(new Ambience());
         antiHazard = register(new AntiHazard());
         attackTrace = register(new AttackTrace());
         betterChat = register(new BetterChat());
@@ -394,10 +376,8 @@ public final class ModuleList {
         motionBlur = register(new MotionBlur());
         nametags = register(new Nametags());
         newChunks = register(new NewChunks());
-        noFog = register(new NoFog());
         noOverlay = register(new NoOverlay());
         noRender = register(new NoRender());
-        noSwing = register(new NoSwing());
         passwordHider = register(new PasswordHider());
         phaseESP = register(new PhaseESP());
         radar = register(new Radar());
@@ -405,23 +385,6 @@ public final class ModuleList {
         tooltips = register(new Tooltips());
         tracers = register(new Tracers());
         xray = register(new Xray());
-
-        //WORLD
-        //autoFarm = register(new AutoFarm());
-        autoFarmland = register(new AutoFarmland());
-        autoSign = register(new AutoSign());
-        cloudsColor = register(new CloudsColor());
-        customDayTime = register(new CustomDayTime());
-        fly = register(new Fly());
-        fogColor = register(new FogColor());
-        lawnmower = register(new Lawnmower());
-        liquidFiller = register(new LiquidFiller());
-        noWeather = register(new NoWeather());
-        reach = register(new Reach());
-        skyColor = register(new SkyColor());
-        worldElements = register(new WorldElements());
-
-
 
         Client.modules.addAll(PluginUtils.getPluginsModules());
 

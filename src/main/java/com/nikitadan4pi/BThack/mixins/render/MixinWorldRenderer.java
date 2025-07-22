@@ -88,13 +88,13 @@ public class MixinWorldRenderer {
 
     @Inject(method = "renderWeather", at = @At("HEAD"), cancellable = true)
     public void modifyRenderWeather(LightmapTextureManager manager, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
-        if (ModuleList.noWeather.isEnabled())
+        if (ModuleList.noRender.noWeather.getValue())
             ci.cancel();
     }
 
     @Inject(method = "tickRainSplashing", at = @At("HEAD"), cancellable = true)
     public void modifyTickRainSplashing(Camera camera, CallbackInfo ci) {
-        if (ModuleList.noWeather.isEnabled())
+        if (ModuleList.noRender.noWeather.getValue())
             ci.cancel();
     }
 }

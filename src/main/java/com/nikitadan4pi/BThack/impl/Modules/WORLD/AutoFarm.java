@@ -10,7 +10,7 @@ public class AutoFarm extends Module {
         super("AutoFarm",
                 "",
                 KeyboardUtils.RELEASE,
-                MCategory.WORLD,
+                MCategory.PLAYER,
                 false
         );
     }

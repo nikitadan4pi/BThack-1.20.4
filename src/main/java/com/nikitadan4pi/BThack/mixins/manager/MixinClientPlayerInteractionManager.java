@@ -237,10 +237,10 @@ public abstract class MixinClientPlayerInteractionManager {
     @Inject(method = "getReachDistance", at = @At(value = "HEAD"),
             cancellable = true)
     private void hookGetReachDistance(CallbackInfoReturnable<Float> cir) {
-        if (ModuleList.reach.isEnabled()) {
-            cir.cancel();
-            float reach = gameMode.isCreative() ? 5.0f : 4.5f;
-            cir.setReturnValue(reach + ModuleList.reach.range.getValue().floatValue());
-        }
+        //if (ModuleList.reach.isEnabled()) {
+        //    cir.cancel();
+        //    float reach = gameMode.isCreative() ? 5.0f : 4.5f;
+        //    cir.setReturnValue(reach + ModuleList.reach.range.getValue().floatValue());
+        //}
     }
 }

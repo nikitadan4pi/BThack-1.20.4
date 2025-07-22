@@ -1,4 +1,4 @@
-package com.nikitadan4pi.BThack.impl.Modules.WORLD;
+package com.nikitadan4pi.BThack.impl.Modules.PLAYER;
 
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.nikitadan4pi.BThack.api.Module.Module;
@@ -12,7 +12,7 @@ public class Reach extends Module {
         super("Reach",
                 "lang.module.Reach",
                 KeyboardUtils.RELEASE,
-                MCategory.WORLD,
+                MCategory.PLAYER,
                 false
         );
 

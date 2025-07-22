@@ -28,7 +28,7 @@ public class Lawnmower extends Module {
         super("Lawnmower",
                 "lang.module.Lawnmower",
                 KeyboardUtils.RELEASE,
-                MCategory.WORLD,
+                MCategory.PLAYER,
                 false
         );
 

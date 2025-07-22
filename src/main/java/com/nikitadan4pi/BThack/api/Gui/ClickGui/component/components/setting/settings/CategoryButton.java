@@ -1,15 +1,17 @@
 package com.nikitadan4pi.BThack.api.Gui.ClickGui.component.components.setting.settings;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.nikitadan4pi.BThack.Constants;
+import com.nikitadan4pi.BThack.Core.Client.ModuleList;
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
-import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
 import com.nikitadan4pi.BThack.api.Animation.Animation;
 import com.nikitadan4pi.BThack.api.Animation.Easing;
+import com.nikitadan4pi.BThack.api.Interfaces.Mc;
+import com.nikitadan4pi.BThack.api.Module.Module;
 import com.nikitadan4pi.BThack.api.Gui.ClickGui.component.Component;
 import com.nikitadan4pi.BThack.api.Gui.ClickGui.component.components.ModuleButton;
 import com.nikitadan4pi.BThack.api.Gui.ClickGui.component.components.setting.AbstractSetting;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.CategorySetting;
-import com.nikitadan4pi.BThack.api.Module.Module;
 import com.nikitadan4pi.BThack.api.Utils.Data;
 import com.nikitadan4pi.BThack.impl.Modules.CLIENT.ClickGui;
 
@@ -25,51 +27,40 @@ public class CategoryButton extends AbstractSetting<CategorySetting> {
     private boolean opened = false;
     private float height;
     private int renderHeight;
-    private int subOffset = Constants.CLICKGUI_BUTTON_HEIGHT;
-
 
     public CategoryButton(CategorySetting setting, ModuleButton button, int offset, Module module) {
         super(offset, button, module, setting);
-        //Data<Integer> yOffset = new Data<>(offset + (int) (1.5f * Constants.CLICKGUI_BUTTON_HEIGHT));
-        subOffset += offset;
+        Data<Integer> yOffset = new Data<>(offset + Constants.CLICKGUI_BUTTON_HEIGHT);
         setting.getValue().forEach(subSetting -> {
-            AbstractSetting<?> component = subSetting.asSettingButton(button, subOffset);
+            AbstractSetting<?> component = subSetting.asSettingButton(button, yOffset.get());
             subSettings.add(component);
-            subOffset += component.getHeight();
+            yOffset.set(yOffset.get() + component.getHeight());
         });
         subSettings.forEach(subSetting -> {
             if (subSetting.getVisible()) visibleSettings.add(subSetting);
         });
-        height = subOffset - offset - Constants.CLICKGUI_BUTTON_HEIGHT;
+        height = yOffset.get() - offset - Constants.CLICKGUI_BUTTON_HEIGHT;
     }
 
     @Override
     public int getHeight() {
-        for(AbstractSetting<?> setting : subSettings){
-            renderHeight += setting.getHeight();
-        }
-        return opened ? Constants.CLICKGUI_BUTTON_HEIGHT + (int) (height * animation.getEase()) : Constants.CLICKGUI_BUTTON_HEIGHT + (int) ((height - Constants.CLICKGUI_BUTTON_HEIGHT) * (1 - animation.getEase()));
-        //renderHeight = opened ? Constants.CLICKGUI_BUTTON_HEIGHT + (int) (height) : Constants.CLICKGUI_BUTTON_HEIGHT + (int) ((height - Constants.CLICKGUI_BUTTON_HEIGHT));
-        //renderHeight = opened ? Constants.CLICKGUI_BUTTON_HEIGHT + (int) (height) : Constants.CLICKGUI_BUTTON_HEIGHT;
-        //return renderHeight;
-        //renderHeight = Constants.CLICKGUI_BUTTON_HEIGHT + (int)(height * animation.getEase());
-         //renderHeight;
+        renderHeight = opened ? Constants.CLICKGUI_BUTTON_HEIGHT + (int) (height * animation.getEase()) : Constants.CLICKGUI_BUTTON_HEIGHT + (int) ((height - Constants.CLICKGUI_BUTTON_HEIGHT) * (1 - animation.getEase()));
+        return renderHeight;
     }
 
     @Override
     public void refresh(int newOff) {
         super.refresh(newOff);
-        //Data<Integer> yOffset = new Data<>(newOff + Constants.CLICKGUI_BUTTON_HEIGHT);
+        Data<Integer> yOffset = new Data<>(newOff + Constants.CLICKGUI_BUTTON_HEIGHT);
         visibleSettings.clear();
         for (AbstractSetting<?> component : subSettings) {
-            component.refresh(subOffset);
+            component.refresh(yOffset.get());
             if (component.getVisible()) {
-                subOffset += component.getHeight();
+                yOffset.set(yOffset.get() + component.getHeight());
                 visibleSettings.add(component);
-
             }
         }
-        height = subOffset - newOff - Constants.CLICKGUI_BUTTON_HEIGHT;
+        height = yOffset.get() - newOff - Constants.CLICKGUI_BUTTON_HEIGHT;
     }
 
     @Override
@@ -77,10 +68,13 @@ public class CategoryButton extends AbstractSetting<CategorySetting> {
         super.renderComponent();
 
         BThackRender.drawRect(getX(), getY(), getX() + Constants.CLICKGUI_FRAME_WIDTH, getY() + Constants.CLICKGUI_BUTTON_HEIGHT, hovered ? ClickGui.BACKGROUND_HOVERED_COLOR : ClickGui.BACKGROUND_COLOR);
-        BThackRender.drawString(setting.getName(), getX() + 7, getY() + 4, ColorUtils.WHITE);
-        BThackRender.drawString(opened ? "-" : "+", (getX() + Constants.CLICKGUI_FRAME_WIDTH - 10), (getY() + 2), ColorUtils.WHITE);
-        BThackRender.enableScissor(ClickGui.applyGuiScale(getX()), ClickGui.applyGuiScale(getY()), ClickGui.applyGuiScale(Constants.CLICKGUI_FRAME_WIDTH), ClickGui.applyGuiScale(getHeight()));
-        if (opened)
+        BThackRender.drawString(setting.getName(), getX() + 7, getY() + (float) ((Constants.CLICKGUI_BUTTON_HEIGHT - Mc.mc.textRenderer.fontHeight) / 2f), ModuleList.clickGui.fontColor.getValue().hashCode());
+        RenderSystem.setShaderColor(0.7f, 0.7f, 0.7f, 1f);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+
+        BThackRender.enableScissor(ClickGui.applyGuiScale(getX()), ClickGui.applyGuiScale(getY()), ClickGui.applyGuiScale(Constants.CLICKGUI_FRAME_WIDTH), ClickGui.applyGuiScale(renderHeight));
+        BThackRender.drawString(opened ? "-" : "+", (getX() + Constants.CLICKGUI_FRAME_WIDTH - 10), (getY() + 2), ClickGui.fontColor.getValue().getRGB());
+        if (opened || animation.getEase() < 1)
             for (Component component : visibleSettings)
                 component.renderComponent();
         BThackRender.disableScissor();
@@ -89,9 +83,6 @@ public class CategoryButton extends AbstractSetting<CategorySetting> {
     @Override
     public boolean updateComponent(int mouseX, int mouseY) {
         if (!getVisible()) return true;
-
-        if (opened) animation.reset();
-
         if (animation.getEase() < 1) parent.parent.refresh();
         else if (!lastRefreshed) {
             parent.parent.refresh();
@@ -100,10 +91,8 @@ public class CategoryButton extends AbstractSetting<CategorySetting> {
 
         hovered = isMouseOnButton(mouseX, mouseY);
         if (opened)
-            for (Component component : visibleSettings){
+            for (Component component : visibleSettings)
                 component.updateComponent(mouseX, mouseY);
-
-            }
         return true;
     }
 

@@ -1,6 +1,5 @@
 package com.nikitadan4pi.BThack.impl.Commands;
 
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.nikitadan4pi.BThack.api.CommandSystem.command.AbstractCommand;
 import com.nikitadan4pi.BThack.api.Utils.Account.types.CrackedAccount;
 import com.nikitadan4pi.BThack.api.Utils.ChatUtils;

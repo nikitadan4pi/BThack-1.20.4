@@ -46,7 +46,7 @@ public class AutoFarmland extends Module {
         super("AutoFarmland",
                 "lang.module.AutoFarmland",
                 KeyboardUtils.RELEASE,
-                MCategory.WORLD,
+                MCategory.PLAYER,
                 false
         );
 

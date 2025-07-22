@@ -19,7 +19,7 @@ public class Fly extends Module {
         super("Fly",
                 "lang.module.Fly",
                 KeyboardUtils.RELEASE,
-                MCategory.WORLD,
+                MCategory.PLAYER,
                 false
         );
 

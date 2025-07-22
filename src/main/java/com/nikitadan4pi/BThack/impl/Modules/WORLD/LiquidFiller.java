@@ -48,7 +48,7 @@ public class LiquidFiller extends Module {
         super("LiquidFiller",
                 "lang.module.LiquidFiller",
                 KeyboardUtils.RELEASE,
-                MCategory.WORLD,
+                MCategory.PLAYER,
                 false
         );
 

@@ -3,10 +3,7 @@ package com.nikitadan4pi.BThack.mixins.world;
 import com.nikitadan4pi.BThack.BThack;
 import com.nikitadan4pi.BThack.Core.Client.ModuleList;
 import com.nikitadan4pi.BThack.api.Events.SoundPlayEvent;
-import com.nikitadan4pi.BThack.impl.Modules.WORLD.CloudsColor;
-import com.nikitadan4pi.BThack.impl.Modules.WORLD.CustomDayTime;
-import com.nikitadan4pi.BThack.impl.Modules.WORLD.SkyColor;
-import com.nikitadan4pi.BThack.impl.Modules.WORLD.WorldElements;
+import com.nikitadan4pi.BThack.impl.Modules.RENDER.Ambience;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.world.ClientWorld;
@@ -48,20 +45,20 @@ public abstract class MixinClientWorld extends World {
 
     @Inject(method = "getCloudsColor", at = @At("HEAD"), cancellable = true)
     public void modifyGetCloudColor(float p_getCloudColour_1_, CallbackInfoReturnable<Vec3d> cir) {
-        if (ModuleList.cloudsColor.isEnabled())
-            cir.setReturnValue(new Vec3d(CloudsColor.cloudsRed.getValue() / 255, CloudsColor.cloudsGreen.getValue() / 255, CloudsColor.cloudsBlue.getValue() / 255));
+        if (ModuleList.ambience.isEnabled())
+            cir.setReturnValue(new Vec3d(Ambience.cloudsRed.getValue() / 255, Ambience.cloudsGreen.getValue() / 255, Ambience.cloudsBlue.getValue() / 255));
     }
 
     @Inject(method = "getSkyColor", at = @At("HEAD"), cancellable = true)
     public void modifyGetSkyColor(Vec3d cameraPos, float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
-        if (ModuleList.skyColor.isEnabled())
-            cir.setReturnValue(new Vec3d(SkyColor.skyRed.getValue() / 255.0f, SkyColor.skyGreen.getValue() / 255.0f, SkyColor.skyBlue.getValue() / 255.0f));
+        if (ModuleList.ambience.isEnabled())
+            cir.setReturnValue(new Vec3d(Ambience.skyRed.getValue().floatValue() / 255.0f, Ambience.skyGreen.getValue() / 255.0f, Ambience.skyBlue.getValue() / 255.0f));
     }
 
     @Inject(method = "method_23787", at = @At("HEAD"), cancellable = true)
     public void modifyStarBrightness(float f, CallbackInfoReturnable<Float> cir) {
-        if (ModuleList.worldElements.isEnabled())
-            cir.setReturnValue(WorldElements.starBrightness.getValue().floatValue());
+        if (ModuleList.ambience.isEnabled())
+            cir.setReturnValue(Ambience.starBrightness.getValue().floatValue());
     }
 
     @Inject(method = "playSound(DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FFZJ)V", at = @At("HEAD"), cancellable = true)
@@ -83,8 +80,8 @@ public abstract class MixinClientWorld extends World {
 
     @ModifyArgs(method = "setTimeOfDay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;setTimeOfDay(J)V"))
     public void modifyArgsSetTimeOfDay(Args args) {
-        if (ModuleList.customDayTime.isEnabled())
-            args.set(0, CustomDayTime.time < 0 ? -CustomDayTime.time : CustomDayTime.time);
+        if (ModuleList.ambience.isEnabled())
+            args.set(0, Ambience.time < 0 ? -Ambience.time : Ambience.time);
     }
 
     @Inject(method = "addEntity", at = @At("HEAD"))
