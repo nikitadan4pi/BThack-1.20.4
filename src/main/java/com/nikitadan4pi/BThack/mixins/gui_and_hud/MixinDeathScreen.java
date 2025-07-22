@@ -1,0 +1,27 @@
+package com.nikitadan4pi.BThack.mixins.gui_and_hud;
+
+import com.nikitadan4pi.BThack.Core.Client.ModuleList;
+import com.nikitadan4pi.BThack.api.Interfaces.Mc;
+import net.minecraft.client.gui.screen.DeathScreen;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(value = DeathScreen.class, priority = Integer.MAX_VALUE)
+public class MixinDeathScreen implements Mc {
+
+    @Shadow private int ticksSinceDeath;
+
+    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+    public void modifyTick(CallbackInfo ci) {
+        if (ticksSinceDeath >= 20) {
+            if (ModuleList.autoRespawn.isEnabled()) {
+                mc.player.requestRespawn();
+                mc.setScreen(null);
+                ci.cancel();
+            }
+        }
+    }
+}

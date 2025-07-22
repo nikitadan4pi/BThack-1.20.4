@@ -1,0 +1,138 @@
+package com.nikitadan4pi.BThack.impl.Modules.RENDER;
+
+
+import com.nikitadan4pi.BThack.Core.Render.BThackRender;
+import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
+import com.nikitadan4pi.BThack.api.Events.Entity.AttackEntityEvent;
+import com.nikitadan4pi.BThack.api.Events.Render.RenderHudPostEvent;
+import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
+import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.ColorSetting;
+import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
+import com.nikitadan4pi.BThack.api.Module.Module;
+import com.nikitadan4pi.BThack.api.Utils.KeyboardUtils;
+import com.ferra13671.MegaEvents.Base.EventSubscriber;
+import net.minecraft.client.util.Window;
+
+import java.awt.*;
+
+public class CS_Crosshair extends Module {
+
+    public static NumberSetting width;
+    public static NumberSetting height;
+    public static NumberSetting distance;
+    public static BooleanSetting movable;
+    public static NumberSetting scatterLimit;
+    public static NumberSetting scatterSpeed;
+
+    public static BooleanSetting leftRect;
+    public static BooleanSetting rightRect;
+    public static BooleanSetting upRect;
+    public static BooleanSetting downRect;
+    public static BooleanSetting centerRect;
+
+    public static ColorSetting colorS;
+
+    public static NumberSetting rotate;
+
+    public static BooleanSetting rainbow;
+
+    private float spread = 0;
+
+    public CS_Crosshair() {
+        super("CS_Crosshair",
+                "lang.module.CS_Crosshair",
+                KeyboardUtils.RELEASE,
+                MCategory.RENDER,
+                false
+        );
+
+        width = new NumberSetting("Width", this, 4, 1, 50, false);
+        height = new NumberSetting("Height", this, 1, 1, 10, false);
+        distance = new NumberSetting("Distance", this, 3, 2, 30, true);
+
+        movable = new BooleanSetting("Movable", this, true);
+        scatterLimit = new NumberSetting("Scatter Limit", this, 15, 6, 30, true, movable::getValue);
+        scatterSpeed = new NumberSetting("Scatter Speed", this, 0.15, 0.05, 0.3, false, movable::getValue);
+
+        leftRect = new BooleanSetting("Left Rect", this, true);
+        rightRect = new BooleanSetting("Right Rect", this, true);
+        upRect = new BooleanSetting("Up Rect", this, true);
+        downRect = new BooleanSetting("Down Rect", this, true);
+        centerRect = new BooleanSetting("Center Rect", this, true);
+
+        colorS = new ColorSetting("Color", this, Color.GREEN).withBlockedAlpha();
+
+        rotate = new NumberSetting("Rotate", this, 0, 0, 90, true);
+
+        rainbow = new BooleanSetting("Rainbow", this, false);
+
+        initSettings(
+                width,
+                height,
+                distance,
+                movable,
+                scatterLimit,
+                scatterSpeed,
+                leftRect,
+                rightRect,
+                upRect,
+                downRect,
+                centerRect,
+                colorS,
+                rotate,
+                rainbow
+        );
+    }
+
+    @EventSubscriber
+    public void onOverlay(RenderHudPostEvent e) {
+        if (nullCheck()) return;
+
+        if (!movable.getValue())
+            spread = 0;
+
+        BThackRender.guiGraphics.getMatrices().push();
+
+        Window window = mc.getWindow();
+
+        Color color = rainbow.getValue() ? new Color(ColorUtils.rainbow(100)) : colorS.getValue();
+
+        BThackRender.guiGraphics.getMatrices().translate(window.getScaledWidth() / 2f, window.getScaledHeight() / 2f, 0);
+        BThackRender.guiGraphics.getMatrices().peek().getPositionMatrix().rotate((float) Math.toRadians(rotate.getValue()), 0, 0, 1);
+
+        if (centerRect.getValue())
+            BThackRender.drawRect((int)-height.getValue(), (int)- height.getValue(), height.getValue().intValue(), height.getValue().intValue(), color.hashCode());
+
+        if (upRect.getValue())
+            BThackRender.drawRect((int)(0 -height.getValue()), (int)(0 - height.getValue() - distance.getValue() - spread), (int)(0 + height.getValue()), (int)(0 - height.getValue() - distance.getValue() - width.getValue() - spread), color.hashCode());
+
+        if (leftRect.getValue())
+            BThackRender.drawRect((int)(0 - height.getValue() - distance.getValue() - spread), (int)(0 - height.getValue()), (int)(0 - height.getValue() - distance.getValue() - width.getValue() - spread), (int)(0 + height.getValue()), color.hashCode());
+
+        if (downRect.getValue())
+            BThackRender.drawRect((int)-height.getValue(), (int)(0 + height.getValue() + distance.getValue() + spread), (int)( + height.getValue()), (int)(0 + height.getValue() + distance.getValue() + width.getValue() + spread), color.hashCode());
+
+        if (rightRect.getValue())
+            BThackRender.drawRect((int)(0 + height.getValue() + distance.getValue() + spread), (int)(0 - height.getValue()), (int)(0 + height.getValue() + distance.getValue() + width.getValue() + spread), (int)(0 + height.getValue()), color.hashCode());
+
+        BThackRender.guiGraphics.getMatrices().peek().getPositionMatrix().rotate((float) -Math.toRadians(rotate.getValue()), 0, 0, 1);
+        BThackRender.guiGraphics.getMatrices().translate(-(window.getScaledWidth() / 2f), -(window.getScaledHeight() / 2f), 0);
+
+        spread -= (float) scatterSpeed.getValue().floatValue();
+        if (spread < 0)
+            spread = 0;
+
+        BThackRender.guiGraphics.getMatrices().pop();
+    }
+
+    @EventSubscriber
+    public void onAction(AttackEntityEvent e) {
+        if (nullCheck() || !movable.getValue()) return;
+
+        if (e.getPlayer() == mc.player) {
+            spread += 6;
+            if (spread > scatterLimit.getValue())
+                spread = scatterLimit.getValue().intValue();
+        }
+    }
+}
