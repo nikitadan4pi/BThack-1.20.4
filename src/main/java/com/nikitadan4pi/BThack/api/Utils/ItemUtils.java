@@ -5,6 +5,8 @@ import com.nikitadan4pi.BThack.api.Managers.managers.Build.BuildManager;
 import net.minecraft.block.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.item.*;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
 import net.minecraft.registry.Registries;
@@ -15,6 +17,7 @@ import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public final class ItemUtils implements Mc {
@@ -125,6 +128,56 @@ public final class ItemUtils implements Mc {
 
         return score;
     }
+
+    public static float getMineSpeed(BlockState state, BlockPos position, ItemStack itemStack) {
+        if (state == Blocks.AIR.getDefaultState())
+            return 0.02f;
+
+        float hardness = state.getHardness(mc.world, position);
+
+        if (hardness < 0)
+            return 0;
+
+        return getMineSpeedInternal(state, itemStack) / hardness / (BlockUtils.canBreak(position) ? 30f : 100f);
+    }
+
+    private static float getMineSpeedInternal(BlockState state, ItemStack itemStack) {
+        if (mc.player == null) return 0;
+        float digSpeed = getDestroySpeed(state, itemStack);
+
+        if (digSpeed > 1) {
+            //int efficiencyModifier = EnchantmentHelper.getLevel(mc.world.getRegistryManager().get(Enchantments.EFFICIENCY).getEntry(Enchantments.EFFICIENCY).get(), itemStack);
+            //if (efficiencyModifier > 0 && !itemStack.isEmpty()) {
+            //    digSpeed += (float) (StrictMath.pow(efficiencyModifier, 2) + 1);
+            //}
+        }
+
+        if (mc.player.hasStatusEffect(StatusEffects.HASTE))
+            digSpeed *= 1 + (Objects.requireNonNull(mc.player.getStatusEffect(StatusEffects.HASTE)).getAmplifier() + 1) * 0.2F;
+
+
+        if (mc.player.hasStatusEffect(StatusEffects.MINING_FATIGUE))
+            digSpeed *= (float) Math.pow(0.3f, Objects.requireNonNull(mc.player.getStatusEffect(StatusEffects.MINING_FATIGUE)).getAmplifier() + 1);
+
+
+        if (mc.player.isSubmergedInWater())
+            digSpeed *= (float) 0.4f;
+
+        return digSpeed < 0 ? 0 : digSpeed;
+    }
+
+    private static float getDestroySpeed(BlockState state, ItemStack itemStack) {
+        float destroySpeed = 1;
+
+        if (mc.player == null)
+            return 0;
+        if (itemStack != null && !itemStack.isEmpty()) {
+            destroySpeed *= itemStack.getMiningSpeedMultiplier(state);
+        }
+
+        return destroySpeed;
+    }
+
 
     public static boolean isTool(Item item) {
         return item instanceof ToolItem || item instanceof ShearsItem;
