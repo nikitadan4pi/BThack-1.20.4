@@ -8,9 +8,11 @@ import com.nikitadan4pi.BThack.Core.FileSystem.ConfigSystem.ConfigUtils;
 import com.nikitadan4pi.BThack.Core.FileSystem.FileSystem;
 import com.nikitadan4pi.BThack.Core.FileSystem.JsonUtils;
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
-import com.nikitadan4pi.BThack.api.Gui.HudMover.HudMoverScreen;
-import com.nikitadan4pi.BThack.api.Gui.MainMenu.BThackMainMenuScreen;
-import com.nikitadan4pi.BThack.api.Gui.ClickGui.ClickGuiScreen;
+import com.nikitadan4pi.BThack.api.Gui.Screen.HudEditor.HudEditorScreen;
+import com.nikitadan4pi.BThack.api.Gui.Screen.MainMenu.BThackMainMenuScreen;
+import com.nikitadan4pi.BThack.api.Gui.Screen.ClickGui.ClickGuiScreen;
+import com.nikitadan4pi.BThack.api.GuiSystem.BThackScreens;
+import com.nikitadan4pi.BThack.api.GuiSystem.BThackWidgets;
 import com.nikitadan4pi.BThack.api.Interfaces.Mc;
 import com.nikitadan4pi.BThack.api.Plugin.Plugin;
 import com.nikitadan4pi.BThack.api.Plugin.PluginSystem;
@@ -49,10 +51,6 @@ public final class BThack implements ClientModInitializer, Mc {
     public static final IEventBus EVENT_BUS = new UpdatedEventBus();
     public static final String APP_ID = "1221431287852826676";
 
-    public ClickGuiScreen clickGui;
-    public BThackMainMenuScreen mainMenu;
-    public HudMoverScreen hudMoverScreen;
-
     public BThack() {
         ModMetadata mod = FabricLoader.getInstance().getModContainer("bthack").get().getMetadata();
         MC_VERSION = mod.getCustomValue("mcVersion").getAsString();
@@ -89,7 +87,6 @@ public final class BThack implements ClientModInitializer, Mc {
         try {
             initLog("Starting to create BThack directory...");
             FileSystem.start();
-            FileSystem.createTutorialJsonTheme();
             initLog("BThack directory successfully created!");
         } catch (IOException e) {
             initErr("There was an error when creating the BThack directory.");
@@ -161,9 +158,8 @@ public final class BThack implements ClientModInitializer, Mc {
             throw new RuntimeException();
         }
 
-        BThack.instance.clickGui = new ClickGuiScreen();
-        BThack.instance.mainMenu = new BThackMainMenuScreen();
-        BThack.instance.hudMoverScreen = new HudMoverScreen();
+        BThackWidgets.init();
+        BThackScreens.init();
 
         BThack.initLog("Starting loading the config...");
         try {

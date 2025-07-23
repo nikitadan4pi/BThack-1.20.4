@@ -4,10 +4,10 @@ import com.nikitadan4pi.BThack.BThack;
 import com.nikitadan4pi.BThack.Core.Client.Client;
 import com.nikitadan4pi.BThack.Core.FileSystem.FileSystem;
 import com.nikitadan4pi.BThack.api.Category.Categories;
-import com.nikitadan4pi.BThack.api.Gui.ClickGui.component.Frame;
-import com.nikitadan4pi.BThack.api.Gui.MainMenu.BThackMainMenuScreen;
-import com.nikitadan4pi.BThack.api.Gui.MainMenu.SelectWallpaper.SelectWallpaperScreen;
-import com.nikitadan4pi.BThack.api.Gui.MainMenu.SelectWallpaper.Wallpaper;
+import com.nikitadan4pi.BThack.api.Gui.Screen.ClickGui.component.Frame;
+import com.nikitadan4pi.BThack.api.Gui.Screen.MainMenu.BThackMainMenuScreen;
+import com.nikitadan4pi.BThack.api.Gui.Screen.MainMenu.SelectWallpaper.SelectWallpaperScreen;
+import com.nikitadan4pi.BThack.api.Gui.Screen.MainMenu.SelectWallpaper.Wallpaper;
 import com.nikitadan4pi.BThack.api.HudComponent.HudComponent;
 import com.nikitadan4pi.BThack.api.Managers.Managers;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.Setting;
@@ -543,7 +543,7 @@ public final class ConfigSystem {
             for (File file : files) {
                 if (file.isFile()) {
                     if (imageFormats.contains(FilenameUtils.getExtension(file.getName()))) {
-                        SelectWallpaperScreen.wallpapers.add(new Wallpaper(file.getName(), GLTexture.fromPath("BThack/Wallpapers/" + file.getName(), PathMode.OUTSIDEJAR, GLTexture.ColorMode.RGBA)));
+                        SelectWallpaperScreen.wallpapers.add(new Wallpaper(file.getName(), GLTexture.fromPath("BThack/Wallpapers/" + file.getName(), PathMode.OUTSIDEJAR, GLTexture.ColorMode.RGBA, false)));
                     }
                 }
             }
@@ -566,7 +566,7 @@ public final class ConfigSystem {
             String line = reader.readLine();
             if (line != null) {
                 if (!line.equals("default") && Files.exists(Paths.get("BThack/Wallpapers/" + line))) {
-                    BThackMainMenuScreen.mainMenuTexture = GLTexture.fromPath("BThack/Wallpapers/" + line, PathMode.OUTSIDEJAR, GLTexture.ColorMode.RGBA);
+                    BThackMainMenuScreen.mainMenuTexture = GLTexture.fromPath("BThack/Wallpapers/" + line, PathMode.OUTSIDEJAR, GLTexture.ColorMode.RGBA, false);
                 }
             }
             reader.close();

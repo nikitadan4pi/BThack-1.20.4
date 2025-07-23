@@ -1,12 +1,12 @@
 package com.nikitadan4pi.BThack.impl.Modules.PLAYER.ActionBot.Config;
 
-import com.nikitadan4pi.BThack.api.Gui.ActionBot.AbstractTaskGui;
-import com.nikitadan4pi.BThack.api.Gui.ActionBot.ActionBotConfigGui;
-import com.nikitadan4pi.BThack.api.Utils.System.BThackScreen;
-import com.nikitadan4pi.BThack.api.Utils.System.buttons.ModeButton;
-import com.nikitadan4pi.BThack.api.Utils.System.buttons.NumberFrameButton;
-import com.nikitadan4pi.BThack.api.Utils.System.buttons.SwitchButton;
-import com.nikitadan4pi.BThack.api.Utils.System.buttons.TextFrameButton;
+import com.nikitadan4pi.BThack.api.Gui.Screen.ActionBot.AbstractTaskGui;
+import com.nikitadan4pi.BThack.api.Gui.Screen.ActionBot.ActionBotConfigGui;
+import com.nikitadan4pi.BThack.api.GuiSystem.Screen.BThackScreen;
+import com.nikitadan4pi.BThack.api.GuiSystem.buttons.ModeButton;
+import com.nikitadan4pi.BThack.api.GuiSystem.buttons.NumberFrameButton;
+import com.nikitadan4pi.BThack.api.GuiSystem.buttons.SwitchButton;
+import com.nikitadan4pi.BThack.api.GuiSystem.buttons.TextFrameButton;
 import com.nikitadan4pi.BThack.impl.Modules.PLAYER.ActionBot.Config.ActionBotTasks.*;
 import com.nikitadan4pi.BThack.impl.Modules.PLAYER.ActionBot.Config.Utils.ActionBotTaskData;
 import com.nikitadan4pi.BThack.impl.Modules.PLAYER.ActionBot.Config.Utils.TaskButton;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.nikitadan4pi.BThack.api.Gui.ActionBot.ActionBotConfigGui.*;
+import static com.nikitadan4pi.BThack.api.Gui.Screen.ActionBot.ActionBotConfigGui.*;
 
 public class ActionBotConfig {
     public static final ActionBotTask startTask = new ActionBotTask("Start") {

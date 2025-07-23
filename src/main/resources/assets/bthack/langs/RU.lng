@@ -315,3 +315,12 @@
 "lang.command.List.itemAlreadyAdded": Этот предмет уже есть.
 "lang.command.List.itemRemoved": Предмет успешно убран!
 "lang.command.List.itemAlreadyRemoved": Этот предмет не добавлен.
+
+//Widgets
+"lang.widget.OutdatedVersion.helloMessage": Привет, мы нашли для вас новое обновление!
+"lang.widget.OutdatedVersion.Current": Текущее: %s
+"lang.widget.OutdatedVersion.New": Новое: %s
+"lang.widget.OutdatedVersion.UpdateMessage": Хотите перейти на новую версию?
+"lang.widget.OutdatedVersion.Yes": Да
+"lang.widget.OutdatedVersion.No": Нет
+"lang.widget.OutdatedVersion.AlwaysNo": Больше не спрашивать

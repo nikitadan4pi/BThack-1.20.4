@@ -5,6 +5,7 @@ import com.nikitadan4pi.BThack.Core.Client.ModuleList;
 import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
 import com.nikitadan4pi.BThack.Core.Render.Utils.RainbowUtils;
 import com.nikitadan4pi.BThack.api.Animation.Easing;
+import com.nikitadan4pi.BThack.api.GuiSystem.BThackScreens;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.*;
 import com.nikitadan4pi.BThack.api.Module.OneActionModule;
 import com.nikitadan4pi.BThack.api.Utils.KeyboardUtils;
@@ -125,8 +126,8 @@ public class ClickGui extends OneActionModule {
         }
 
         if (mc.currentScreen == null) {
-            BThack.instance.clickGui.firstIgnore = true;
-            mc.setScreen(BThack.instance.clickGui);
+            BThackScreens.CLICK_GUI.firstIgnore = true;
+            mc.setScreen(BThackScreens.CLICK_GUI);
         }
 
         toggle();

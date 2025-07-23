@@ -6,7 +6,7 @@ import com.nikitadan4pi.BThack.Core.Render.BThackRender;
 import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
 import com.nikitadan4pi.BThack.api.Events.Render.RenderHudPostEvent;
 import com.nikitadan4pi.BThack.api.Events.ClientTickEvent;
-import com.nikitadan4pi.BThack.api.Gui.HudMover.HudMoverScreen;
+import com.nikitadan4pi.BThack.api.Gui.Screen.HudEditor.HudEditorScreen;
 import com.nikitadan4pi.BThack.api.HudComponent.HudComponent;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
@@ -47,7 +47,7 @@ public class HUD extends Module {
         );
     }
 
-    public static final GLTexture bthack_logo = GLTexture.fromPath("assets/bthack/bthacklogo.png", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA);
+    public static final GLTexture bthack_logo = GLTexture.fromPath("assets/bthack/bthacklogo.png", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA, true);
 
     @Override
     public void onDisable() {
@@ -57,7 +57,7 @@ public class HUD extends Module {
     @EventSubscriber
     public void onTick(ClientTickEvent e) {
         if (nullCheck()) return;
-        if (mc.currentScreen instanceof HudMoverScreen) return;
+        if (mc.currentScreen instanceof HudEditorScreen) return;
 
         for (HudComponent hudComponent : Client.hudComponents) {
             if (hudComponent.isEnabled()) {
@@ -72,7 +72,7 @@ public class HUD extends Module {
 
     @EventSubscriber(priority = Integer.MAX_VALUE)
     public void onRender(RenderHudPostEvent e) {
-        if (mc.currentScreen instanceof HudMoverScreen) return;
+        if (mc.currentScreen instanceof HudEditorScreen) return;
         BThackRender.guiGraphics.getMatrices().push();
         BThackRender.guiGraphics.getMatrices().translate(0,0,3000);
 

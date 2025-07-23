@@ -23,7 +23,7 @@ public class MenuShader extends Module {
                 "lang.module.MenuShader",
                 KeyboardUtils.RELEASE,
                 MCategory.CLIENT,
-                true
+                false
         );
 
         random = new BooleanSetting("Random", this, false);

@@ -1,7 +1,7 @@
 package com.nikitadan4pi.BThack.mixins.gui_and_hud;
 
 import com.nikitadan4pi.BThack.Core.Client.ModuleList;
-import com.nikitadan4pi.BThack.api.Gui.MainMenu.BThackMainMenuScreen;
+import com.nikitadan4pi.BThack.api.Gui.Screen.MainMenu.BThackMainMenuScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;

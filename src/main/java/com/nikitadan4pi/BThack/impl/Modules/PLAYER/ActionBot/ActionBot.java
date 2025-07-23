@@ -5,7 +5,7 @@ import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.BooleanSet
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.GuiButtonSetting;
 import com.nikitadan4pi.BThack.api.Module.Module;
 import com.nikitadan4pi.BThack.api.Utils.KeyboardUtils;
-import com.nikitadan4pi.BThack.api.Gui.ActionBot.ActionBotConfigGui;
+import com.nikitadan4pi.BThack.api.Gui.Screen.ActionBot.ActionBotConfigGui;
 
 public class ActionBot extends Module {
     ActionBotRunTimeThread thread;

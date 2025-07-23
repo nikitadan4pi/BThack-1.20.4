@@ -171,6 +171,13 @@ public final class BThackRender implements Mc {
         draw();
     }
 
+    public static void drawVerticalGradientOutlineRect(float x1, float y1, float x2, float y2, float depth, int upColor, int downColor) {
+        drawRect(x1 + depth, y1, x2 - depth, y1 + depth, upColor); //up
+        drawRect(x1 + depth, y2 - depth, x2, y2, downColor); //down
+        drawVerticalGradientRect(x1,y1, x1 + depth, y2, upColor, downColor);
+        drawVerticalGradientRect(x2 - depth, y1, x2, y2 - depth, upColor, downColor);
+    }
+
     public static void draw4ColorRect(float x1, float y1, float x2, float y2, int x1y1Color, int x2y1Color, int x1y2Color, int x2y2Color) {
         Matrix4f matrix4f = guiGraphics.getMatrices().peek().getPositionMatrix();
 
