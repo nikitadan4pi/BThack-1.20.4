@@ -167,20 +167,6 @@
 "lang.module.Tracers": Draws lines leading to entities.
 "lang.module.Xray": Allows you to cancel the rendering of blocks.
 
-//WORLD
-"lang.module.AutoFarmland": Automatically plows the grass and dirt near you.
-"lang.module.AutoSign": Memorizes the first text entered and automatically inserts it in subsequent times.
-"lang.module.CloudsColor": Changes the color of the clouds.
-"lang.module.CustomDayTime": Sets custom day time.
-"lang.module.Fly": A more comfortable substitute for creative flight.
-"lang.module.FogColor": Changes the color of the fog.
-"lang.module.Lawnmower": Breaks grass and flowers.
-"lang.module.LiquidFiller": Placing blocks in the liquids.
-"lang.module.NoWeather": Turns off the weather.
-"lang.module.SkyColor": Changes the color of the sky in the world.
-"lang.module.WorldElements": A module for fine-tuning the world.
-
-
 //Module messages
 "lang.module.CreeperRadar.spotted": Creeper has been spotted! %sX: %s  %sY: %s  %sZ: %s
 "lang.module.EnemyRadar.spotted": The enemy has been spotted! %sName: %s  %sHealth: %s  %sDirection: %s
@@ -315,3 +301,22 @@
 "lang.command.List.itemAlreadyAdded": This item has already been added.
 "lang.command.List.itemRemoved": Item removed successfully!
 "lang.command.List.itemAlreadyRemoved": This item has already been removed.
+
+//Widgets
+"lang.widget.OutdatedVersion.helloMessage": Hi, we've found a new update for you!
+"lang.widget.OutdatedVersion.Current": Current: %s
+"lang.widget.OutdatedVersion.New": New: %s
+"lang.widget.OutdatedVersion.UpdateMessage": Want to upgrade to a new version?
+"lang.widget.OutdatedVersion.Yes": Yes
+"lang.widget.OutdatedVersion.No": No
+"lang.widget.OutdatedVersion.AlwaysNo": Don't ask anymore
+"lang.widget.Update.Started.text1": Downloading the new version of BThack from Github.
+"lang.widget.Update.Started.text2": Do not disconnect the internet to prevent errors.
+"lang.widget.Update.Started.text3": The program may experience errors if the internet is unstable.
+"lang.widget.Update.Started.text4": Downloaded:
+"lang.widget.Update.Successful.text1": The first stage of the update has been successfully completed!
+"lang.widget.Update.Successful.text2": Restart minecraft to start the second stage of the upgrade.
+"lang.widget.Update.Failed.text1": An error occurred when downloading the new version.
+"lang.widget.Update.Failed.text2": Check your internet connection and try again.
+"lang.widget.Update.Failed.tryAgain": Try again
+"lang.widget.Update.Failed.close": Close

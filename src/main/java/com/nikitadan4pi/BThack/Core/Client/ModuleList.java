@@ -228,7 +228,6 @@ public final class ModuleList {
         HUD = register(new HUD());
         hudEditor = register(new HudEditor());
         memoryCleaner = register(new MemoryCleaner());
-        menuShader = register(new MenuShader());
 
         //COMBAT
         aimBot = register(new AimBot());

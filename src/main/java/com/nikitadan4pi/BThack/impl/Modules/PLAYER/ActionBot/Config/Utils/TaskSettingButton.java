@@ -2,7 +2,7 @@ package com.nikitadan4pi.BThack.impl.Modules.PLAYER.ActionBot.Config.Utils;
 
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
 import com.nikitadan4pi.BThack.api.Interfaces.Mc;
-import com.nikitadan4pi.BThack.api.Utils.System.buttons.Button;
+import com.nikitadan4pi.BThack.api.GuiSystem.buttons.Button;
 
 public class TaskSettingButton implements Mc {
 

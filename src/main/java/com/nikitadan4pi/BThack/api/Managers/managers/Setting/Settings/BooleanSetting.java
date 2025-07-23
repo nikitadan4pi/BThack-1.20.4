@@ -1,8 +1,8 @@
 package com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings;
 
-import com.nikitadan4pi.BThack.api.Gui.ClickGui.component.components.ModuleButton;
-import com.nikitadan4pi.BThack.api.Gui.ClickGui.component.components.setting.AbstractSetting;
-import com.nikitadan4pi.BThack.api.Gui.ClickGui.component.components.setting.settings.Checkbox;
+import com.nikitadan4pi.BThack.api.Gui.Screen.ClickGui.component.components.ModuleButton;
+import com.nikitadan4pi.BThack.api.Gui.Screen.ClickGui.component.components.setting.AbstractSetting;
+import com.nikitadan4pi.BThack.api.Gui.Screen.ClickGui.component.components.setting.settings.Checkbox;
 import com.nikitadan4pi.BThack.api.Module.Module;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

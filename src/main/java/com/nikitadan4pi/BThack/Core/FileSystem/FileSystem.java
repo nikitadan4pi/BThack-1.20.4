@@ -24,8 +24,6 @@ public final class FileSystem {
         registerFolder("Enemies", "/Social");
         registerFolder("Spammer", "");
         registerFolder("Modules", "");
-        registerFolder("Themes", "");
-        registerFolder("ColourThemes", "/Themes");
         registerFolder("ActionBot", "");
         registerFolder("DefaultConfig", "/ActionBot");
         registerFolder("Wallpapers", "");
@@ -66,29 +64,6 @@ public final class FileSystem {
         } else {
             BThack.log(name + " folder already exists");
         }
-    }
-
-    public static void createTutorialJsonTheme() throws IOException {
-        ConfigUtils.registerFiles("tutorialTheme", "Themes/ColourThemes");
-
-        OutputStreamWriter fileOutputStreamWriter = new OutputStreamWriter(Files.newOutputStream(Paths.get("BThack/Themes/ColourThemes/tutorialTheme.json")), StandardCharsets.UTF_8);
-
-        JsonObject colourThemeObject = new JsonObject();
-        JsonObject coloursObject = new JsonObject();
-
-        colourThemeObject.add("Name", new JsonPrimitive("TutorialTheme"));
-
-        coloursObject.add("fontColour", new JsonPrimitive(0x191CFF));
-        coloursObject.add("backgroundFontColour", new JsonPrimitive(0xFF111111));
-        coloursObject.add("backgroundFontHoveredColour", new JsonPrimitive(0xFF222222));
-        coloursObject.add("moduleEnabledColour", new JsonPrimitive(0x191CFF));
-        coloursObject.add("moduleDisabledColour", new JsonPrimitive(0xFFFFFF));
-        coloursObject.add("arrayListColour", new JsonPrimitive(0x191CFF));
-
-        colourThemeObject.add("Colours", coloursObject);
-        String jsonString = gson.toJson(new JsonParser().parse(colourThemeObject.toString()));
-        fileOutputStreamWriter.write(jsonString);
-        fileOutputStreamWriter.close();
     }
 
     public static void deleteDirectory(File directory) {

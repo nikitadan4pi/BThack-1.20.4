@@ -4,10 +4,10 @@ package com.nikitadan4pi.BThack.impl.Modules.PLAYER.ActionBot.Config.Utils;
 
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
 import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
-import com.nikitadan4pi.BThack.api.Utils.System.buttons.Button;
+import com.nikitadan4pi.BThack.api.GuiSystem.buttons.Button;
 import com.nikitadan4pi.BThack.impl.Modules.PLAYER.ActionBot.Config.ActionBotTask;
 
-import static com.nikitadan4pi.BThack.api.Gui.ActionBot.ActionBotConfigGui.*;
+import static com.nikitadan4pi.BThack.api.Gui.Screen.ActionBot.ActionBotConfigGui.*;
 
 public class TaskButton extends Button {
     private boolean selected;
