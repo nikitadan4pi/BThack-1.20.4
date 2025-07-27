@@ -5,21 +5,23 @@ import com.nikitadan4pi.BThack.Constants;
 import com.nikitadan4pi.BThack.Core.Client.ModuleList;
 import com.nikitadan4pi.BThack.Core.Render.BThackMatrix;
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
-import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
 import com.nikitadan4pi.BThack.api.Animation.Animation;
 import com.nikitadan4pi.BThack.api.Animation.Easing;
 import com.nikitadan4pi.BThack.api.Gui.Screen.ClickGui.component.components.ModuleButton;
 import com.nikitadan4pi.BThack.api.Gui.Screen.ClickGui.component.components.setting.AbstractSetting;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
 import com.nikitadan4pi.BThack.api.Module.Module;
+import com.nikitadan4pi.BThack.api.SoundSystem.SoundSystem;
+import com.nikitadan4pi.BThack.api.SoundSystem.Sounds;
 import com.nikitadan4pi.BThack.impl.Modules.CLIENT.ClickGui;
 
 import static com.nikitadan4pi.BThack.api.Module.Module.mc;
 
 public class ModeButton extends AbstractSetting<ModeSetting> {
 
-	public boolean opened = false;
-	private final Animation animation = new Animation(Easing.CIRC_OUT, 450);
+	private boolean open = false;
+	private Animation animation = new Animation(Easing.CIRC_IN_OUT, 500);
+	private boolean[] hoveredModes = new boolean[this.setting.getOptions().size()];
 
 	public ModeButton(ModeSetting setting, ModuleButton button, int offset, int modeIndex, Module module) {
 		super(offset, button, module, setting);
@@ -30,7 +32,9 @@ public class ModeButton extends AbstractSetting<ModeSetting> {
 	@Override
 	public void renderComponent() {
 		super.renderComponent();
-		BThackRender.drawRect(parent.parent.getX(), parent.parent.getY() + offset, parent.parent.getX() + parent.parent.getWidth(), parent.parent.getY() + offset + Constants.CLICKGUI_BUTTON_HEIGHT, this.hovered ? ClickGui.BACKGROUND_HOVERED_COLOR : ClickGui.BACKGROUND_COLOR);
+
+		BThackRender.drawRect(getX(), getY(), getX() + Constants.CLICKGUI_FRAME_WIDTH, getY() + getHeight(), hovered ? ClickGui.BACKGROUND_HOVERED_COLOR : ClickGui.BACKGROUND_COLOR);
+
 		String text = getModeString();
 		float scale = getTextScale(text);
 
@@ -38,16 +42,24 @@ public class ModeButton extends AbstractSetting<ModeSetting> {
 			BThackMatrix.push();
 			BThackMatrix.scale(scale, scale, 1);
 		}
-		BThackRender.drawString(text, (getX() + 2) / scale, (getY() + 4) / scale, ClickGui.fontColor.getValue().getRGB());
+		BThackRender.drawString(text, (getX() + 2) / scale, (getY() + 4) / scale, ModuleList.clickGui.textColor.getValue().hashCode());
 		if (scale != 1)
 			BThackMatrix.pop();
-		if (opened || animation.getEase() < 1){
-			BThackRender.enableScissor(ClickGui.applyGuiScale(getX()), ClickGui.applyGuiScale(getY()), ClickGui.applyGuiScale(Constants.CLICKGUI_FRAME_WIDTH), ClickGui.applyGuiScale(getHeight()));
-			for (int i = 0; i < setting.getOptions().size(); i++){
-				BThackRender.drawRect(parent.parent.getX(), parent.parent.getY() + offset + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 1)), parent.parent.getX() + parent.parent.getWidth(), parent.parent.getY() + offset + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 2)), this.setting.getIndex() == i ? ColorUtils.integrateAlpha(ModuleList.clickGui.color.getValue().hashCode(), (int) 255 * ModuleList.clickGui.opacity.getValue()) : ClickGui.BACKGROUND_COLOR);
-				String textO = (setting.getOptions().get(i));
-				BThackRender.drawString(textO, (getX() + 2), (getY() + ((Constants.CLICKGUI_BUTTON_HEIGHT - mc.textRenderer.fontHeight) / 2 ) + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 1))), ClickGui.fontColor.getValue().getRGB());
-				if (ClickGui.moduleOutline.getValue()) BThackRender.drawOutlineRect(parent.parent.getX(), parent.parent.getY() + offset + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 1)), parent.parent.getX() + parent.parent.getWidth(), parent.parent.getY() + offset + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 2)), 1, Constants.CLICKGUI_BUTTON_OUTLINE_COLOR);
+		BThackRender.drawOutlineRect(getX() + 1, getY(), getX() + Constants.CLICKGUI_FRAME_WIDTH - 1, getY() + Constants.CLICKGUI_BUTTON_HEIGHT, 1, Constants.CLICKGUI_BUTTON_OUTLINE_COLOR);
+		if (open || animation.getEase() < 1) {
+			BThackRender.enableScissor(getX(), getY(), Constants.CLICKGUI_FRAME_WIDTH, getHeight());
+			for (int i = 0; i < setting.getOptions().size(); i++) {
+				if(this.setting.getValue().equals(this.setting.getOptions().get(i))) {
+					if (ModuleList.clickGui.isShaderEnabled()) {
+						ModuleList.clickGui.prepareCurrentShader(255f, 0.7f);
+						BThackRender.drawShader(ModuleList.clickGui.getCurrentShader(), getX() + 1, getY() + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 1)), getX() + Constants.CLICKGUI_FRAME_WIDTH - 1, getY() + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 2)));
+					} else
+						BThackRender.drawRect(getX() + 1, getY() + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 1)), getX() + Constants.CLICKGUI_FRAME_WIDTH - 1, getY() + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 2)), ClickGui.getClickGuiColor(false));
+				} else {
+					BThackRender.drawRect(getX() + 1, getY() + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 1)), getX() + Constants.CLICKGUI_FRAME_WIDTH - 1, getY() + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 2)), hoveredModes[i] ? ClickGui.BACKGROUND_HOVERED_COLOR : ClickGui.BACKGROUND_COLOR);
+				}
+				BThackRender.drawOutlineRect(getX() + 1, getY() + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 1)), getX() + Constants.CLICKGUI_FRAME_WIDTH - 1, getY() + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 2)), 1, Constants.CLICKGUI_BUTTON_OUTLINE_COLOR);
+				BThackRender.drawString(setting.getOptions().get(i), (getX() + 2), getY() + (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 1)) + ((Constants.CLICKGUI_BUTTON_HEIGHT - mc.textRenderer.fontHeight) / 2f), ModuleList.clickGui.textColor.getValue().hashCode());
 			}
 			BThackRender.disableScissor();
 		}
@@ -63,50 +75,36 @@ public class ModeButton extends AbstractSetting<ModeSetting> {
 	}
 
 	@Override
-	public boolean updateComponent(int mouseX, int mouseY) {
-		if (animation.getEase() < 1) parent.parent.refresh();
+	public int getHeight() {
+		return open ? (int) (Constants.CLICKGUI_BUTTON_HEIGHT * (setting.getOptions().size() + 1) * animation.getEase()) : (int) (Constants.CLICKGUI_BUTTON_HEIGHT + (Constants.CLICKGUI_BUTTON_HEIGHT * (setting.getOptions().size() + 1) * (1 - animation.getEase())));
+	}
 
-		if (!getVisible() || !parent.open) {
-			opened = false;
+	@Override
+	public boolean updateComponent(int mouseX, int mouseY) {
+		if (!getVisible() || !parent.open){
+			open = false;
 			return true;
 		}
 
 		hovered = isMouseOnButton(mouseX, mouseY);
-
-		y = parent.parent.getY() + offset;
-		x = parent.parent.getX();
+		if (open){
+			for (int i = 0; i < setting.getOptions().size(); i++) {
+				if (isMouseOnButton(mouseX, mouseY - (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 1)))) this.hoveredModes[i] = true;
+				else hoveredModes[i] = false;
+			}
+		}
+		if (animation.getEase() < 1) {
+			parent.parent.refresh();
+		}
 
 		return true;
 	}
 
-	public int getHeight(){
-		return opened ? (int) ((Constants.CLICKGUI_BUTTON_HEIGHT * (setting.getOptions().size() + 1)) * animation.getEase()) : Constants.CLICKGUI_BUTTON_HEIGHT + (int) (Constants.CLICKGUI_BUTTON_HEIGHT * (setting.getOptions().size() * (1 - animation.getEase())));
-	}
-
 	@Override
 	public boolean mouseClicked(int mouseX, int mouseY, int button) {
-		if (!getVisible() || !parent.open) return false;
+		if (!getVisible()) return false;
 
-		if (opened && button == 0 && this.parent.open){
-			for (int x = 0; x < setting.getOptions().size(); x++){
-				if (isMouseOnButton(mouseX, mouseY - ClickGui.applyGuiScale((Constants.CLICKGUI_BUTTON_HEIGHT) * (x + 1)))){
-					setting.setIndex(x);
-					setting.setValue(setting.getOptions().get(setting.getIndex()));
-					setting.module.onChangeSetting(setting);
-					setting.setValue(setting.getOptions().get(x));
-					return false;
-				}
-			}
-		}
-
-		if (isMouseOnButton(mouseX, mouseY) && button == 1 && this.parent.open) {
-			opened = !opened;
-			parent.parent.refresh();
-			animation.reset();
-			return false;
-		}
-
-		if (isMouseOnButton(mouseX, mouseY) && button == 0 && this.parent.open) {
+		if (isMouseOnButton(mouseX, mouseY) && button == 0) {
 			int maxIndex = setting.getOptions().size();
 
 			if (setting.getIndex() + 1 >= maxIndex) {
@@ -117,9 +115,24 @@ public class ModeButton extends AbstractSetting<ModeSetting> {
 			}
 
 			setting.setValue(setting.getOptions().get(setting.getIndex()));
-			setting.module.onChangeSetting(setting);
+			SoundSystem.playSound(Sounds.GUI_CHECKBOX_ENABLE);
 		}
 
+		if (isMouseOnButton(mouseX, mouseY) && button == 1) {
+			open = !open;
+			animation.reset();
+			parent.parent.refresh();
+		}
+
+		if (open){
+			for (int i = 0; i < setting.getOptions().size(); i++){
+				if (isMouseOnButton(mouseX, mouseY - (Constants.CLICKGUI_BUTTON_HEIGHT * (i + 1))) && button == 0) {
+					setting.setIndex(i);
+					setting.setValue(setting.getOptions().get(i));
+					SoundSystem.playSound(Sounds.GUI_CHECKBOX_ENABLE);
+				}
+			}
+		}
 		return isMouseOnButton(mouseX, mouseY);
 	}
 }

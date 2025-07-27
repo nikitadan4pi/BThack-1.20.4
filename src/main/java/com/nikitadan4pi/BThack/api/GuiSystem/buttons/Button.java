@@ -108,6 +108,8 @@ public class Button implements Mc {
             return text;
     }
 
+    public boolean isHided() {return this.hided;}
+
     public void setCenterX(int centerX) {
         this.centerX = centerX;
     }

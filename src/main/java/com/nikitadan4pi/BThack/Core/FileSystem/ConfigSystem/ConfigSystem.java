@@ -11,6 +11,7 @@ import com.nikitadan4pi.BThack.api.Gui.Screen.MainMenu.SelectWallpaper.Wallpaper
 import com.nikitadan4pi.BThack.api.HudComponent.HudComponent;
 import com.nikitadan4pi.BThack.api.Managers.Managers;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.Setting;
+import com.nikitadan4pi.BThack.api.Managers.managers.Thread.ThreadManager;
 import com.nikitadan4pi.BThack.api.Module.Module;
 import com.nikitadan4pi.BThack.api.Plugin.Plugin;
 import com.nikitadan4pi.BThack.api.Plugin.PluginSystem;
@@ -27,6 +28,7 @@ import com.ferra13671.SimpleLanguageSystem.LanguageSystem;
 import com.ferra13671.TextureUtils.GLTexture;
 import com.ferra13671.TextureUtils.PathMode;
 import com.google.gson.*;
+import com.sun.jna.platform.win32.WinDef;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
@@ -41,6 +43,7 @@ import static com.nikitadan4pi.BThack.Core.FileSystem.JsonUtils.*;
 
 public final class ConfigSystem {
     static final Gson gson = (new GsonBuilder()).setPrettyPrinting().create();
+    public static boolean saving = false;
 
     public static void saveConfig() {
         try {
@@ -67,6 +70,15 @@ public final class ConfigSystem {
         } catch (IOException e) {
             BThack.error(e.getMessage());
         }
+    }
+
+    public static void saveConfigThreaded() {
+        if (saving) return;
+        saving = true;
+
+        ThreadManager.startNewThread((thread -> saveConfig()));
+
+        saving = false;
     }
 
     public static void loadConfig() {

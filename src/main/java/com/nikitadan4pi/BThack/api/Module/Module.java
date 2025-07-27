@@ -157,6 +157,10 @@ public class Module {
         }
     }
 
+    public boolean isVisible(){return this.visible;}
+
+    public void setVisible(boolean visible){this.visible = visible;}
+
     public void setQuietlyToggled(boolean toggled) {
         if (this.toggled == toggled) return;
         this.toggled = toggled;

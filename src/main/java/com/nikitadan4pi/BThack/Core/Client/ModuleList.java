@@ -424,6 +424,7 @@ public final class ModuleList {
 
                 new ArrayListComponent()
         ));
+        //Client.hudComponents.add(new CompanionComponent());
 
         Client.hudComponents.addAll(PluginUtils.getPluginsHudComponents());
         Client.modules.addAll(Client.hudComponents);

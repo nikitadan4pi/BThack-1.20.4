@@ -21,25 +21,21 @@ public class KeyCode extends AbstractSetting<KeyCodeSetting> {
     public KeyCode(ModuleButton button, int offset, KeyCodeSetting option, Module module) {
         super(offset, button, module, option);
         set = option;
-        x = button.parent.getX() + button.parent.getWidth();
-        y = button.parent.getY() + button.offset;
+        position.x = button.parent.getX() + button.parent.getWidth();
+        position.y = button.parent.getY() + button.offset;
     }
 
     @Override
     public void renderComponent() {
         BThackRender.drawRect(parent.parent.getX(), parent.parent.getY() + offset, parent.parent.getX() + parent.parent.getWidth(), parent.parent.getY() + offset + 15, this.hovered ? ClickGui.BACKGROUND_HOVERED_COLOR : ClickGui.BACKGROUND_COLOR);
 
-        BThackRender.drawString(binding ? "< PRESS KEY >" : (setting.getName() + ": " + KeyboardUtils.getKeyName(set.getValue())), parent.parent.getX() + 2, parent.parent.getY() + offset + ((Constants.CLICKGUI_BUTTON_HEIGHT - mc.textRenderer.fontHeight) / 2 ), ClickGui.fontColor.getValue().hashCode());
+        BThackRender.drawString(binding ? "< PRESS KEY >" : (setting.getName() + ": " + KeyboardUtils.getKeyName(set.getValue())), parent.parent.getX() + 2, parent.parent.getY() + offset + ((Constants.CLICKGUI_BUTTON_HEIGHT - mc.textRenderer.fontHeight) / 2 ), ClickGui.textColor.getValue().hashCode());
     }
 
     @Override
     public boolean updateComponent(int mouseX, int mouseY) {
         if (!getVisible() || !parent.open) return true;
-
         hovered = isMouseOnButton(mouseX, mouseY);
-        y = parent.parent.getY() + offset;
-        x = parent.parent.getX();
-
         return true;
     }
 

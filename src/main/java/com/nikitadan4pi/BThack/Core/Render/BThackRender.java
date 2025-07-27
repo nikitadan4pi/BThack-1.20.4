@@ -261,6 +261,32 @@ public final class BThackRender implements Mc {
         drawRect(x2 - outlineX, y1, x1 + outlineX, y1 - outlineY, color);
     }
 
+    public static void drawShaderOutlineRect(ShaderProgram shaderProgram, float x1, float y1, float x2, float y2, float depth) {
+        Matrix4f matrix4f = guiGraphics.getMatrices().peek().getPositionMatrix();
+
+        guiGraphics.getMatrices().push();
+        shaderProgram.use();
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
+
+        drawShaderOutlineRect(x1,y1, x1 + depth, y2, buffer); //left
+        drawShaderOutlineRect(x1 + depth, y2 - depth, x2, y2, buffer); //down
+        drawShaderOutlineRect(x2, y2 - depth, x2 - depth, y1, buffer); //right
+        drawShaderOutlineRect(x1 + depth, y1, x2 - depth, y1 + depth, buffer); //up
+
+        draw();
+        shaderProgram.release();
+        guiGraphics.getMatrices().pop();
+    }
+
+    public static void drawShaderOutlineRect(float x1, float y1, float x2, float y2, BufferBuilder buffer) {
+        Matrix4f matrix4f = BThackMatrix.peek().getPositionMatrix();
+        buffer.vertex(matrix4f, x1, y1, 0).next();
+        buffer.vertex(matrix4f, x1, y2, 0).next();
+        buffer.vertex(matrix4f, x2, y2, 0).next();
+        buffer.vertex(matrix4f, x2, y1, 0).next();
+    }
+
     public static void drawSquare(float x1, float y1, float size, int color) {
         drawRect(x1 - size, y1 - size, x1 + size, y1 + size, color);
     }
@@ -298,25 +324,6 @@ public final class BThackRender implements Mc {
 
         draw();
     }
-
-    /*public static void drawString(String text, float x, float y, int color, boolean shadow, FontRenderManager.DrawMode drawMode) {
-
-        if (text == null || text.isEmpty()) return;
-
-        if (ModuleList.customFont == null || !ModuleList.customFont.isEnabled()) {
-            BThackMatrix.push();
-            float size = drawMode.getSize();
-            if (size != 1f)
-                BThackMatrix.scale(size, size, size);
-            mc.textRenderer.draw(text, x * (1 / size), y * (1 / size), color, shadow, BThackMatrix.peek().getPositionMatrix(), bufferSource, TextRenderer.TextLayerType.NORMAL, 0, 15728880, mc.textRenderer.isRightToLeft());
-            guiGraphics.draw();
-            resetShader();
-            BThackMatrix.pop();
-        } else {
-            RenderSystem.enableDepthTest();
-            fontRenderManager.draw(text, x, y, color, shadow, drawMode);
-        }
-    }*/
 
     public static void drawString(String text, float x1, float y1, int color, boolean shadow, float size) {
 
@@ -393,15 +400,6 @@ public final class BThackRender implements Mc {
         bufferBuilder.vertex(matrix4f, x1, y1, 0.0f).texture(0, 0).next();
         draw();
     }
-
-   /* public static void reloadFontRenderManager() throws Exception {
-        if (fontRenderManager != null)
-            fontRenderManager.close();
-        if (Client.clientInfo.getFont().equals("default")) fontRenderManager = new FontRenderManager(defaultFont);
-        else if (Files.exists(Paths.get("BThack/Fonts/" + Client.clientInfo.getFont()))) fontRenderManager = new FontRenderManager(FontUtils.createFont(ConfigUtils.newInputStream("BThack/Fonts/" + Client.clientInfo.getFont(), PathMode.OUTSIDEJAR), 17));
-        ArrayListComponent.updateSizes();
-    }*/
-
 
     /**
      * THE SHADER MUST HAVE VERTEXFORMAT = VERTEXFORMATS.POSITION!!!!
