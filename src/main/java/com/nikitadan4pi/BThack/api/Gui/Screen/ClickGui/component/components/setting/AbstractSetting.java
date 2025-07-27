@@ -9,22 +9,14 @@ import com.nikitadan4pi.BThack.impl.Modules.CLIENT.ClickGui;
 import org.joml.Vector2i;
 
 public abstract class AbstractSetting<T extends Setting<?>> extends Component {
-
-    public int x;
-    public int y;
-    public int offset;
     public final Vector2i position = new Vector2i(0, 0);
-
-
+    public int offset;
     public boolean hovered;
-
     private boolean visible = true;
-
-    public T setting;
-
 
     public final ModuleButton parent;
     public final Module module;
+    public final T setting;
 
     public AbstractSetting(int offset, ModuleButton button, Module module, T setting) {
         this.offset = offset;
@@ -38,17 +30,7 @@ public abstract class AbstractSetting<T extends Setting<?>> extends Component {
         position.set(parent.parent.getX(), parent.parent.getY() + offset);
     }
 
-    @Override
-    public void setOff(int newOff) {
-        offset = newOff;
-    }
-
-    @Override
-    public void updateDependencies(int offset) {
-        if (setting.dependence != null)
-            setVisible(setting.dependence.get());
-    }
-
+    //@Override
     public void refresh(int newOff) {
         offset = newOff;
         if (setting != null && setting.dependence != null)
@@ -57,7 +39,7 @@ public abstract class AbstractSetting<T extends Setting<?>> extends Component {
 
     @Override
     public int getHeight() {
-        return Constants.CLICKGUI_BUTTON_HEIGHT;
+        return 15;
     }
 
     public int getX() {
@@ -68,7 +50,6 @@ public abstract class AbstractSetting<T extends Setting<?>> extends Component {
         return position.y;
     }
 
-
     @Override
     public abstract boolean updateComponent(int mouseX, int mouseY);
 
@@ -76,8 +57,8 @@ public abstract class AbstractSetting<T extends Setting<?>> extends Component {
     public abstract boolean mouseClicked(int mouseX, int mouseY, int button);
 
     public boolean isMouseOnButton(int x, int y) {
-        return x >= ClickGui.applyGuiScale(this.x) && x <= ClickGui.applyGuiScale(this.x + Constants.CLICKGUI_FRAME_WIDTH) &&
-                y >= ClickGui.applyGuiScale(this.y) && y <= ClickGui.applyGuiScale(this.y + Constants.CLICKGUI_BUTTON_HEIGHT);
+        return x > ClickGui.applyGuiScale(getX()) && x < ClickGui.applyGuiScale(getX() + Constants.CLICKGUI_FRAME_WIDTH) &&
+                y > ClickGui.applyGuiScale(getY()) && y < ClickGui.applyGuiScale(getY() + Constants.CLICKGUI_BUTTON_HEIGHT);
     }
 
     public boolean getVisible() {

@@ -78,7 +78,7 @@ public class HudEditorScreen extends BThackScreen {
         frame.updatePosition((int) (mouseX / ClickGui.guiScale.getValue()), (int) (mouseY / ClickGui.guiScale.getValue()));
         BThackRender.guiGraphics.getMatrices().pop();
 
-        ClickGuiScreen.descriptionY = (int) ((height - (height / 40)) / ClickGui.guiScale.getValue());
+        //ClickGuiScreen.descriptionY = (int) ((height - (height / 40)) / ClickGui.guiScale.getValue());
     }
 
     @Override

@@ -19,14 +19,14 @@ public class Keybind extends AbstractSetting<Setting<?>> {
 		super(offset, button, null, null);
 
 
-		this.x = button.parent.getX() + button.parent.getWidth();
-		this.y = button.parent.getY() + button.offset;
+		position.x = button.parent.getX() + button.parent.getWidth();
+		position.y = button.parent.getY() + button.offset;
 	}
 	
 	@Override
 	public void renderComponent() {
 		BThackRender.drawRect(parent.parent.getX(), parent.parent.getY() + offset, parent.parent.getX() + parent.parent.getWidth(), parent.parent.getY() + offset + 15, this.hovered ? ClickGui.BACKGROUND_HOVERED_COLOR : ClickGui.BACKGROUND_COLOR);
-		BThackRender.drawString(binding ? "< PRESS KEY >" : ("Key: " + KeyboardUtils.getKeyName(this.parent.module.getKey())), parent.parent.getX() + 2, parent.parent.getY() + offset + ((Constants.CLICKGUI_BUTTON_HEIGHT - mc.textRenderer.fontHeight) / 2 ), ClickGui.fontColor.getValue().hashCode());
+		BThackRender.drawString(binding ? "< PRESS KEY >" : ("Key: " + KeyboardUtils.getKeyName(this.parent.module.getKey())), parent.parent.getX() + 2, parent.parent.getY() + offset + ((Constants.CLICKGUI_BUTTON_HEIGHT - mc.textRenderer.fontHeight) / 2 ), ClickGui.textColor.getValue().hashCode());
 		if (ClickGui.moduleOutline.getValue()) BThackRender.drawOutlineRect(parent.parent.getX(), parent.parent.getY() + offset, parent.parent.getX() + parent.parent.getWidth(), parent.parent.getY() + offset, 1, Constants.CLICKGUI_BUTTON_OUTLINE_COLOR);
 	}
 
@@ -38,9 +38,6 @@ public class Keybind extends AbstractSetting<Setting<?>> {
 	@Override
 	public boolean updateComponent(int mouseX, int mouseY) {
 		this.hovered = isMouseOnButton(mouseX, mouseY);
-		this.y = parent.parent.getY() + offset;
-		this.x = parent.parent.getX();
-
 		return true;
 	}
 	

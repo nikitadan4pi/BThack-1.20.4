@@ -1,7 +1,9 @@
 package com.nikitadan4pi.BThack.api.Gui.Screen.ClickGui.component;
 
+import com.nikitadan4pi.BThack.Constants;
 import com.nikitadan4pi.BThack.Core.Client.Client;
 import com.nikitadan4pi.BThack.Core.Client.ModuleList;
+import com.nikitadan4pi.BThack.Core.Render.BThackMatrix;
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
 import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
 import com.nikitadan4pi.BThack.api.Animation.Animation;
@@ -9,6 +11,7 @@ import com.nikitadan4pi.BThack.api.Animation.Easing;
 import com.nikitadan4pi.BThack.api.Category.Category;
 import com.nikitadan4pi.BThack.api.Gui.Screen.ClickGui.component.components.ModuleButton;
 import com.nikitadan4pi.BThack.api.Gui.Screen.ClickGui.component.components.setting.settings.Slider;
+import com.nikitadan4pi.BThack.api.GuiSystem.BThackScreens;
 import com.nikitadan4pi.BThack.api.Interfaces.Mc;
 import com.nikitadan4pi.BThack.api.Module.Module;
 import com.nikitadan4pi.BThack.api.Utils.Data;
@@ -17,6 +20,7 @@ import com.nikitadan4pi.BThack.impl.Modules.CLIENT.ClickGui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Frame implements Mc {
 	public static final int BAR_HEIGHT = 12;
@@ -36,6 +40,8 @@ public class Frame implements Mc {
 	public int height;
 	public boolean buttonHovered = false;
 	private final Animation frameAnimation = new Animation(Easing.CUBIC_OUT, 500);
+	public float renderHeight;
+	public final CopyOnWriteArrayList<ModuleButton> visibleButtons = new CopyOnWriteArrayList<>();
 
 	public final Data<Slider> writingSlider;
 
@@ -75,6 +81,11 @@ public class Frame implements Mc {
 	public void setY(int newY) {
 		this.y = newY;
 	}
+
+	public void setPosition(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
 	
 	public void setDrag(boolean drag) {
 		isDragging = drag;
@@ -105,6 +116,20 @@ public class Frame implements Mc {
 		buttonHovered = false;
 	}
 
+	public void resetAnimation() {
+		if (isOpen())
+			frameAnimation.reset();
+	}
+
+	public CopyOnWriteArrayList<ModuleButton> getVisibleButtons() {
+		return visibleButtons;
+	}
+
+	public void close() {
+		for (Component comp : getVisibleButtons())
+			comp.mouseReleased(0, 0, 0);
+	}
+
 	/**
 	 * @return - whether to continue the cycle
 	 */
@@ -127,6 +152,7 @@ public class Frame implements Mc {
 			setOpen(!isOpen());
 			if (isOpen()) refresh();
 			else height = BAR_HEIGHT;
+			frameAnimation.reset();
 			return false;
 		}
         return !isMouseOnFrame((int) mouseX, (int) mouseY);
@@ -150,35 +176,48 @@ public class Frame implements Mc {
 		}
 		return null;
 	}
-	
 	public void renderFrame() {
-		BThackRender.guiGraphics.getMatrices().translate(0,0, 1);
+		BThackMatrix.translate(0,0, 1);
 
-		if(open) {
-			if(!buttons.isEmpty()) {
-				for(Component component : buttons) {
-					component.renderComponent();
-				}
-			}
+		boolean needScissor = frameAnimation.getEase() < 1;
+		renderHeight = needScissor ? (float) (height * (open ? frameAnimation.getEase() : 1 - frameAnimation.getEase())) : open ? height : 0;
+
+		if (ModuleList.clickGui.isShaderEnabled()) {
+			ModuleList.clickGui.prepareCurrentShader(1, 1);
+			BThackRender.drawShader(ModuleList.clickGui.getCurrentShader(), getX(), getY(), getX() + Constants.CLICKGUI_FRAME_WIDTH, getY() + Constants.CLICKGUI_BAR_HEIGHT);
+		} else
+			BThackRender.drawRect(getX(), getY(), getX() + Constants.CLICKGUI_FRAME_WIDTH, getY() + Constants.CLICKGUI_BAR_HEIGHT, ModuleList.clickGui.color.getValue().hashCode());
+		if (ModuleList.clickGui.frameOutline.getValue()) {
+			if (ModuleList.clickGui.isShaderEnabled()) {
+				ModuleList.clickGui.prepareCurrentShader(1, 1);
+				BThackRender.drawShaderOutlineRect(ModuleList.clickGui.getCurrentShader(), getX() - 1, getY() - 1, getX() + Constants.CLICKGUI_FRAME_WIDTH + 1, getY() + renderHeight + Constants.CLICKGUI_BAR_HEIGHT + 1, 1);
+			} else
+				BThackRender.drawOutlineRect(getX() - 1, getY() - 1, getX() + Constants.CLICKGUI_FRAME_WIDTH + 1, getY() + renderHeight + Constants.CLICKGUI_BAR_HEIGHT + 1, 1, ClickGui.getClickGuiColor(true));
 		}
-		if (ClickGui.rainbow.getValue()) {
-			int type = ClickGui.rainbowSpeed.getValue().intValue();
-			BThackRender.drawHorizontalRainbowRect(x, y, x + width, y + BAR_HEIGHT, type);
-		} else {
-			BThackRender.drawRect(x, y, x + width, y + BAR_HEIGHT, ModuleList.clickGui.color.getValue().hashCode());
+
+		BThackRender.drawString(frameName, getX() + (Constants.CLICKGUI_FRAME_WIDTH / 2f) - (mc.textRenderer.getWidth(frameName) / 2f), getY() + (Constants.CLICKGUI_BAR_HEIGHT / 2f) - (mc.textRenderer.fontHeight / 2f), ModuleList.clickGui.textColor.getValue().hashCode(), true);
+
+		if((open || frameAnimation.getEase() < 1) && !getVisibleButtons().isEmpty()) {
+			if (needScissor)
+				BThackRender.enableScissor(ClickGui.applyGuiScale(getX()), ClickGui.applyGuiScale(getY() + Constants.CLICKGUI_BAR_HEIGHT), ClickGui.applyGuiScale(Constants.CLICKGUI_FRAME_WIDTH), (int) ClickGui.applyGuiScale(renderHeight));
+			for(Component component : getVisibleButtons())
+				component.renderComponent();
+			BThackMatrix.translate(0, 0, -1);
+			if (needScissor)
+				BThackRender.disableScissor();
 		}
-		if (ClickGui.frameOutline.getValue())
-			BThackRender.drawOutlineRect(x, y, x + width, y + BAR_HEIGHT, 1, BAR_OUTLINE_COLOR);
-		BThackRender.drawString(frameName, x + (width / 2f) - (mc.textRenderer.getWidth(frameName) / 2f), y + (BAR_HEIGHT / 2f) - (mc.textRenderer.fontHeight / 2f), ClickGui.fontColor.getValue().hashCode(), false);
 	}
-	
+
+
 	public void refresh() {
-		int off = BAR_HEIGHT;
-		for(Component comp : buttons) {
-			comp.setOff(off);
-			off += comp.getHeight();
+		visibleButtons.clear();
+		int off = Constants.CLICKGUI_BAR_HEIGHT;
+		for(ModuleButton moduleButton : buttons) {
+			moduleButton.refresh(off);
+			off += moduleButton.getHeight();
+			visibleButtons.add(moduleButton);
 		}
-		height = off;
+		height = off - Constants.CLICKGUI_BAR_HEIGHT;
 	}
 
 	public void updateDependencies() {

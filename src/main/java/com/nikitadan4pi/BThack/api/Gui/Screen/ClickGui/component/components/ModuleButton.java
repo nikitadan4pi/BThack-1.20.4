@@ -30,7 +30,10 @@ public class ModuleButton extends Component implements Mc {
 	public boolean open = false;
 	public boolean renderOpen = false;
 
+	private boolean scInvert = false;
 	private boolean isHovered;
+	private final Animation settingColorAnimation = new Animation(Easing.LINEAR, 1300);
+	private Animation settingAnimation = new Animation(Easing.CIRC_OUT, 500);
 	private ArrayList<AbstractSetting> settings = new ArrayList<>();
 	private float alphaDelta = 1;
 	private boolean alphaDeltaInverse = true;
@@ -95,6 +98,23 @@ public class ModuleButton extends Component implements Mc {
 		}
 	}
 
+	protected void drawEnabledBackground() {
+		float _alpha = (int) (ClickGui.INT_OPACITY * (module.isEnabled() ? toggleAnimation.getEase() : 1 - toggleAnimation.getEase())) / 255f;
+		if (ModuleList.clickGui.isShaderEnabled()) {
+			ModuleList.clickGui.prepareCurrentShader(_alpha, isHovered ? 0.9f : 0.7f);
+			BThackRender.drawShader(ModuleList.clickGui.getCurrentShader(), parent.getX(), parent.getY() + offset, parent.getX() + Constants.CLICKGUI_FRAME_WIDTH, parent.getY() + Constants.CLICKGUI_BUTTON_HEIGHT + offset);
+		} else {
+			BThackRender.drawRect(parent.getX(), parent.getY() + offset, parent.getX() + Constants.CLICKGUI_FRAME_WIDTH, parent.getY() + Constants.CLICKGUI_BUTTON_HEIGHT + offset,
+					ColorUtils.integrateAlpha(
+							isHovered ?
+									new Color(ClickGui.getClickGuiColor(true)).hashCode() :
+									new Color(ClickGui.getClickGuiColor(true)).darker().hashCode(),
+							(int) (_alpha * 255)
+					)
+			);
+		}
+	}
+
 	protected void drawNormalBackground() {
 		BThackRender.drawRect(parent.getX(), parent.getY() + offset, parent.getX() + Constants.CLICKGUI_FRAME_WIDTH, parent.getY() + Constants.CLICKGUI_BUTTON_HEIGHT + offset,
 				ColorUtils.integrateAlpha(
@@ -106,73 +126,47 @@ public class ModuleButton extends Component implements Mc {
 		);
 	}
 
-	protected void drawEnabledBackground() {
-		float _alpha = (int) (ClickGui.INT_OPACITY * (module.isEnabled() ? toggleAnimation.getEase() : 1 - toggleAnimation.getEase())) / 255f;
-			BThackRender.drawRect(parent.getX(), parent.getY() + offset, parent.getX() + Constants.CLICKGUI_FRAME_WIDTH, parent.getY() + Constants.CLICKGUI_BUTTON_HEIGHT + offset,
-					ColorUtils.integrateAlpha(
-							isHovered ?
-									new Color(ClickGui.getClickGuiColor(true)).hashCode() :
-									new Color(ClickGui.getClickGuiColor(true)).darker().hashCode(),
-							(int) (_alpha * 255)
-					)
-			);
-		}
+	private int getModuleTextColor() {
+		return ModuleList.clickGui.opacity.getValue() > 0.4 ? ModuleList.clickGui.textColor.getValue().hashCode() : (module.isEnabled() ? ClickGui.getClickGuiColor(true) : ModuleList.clickGui.textColor.getValue().hashCode());
+	}
 
 	@Override
 	public void renderComponent() {
-		if (animation.getPassedMillis() <= animation.getMillis() + 50) {
-			lastAnimFactor = animation.getEase();
-			parent.refresh();
-		} else if (lastAnimFactor != 1) {
-			lastAnimFactor = 1;
-			parent.refresh();
-		}
 
-		//background
-		if (module.isEnabled()) drawEnabledBackground();
-		else drawNormalBackground();
-		BThackRender.drawString(module.getName(), (parent.getX() + 5), (parent.getY() + offset + ((Constants.CLICKGUI_BUTTON_HEIGHT - mc.textRenderer.fontHeight) / 2 )), ClickGui.fontColor.getValue().getRGB());
-
+		if (!module.isEnabled() || toggleAnimation.getEase() < 1) drawNormalBackground();
+		if (module.isEnabled() || toggleAnimation.getEase() < 1) drawEnabledBackground();
+		if (ModuleList.clickGui.moduleOutline.getValue())
+			BThackRender.drawOutlineRect(parent.getX(), parent.getY() + offset, parent.getX() + Constants.CLICKGUI_FRAME_WIDTH, parent.getY() + Constants.CLICKGUI_BUTTON_HEIGHT + offset, 1, Constants.CLICKGUI_BUTTON_OUTLINE_COLOR);
 		if (!settings.isEmpty())
-			BThackRender.drawString(open ? "-" : "+", (parent.getX() + parent.getWidth() - 10), (parent.getY() + offset + 2), ClickGui.fontColor.getValue().getRGB());
-		if(renderOpen || open) {
+			BThackRender.drawString(open ? "-" : "+", (parent.getX() + parent.getWidth() - 10), (parent.getY() + offset + 2), ClickGui.textColor.getValue().getRGB());
+		BThackRender.drawString(module.getName(), (parent.getX() + 5), (parent.getY() + offset + (Constants.CLICKGUI_BUTTON_HEIGHT / 2f) - (mc.textRenderer.fontHeight) / 2f), getModuleTextColor());
+		getHeight();
+		if(renderOpen || open || settingAnimation.getEase() < 1) {
 			if(!settings.isEmpty()) {
-				BThackRender.enableScissor(ClickGui.applyGuiScale(parent.getX()), ClickGui.applyGuiScale(parent.getY() + offset), ClickGui.applyGuiScale(parent.getWidth()), ClickGui.applyGuiScale(animatedSettingsHeight + BUTTON_HEIGHT));
-				BThackRender.guiGraphics.getMatrices().translate(0, 0, -1);
-				for(AbstractSetting set : settings) {
-					if (set.getVisible()) {
+				BThackRender.enableScissor(ClickGui.applyGuiScale(parent.getX()), ClickGui.applyGuiScale(parent.getY() + offset), ClickGui.applyGuiScale(Constants.CLICKGUI_FRAME_WIDTH), ClickGui.applyGuiScale(animatedSettingsHeight + Constants.CLICKGUI_BUTTON_HEIGHT));
+				for(AbstractSetting<?> set : settings)
+					if (set.getVisible())
 						set.renderComponent();
-					}
-				}
 				BThackRender.disableScissor();
-				//RenderSystem.disableScissor();
+				if (ModuleList.clickGui.settingsOutline.getValue())
+					BThackRender.drawOutlineRect(parent.getX(), parent.getY() + offset, parent.getX() + Constants.CLICKGUI_FRAME_WIDTH, parent.getY() + offset + animatedSettingsHeight + Constants.CLICKGUI_BUTTON_HEIGHT, 1, ColorUtils.fastRGBA(255, 255, 255, Math.max(1, (int) ((scInvert ? 1 - settingColorAnimation.getEase() : settingColorAnimation.getEase()) * 255))));
 			}
-			if (ClickGui.settingsOutline.getValue()) {
-				BThackRender.guiGraphics.getMatrices().translate(0, 0, 4);
-				BThackRender.drawOutlineRect(parent.getX(), parent.getY() + offset, parent.getX() + parent.getWidth(), parent.getY() + offset + animatedSettingsHeight + BUTTON_HEIGHT, 1, ColorUtils.fastRGBA(255, 255, 255, Math.max(1, (int) (alphaDelta * 255))));
-				BThackRender.guiGraphics.getMatrices().translate(0, 0, -4);
-			}
-		}
-		if (ModuleList.clickGui.moduleOutline.getValue()){
-			BThackRender.drawOutlineRect(parent.getX(), parent.getY() + offset, parent.getX() + parent.getWidth(), parent.getY() + offset, 1, Constants.CLICKGUI_BUTTON_OUTLINE_COLOR);
 		}
 	}
 
 	@Override
 	public int getHeight() {
-		if(renderOpen || open) {
+		//if(renderOpen || open) {
 			int height = 0;
-			for (AbstractSetting component : settings) {
-				if (component.getVisible()) {
+			for (AbstractSetting<?> component : settings)
+				if (component.getVisible())
 					height += component.getHeight();
-				}
-			}
 			height = open ? (int) (lastAnimFactor * height) : (int) (height - (lastAnimFactor * height));
 			animatedSettingsHeight = height;
-			height += BUTTON_HEIGHT;
+			height += Constants.CLICKGUI_BUTTON_HEIGHT;
 			return height;
-		}
-		return BUTTON_HEIGHT;
+		//}
+		//return Constants.CLICKGUI_BUTTON_HEIGHT;
 	}
 
 	@Override
@@ -202,22 +196,25 @@ public class ModuleButton extends Component implements Mc {
 	@Override
 	public boolean mouseClicked(int mouseX, int mouseY, int button) {
 		if (isMouseOnButton(mouseX, mouseY)) {
-			if (button == 0)
+			if (button == 0) {
 				module.toggle();
+				toggleAnimation.reset();
+			}
 			if (button == 1) {
 				if (renderOpen == open) {
-					animation = new Animation(ClickGui.getCurrentEasing(), ClickGui.animationTime.getValue().intValue());
+					settingAnimation = new Animation(ClickGui.getCurrentEasing(), ModuleList.clickGui.animationTime.getValue().intValue());
 					open = !open;
-					animation.reset();
+					settingAnimation.reset();
+					lastAnimFactor = 0;
 					parent.refresh();
 				}
 			}
 		}
-		for(Component comp : settings) {
-			comp.mouseClicked(mouseX, mouseY, button);
+		if (open) {
+			for (Component comp : settings)
+				comp.mouseClicked(mouseX, mouseY, button);
+			parent.refresh();
 		}
-		if (open)
-			parent.updateDependencies();
 
 		return isMouseOnButton(mouseX, mouseY);
 	}
@@ -242,6 +239,26 @@ public class ModuleButton extends Component implements Mc {
         return x > ClickGui.applyGuiScale(parent.getX()) && x < ClickGui.applyGuiScale(parent.getX() + parent.getWidth()) &&
 				y > ClickGui.applyGuiScale(parent.getY() + offset) && y < ClickGui.applyGuiScale(parent.getY() + BUTTON_HEIGHT + offset);
     }
+
+	public void updateAnim() {
+		if (settingAnimation.getPassedMillis() <= settingAnimation.getMillis() + 50) {
+			lastAnimFactor = settingAnimation.getEase();
+			parent.refresh();
+		} else if (lastAnimFactor != 1) {
+			lastAnimFactor = 1;
+			parent.refresh();
+		}
+	}
+
+	public void refresh(int newOff) {
+		this.offset = newOff;
+		int opY = offset + Constants.CLICKGUI_BUTTON_HEIGHT;
+		for(AbstractSetting<?> comp : settings) {
+			comp.refresh(opY);
+			if (comp.getVisible())
+				opY += comp.getHeight();
+		}
+	}
 
 	public void resetHovered() {
 		isHovered = false;

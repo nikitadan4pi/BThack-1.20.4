@@ -52,24 +52,22 @@ public class Slider extends AbstractSetting<NumberSetting> implements Mc {
 	public void renderComponent() {
 		super.renderComponent();
 
-		BThackRender.drawRect(getX(), getY(), getX() + Constants.CLICKGUI_FRAME_WIDTH, getY() + getHeight(), this.hovered ? ClickGui.BACKGROUND_HOVERED_COLOR : ClickGui.BACKGROUND_COLOR);
+		BThackRender.drawRect(getX(), getY(), getX() + Constants.CLICKGUI_FRAME_WIDTH, getY() + getHeight(), ClickGui.BACKGROUND_COLOR);
 
 		BThackRender.drawRect(getX() + 2, getY() + 11, getX() + Constants.CLICKGUI_FRAME_WIDTH - 2, getY() + getHeight(), Color.GRAY.darker().darker().darker().getRGB());
-		if (ClickGui.rainbow.getValue()){
-			int type = ClickGui.rainbowSpeed.getValue().intValue();
-			BThackRender.drawHorizontalRainbowRect(getX() + 2, getY() + 11, getX() + 2 + (int) renderWidth, getY() + getHeight(), type);
-		}
-		BThackRender.drawRect(getX() + 2, getY() + 11, getX() + 2 + (int) renderWidth, getY() + getHeight(), ClickGui.getClickGuiColor(false));
 
-		BThackRender.drawString(setting.getName() + ": " + setting.getValue(), getX() + 2, getY() + 1, ClickGui.fontColor.getValue().getRGB());
-		if (ClickGui.moduleOutline.getValue()) BThackRender.drawOutlineRect(parent.parent.getX(), parent.parent.getY() + offset, parent.parent.getX() + parent.parent.getWidth(), parent.parent.getY() + offset, 1, Constants.CLICKGUI_BUTTON_OUTLINE_COLOR);
+		if (ModuleList.clickGui.isShaderEnabled()) {
+			ModuleList.clickGui.prepareCurrentShader(1, 1);
+			BThackRender.drawShader(ModuleList.clickGui.getCurrentShader(), getX() + 2, getY() + 11, getX() + 2 + (int) renderWidth, getY() + getHeight());
+		} else
+			BThackRender.drawRect(getX() + 2, getY() + 11, getX() + 2 + (int) renderWidth, getY() + getHeight(), ClickGui.getClickGuiColor(false));
+
+		BThackRender.drawString(setting.getName() + ": " + setting.getValue(), getX() + 2, getY() + 1, ModuleList.clickGui.textColor.getValue().hashCode());
 	}
 
 	@Override
 	public boolean updateComponent(int mouseX, int mouseY) {
 		if (!getVisible() || !parent.open) return true;
-
-		this.hovered = isMouseOnButton(mouseX, mouseY);
 
 		double min = setting.getMinValue();
 		double max = setting.getMaxValue();

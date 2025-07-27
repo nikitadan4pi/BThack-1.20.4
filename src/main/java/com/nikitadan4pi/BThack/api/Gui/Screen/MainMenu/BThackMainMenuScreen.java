@@ -120,7 +120,7 @@ public class BThackMainMenuScreen extends BThackScreen {
                     button.allowUpdate = false;
                     button.hovered = false;
                 });
-                BThackScreens.CLICK_GUI.setInstanceScreen(() -> BThackMainMenuScreen.this);
+                //BThackScreens.CLICK_GUI.setInstanceScreen(() -> BThackMainMenuScreen.this);
                 mc.setScreen(BThackScreens.CLICK_GUI);
             }
         }

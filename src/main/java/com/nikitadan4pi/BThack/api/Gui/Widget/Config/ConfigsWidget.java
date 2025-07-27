@@ -25,6 +25,7 @@ import java.util.List;
 public class ConfigsWidget extends ScreenWidget {
 
     public static final GLTexture CONFIG_FILE = GLTexture.fromPath("assets/bthack/config_file.png", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA, true);
+    public static final GLTexture CONFIGS = GLTexture.fromPath("assets/bthack/configs.png", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA, true);
 
     private final List<Button> configs = new ArrayList<>();
     private Button selectedConfig;

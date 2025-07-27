@@ -68,12 +68,12 @@ public class CategoryButton extends AbstractSetting<CategorySetting> {
         super.renderComponent();
 
         BThackRender.drawRect(getX(), getY(), getX() + Constants.CLICKGUI_FRAME_WIDTH, getY() + Constants.CLICKGUI_BUTTON_HEIGHT, hovered ? ClickGui.BACKGROUND_HOVERED_COLOR : ClickGui.BACKGROUND_COLOR);
-        BThackRender.drawString(setting.getName(), getX() + 7, getY() + (float) ((Constants.CLICKGUI_BUTTON_HEIGHT - Mc.mc.textRenderer.fontHeight) / 2f), ModuleList.clickGui.fontColor.getValue().hashCode());
+        BThackRender.drawString(setting.getName(), getX() + 7, getY() + (float) ((Constants.CLICKGUI_BUTTON_HEIGHT - Mc.mc.textRenderer.fontHeight) / 2f), ModuleList.clickGui.textColor.getValue().hashCode());
         RenderSystem.setShaderColor(0.7f, 0.7f, 0.7f, 1f);
         RenderSystem.setShaderColor(1, 1, 1, 1);
 
         BThackRender.enableScissor(ClickGui.applyGuiScale(getX()), ClickGui.applyGuiScale(getY()), ClickGui.applyGuiScale(Constants.CLICKGUI_FRAME_WIDTH), ClickGui.applyGuiScale(renderHeight));
-        BThackRender.drawString(opened ? "-" : "+", (getX() + Constants.CLICKGUI_FRAME_WIDTH - 10), (getY() + 2), ClickGui.fontColor.getValue().getRGB());
+        BThackRender.drawString(opened ? "-" : "+", (getX() + Constants.CLICKGUI_FRAME_WIDTH - 10), (getY() + 2), ClickGui.textColor.getValue().getRGB());
         if (opened || animation.getEase() < 1)
             for (Component component : visibleSettings)
                 component.renderComponent();
