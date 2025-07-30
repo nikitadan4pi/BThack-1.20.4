@@ -21,6 +21,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.Chunk;
 import org.joml.Matrix4f;
 import com.nikitadan4pi.BThack.api.Interfaces.Mc;
+import org.joml.Vector3f;
 
 import static com.nikitadan4pi.BThack.Core.Render.Utils.BThackRenderUtils.*;
 
@@ -131,6 +132,65 @@ public final class BThackRender implements Mc {
         buffer.vertex(matrix4f, x2 + width, y2 - width, 0).next();
         buffer.vertex(matrix4f, x1 - width, y1 - width, 0).next();
         buffer.vertex(matrix4f, x1 - width, y1 + width, 0).next();
+
+        draw();
+    }
+
+    public static void drawRoundedRectWithOutline(float x1, float y1, float x2, float y2, float radius, int color, int outlineColor, float depth) {
+        BufferBuilder buffer = BThackRenderUtils.prepareToDraw(() -> Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.shader.getProgram());
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
+
+        Matrix4f matrix4f = BThackMatrix.peek().getPositionMatrix();
+        Vector3f startPos = matrix4f.transformPosition(x1, y1, 0, new Vector3f());
+        Vector3f endPos = matrix4f.transformPosition(x2, y2, 0, new Vector3f());
+
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("resolution", (float) mc.getWindow().getWidth(), (float) mc.getWindow().getHeight());
+        float scale = mc.getWindow().getScaledHeight() / (float) mc.getWindow().getHeight();
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("position", startPos.x / scale, startPos.y / scale);
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("size", (endPos.x - startPos.x) / scale, (endPos.y - startPos.y) / scale);
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("radius", radius / scale);
+        float[] rgba1 = ColorUtils.hashCodeToRGBA(color);
+        float[] rgba2 = ColorUtils.hashCodeToRGBA(outlineColor);
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("color", rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("outlineColor", rgba2[0], rgba2[1], rgba2[2], rgba2[3]);
+        Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.setUniformValue("depth", depth / scale);
+
+        buffer.vertex(matrix4f, x1 - 1, y1 - 1, 0).next();
+        buffer.vertex(matrix4f, x1 - 1, y2 + 1, 0).next();
+        buffer.vertex(matrix4f, x2 + 1, y2 + 1, 0).next();
+        buffer.vertex(matrix4f, x2 + 1, y1 - 1, 0).next();
+
+        draw();
+    }
+
+    public static void drawGradientRoundedRectWithOutline(float x1, float y1, float x2, float y2, float radius, int color, int outlineColor1, int outlineColor2, float depth, float scale, float speed) {
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.use();
+        BufferBuilder buffer = BThackRenderUtils.prepareToDraw();
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
+
+        Matrix4f matrix4f = BThackMatrix.peek().getPositionMatrix();
+        Vector3f startPos = matrix4f.transformPosition(x1, y1, 0, new Vector3f());
+        Vector3f endPos = matrix4f.transformPosition(x2, y2, 0, new Vector3f());
+
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("resolution", (float) mc.getWindow().getWidth(), (float) mc.getWindow().getHeight());
+        float _scale = mc.getWindow().getScaledHeight() / (float) mc.getWindow().getHeight();
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("position", startPos.x / _scale, startPos.y / _scale);
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("size", (endPos.x - startPos.x) / _scale, (endPos.y - startPos.y) / _scale);
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("radius", radius / _scale);
+        float[] rgba1 = ColorUtils.hashCodeToRGBA(color);
+        float[] rgba2 = ColorUtils.hashCodeToRGBA(outlineColor1);
+        float[] rgba3 = ColorUtils.hashCodeToRGBA(outlineColor2);
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("color", rgba1[0], rgba1[1], rgba1[2], rgba1[3]);
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("outlineColor1", rgba2[0], rgba2[1], rgba2[2], rgba2[3]);
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("outlineColor2", rgba3[0], rgba3[1], rgba3[2], rgba3[3]);
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("depth", depth / _scale);
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("scale", scale);
+        Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("speed", speed);
+
+        buffer.vertex(matrix4f, x1 - 1, y1 - 1, 0);
+        buffer.vertex(matrix4f, x1 - 1, y2 + 1, 0);
+        buffer.vertex(matrix4f, x2 + 1, y2 + 1, 0);
+        buffer.vertex(matrix4f, x2 + 1, y1 - 1, 0);
 
         draw();
     }

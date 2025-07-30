@@ -2,6 +2,8 @@ package com.nikitadan4pi.BThack.api.GuiSystem.buttons;
 
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
 import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
+import com.nikitadan4pi.BThack.api.Animation.Animation;
+import com.nikitadan4pi.BThack.api.Animation.Easing;
 import com.nikitadan4pi.BThack.api.GuiSystem.ButtonClickInfo;
 import com.nikitadan4pi.BThack.api.Interfaces.Mc;
 import com.ferra13671.SimpleLanguageSystem.LanguageSystem;
@@ -24,6 +26,7 @@ public class Button implements Mc {
     public boolean allowUpdate = true;
     public boolean selected = false;
     protected Consumer<ButtonClickInfo> clickConsumer = null;
+    protected final Animation hoveredAnimation = new Animation(Easing.LINEAR, 200);
     protected Sound clickSound = Sounds.BUTTON_CLICK;
 
     public Button(int id, int x, int y, int width, int height, String text) {
@@ -108,6 +111,10 @@ public class Button implements Mc {
             return text;
     }
 
+    public float getAnimationDelta() {
+        return (float) (hovered ? hoveredAnimation.getEase() : 1 - hoveredAnimation.getEase());
+    }
+
     public boolean isHided() {return this.hided;}
 
     public void setCenterX(int centerX) {
@@ -144,6 +151,10 @@ public class Button implements Mc {
 
     public void setHided(boolean hided) {
         this.hided = hided;
+    }
+
+    public void setHovered(boolean hovered){
+        this.hovered = hovered;
     }
 
     public void clickAction(int mouseX, int mouseY, int mouseButton) {
