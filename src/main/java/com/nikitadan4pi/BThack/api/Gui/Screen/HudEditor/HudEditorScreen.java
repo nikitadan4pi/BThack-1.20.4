@@ -1,7 +1,9 @@
 package com.nikitadan4pi.BThack.api.Gui.Screen.HudEditor;
 
 import com.nikitadan4pi.BThack.Core.Client.Client;
+import com.nikitadan4pi.BThack.Core.Client.ModuleList;
 import com.nikitadan4pi.BThack.Core.FileSystem.ConfigSystem.ConfigSystem;
+import com.nikitadan4pi.BThack.Core.Render.BThackMatrix;
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
 import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
 import com.nikitadan4pi.BThack.api.Category.Categories;
@@ -35,12 +37,16 @@ public class HudEditorScreen extends BThackScreen {
         super(Text.of("Hud Mover"));
 
         frame = new Frame(Categories.HUD, writingSlider);
-        frame.setX(300);
-        frame.setY(50);
+        frame.setPosition(300, 50);
         ticker.reset();
     }
 
     private final Set<HudComponentButton> hudComponentButtons = Sets.newHashSet();
+
+    @Override
+    public void onDisplayed() {
+        frame.resetAnimation();
+    }
 
     @Override
     public void init() {
@@ -70,14 +76,15 @@ public class HudEditorScreen extends BThackScreen {
             }
         }
 
+        for (ModuleButton moduleButton : frame.buttons)
+            moduleButton.updateAnim();
         frame.updateButtons(mouseX, mouseY);
 
-        BThackRender.guiGraphics.getMatrices().push();
-        BThackRender.guiGraphics.getMatrices().scale(ClickGui.guiScale.getValue().floatValue(), ClickGui.guiScale.getValue().floatValue(), 1);
+        BThackMatrix.push();
+        BThackMatrix.scale(ModuleList.clickGui.guiScale.getValue().floatValue(), ModuleList.clickGui.guiScale.getValue().floatValue(), 1);
         frame.renderFrame();
-        frame.updatePosition((int) (mouseX / ClickGui.guiScale.getValue()), (int) (mouseY / ClickGui.guiScale.getValue()));
-        BThackRender.guiGraphics.getMatrices().pop();
-
+        frame.updatePosition((int) (mouseX / ModuleList.clickGui.guiScale.getValue()), (int) (mouseY / ModuleList.clickGui.guiScale.getValue()));
+        BThackMatrix.pop();
         //ClickGuiScreen.descriptionY = (int) ((height - (height / 40)) / ClickGui.guiScale.getValue());
     }
 
