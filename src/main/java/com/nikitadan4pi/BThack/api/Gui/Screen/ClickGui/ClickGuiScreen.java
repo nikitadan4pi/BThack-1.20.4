@@ -135,7 +135,6 @@ public class ClickGuiScreen extends BThackScreen implements Mc {
     @Override
     public void tick() {
         super.tick();
-        Shaders.INSTANCE.updateTime();
         ModuleList.clickGui.guiScale.setValue(guiScaleSlider.value);
     }
 

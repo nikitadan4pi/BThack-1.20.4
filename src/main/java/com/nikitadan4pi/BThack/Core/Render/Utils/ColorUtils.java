@@ -1,7 +1,9 @@
 package com.nikitadan4pi.BThack.Core.Render.Utils;
 
+import com.nikitadan4pi.BThack.api.Shader.Shaders;
 import com.nikitadan4pi.BThack.api.Utils.MathUtils;
 import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 
@@ -46,6 +48,38 @@ public final class ColorUtils {
         float rSpeed = 360 * speed;
         rainbowState %= 360;
         return Color.getHSBColor((float) (rainbowState / rSpeed), 0.5f, 1f).getRGB();
+    }
+
+    public static int gradient(int color1, int color2, int count, float scale, float speed) {
+        float colorState = (float) Math.ceil(((Shaders.INSTANCE.shaderTicker.getPassedTime() * speed) + ((200 * scale) * count)) / 20.0);
+        colorState %= 360;
+        colorState /= 360;
+        if (colorState > 0.5) colorState = 1f - colorState;
+        colorState *= 2f;
+
+        float[] rgba1 = hashCodeToRGBA(color1);
+        float[] rgba2 = hashCodeToRGBA(color2);
+
+        return new Color(
+                MathUtils.applyRange(MathHelper.lerp(colorState, rgba1[0], rgba2[0]), 0, 1),
+                MathUtils.applyRange(MathHelper.lerp(colorState, rgba1[1], rgba2[1]), 0, 1),
+                MathUtils.applyRange(MathHelper.lerp(colorState, rgba1[2], rgba2[2]), 0, 1),
+                MathUtils.applyRange(MathHelper.lerp(colorState, rgba1[3], rgba2[3]), 0, 1)
+        ).hashCode();
+    }
+
+    public static Color gradient(Color color1, Color color2, int count, float scale, float speed) {
+        float colorState = (float) Math.ceil(((Shaders.INSTANCE.shaderTicker.getPassedTime() * speed) + ((200 * scale) * count)) / 20.0);
+        colorState %= 360;
+        colorState /= 360;
+        if (colorState > 0.5) colorState = 1f - colorState;
+        colorState *= 2f;
+
+        return new Color(
+                MathUtils.applyRange(MathHelper.lerp(colorState, color1.getRed(), color2.getRed()), 0, 255),
+                MathUtils.applyRange(MathHelper.lerp(colorState, color1.getGreen(), color2.getGreen()), 0, 255),
+                MathUtils.applyRange(MathHelper.lerp(colorState, color1.getBlue(), color2.getBlue()), 0, 255),
+                MathUtils.applyRange(MathHelper.lerp(colorState, color1.getAlpha(), color2.getAlpha()), 0, 255));
     }
 
     public static int integrateAlpha(int colorHashcode, int alpha) {

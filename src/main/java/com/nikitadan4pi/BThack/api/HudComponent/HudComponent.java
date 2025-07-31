@@ -12,13 +12,16 @@ public abstract class HudComponent extends Module {
     private float x; //Left edge
     private float y; //Upper edge
 
-    private int scaledWidth;
-    private int scaledHeight;
+    /*
+    These values are needed to correctly transform the position of HudComponent when resizing the window
+
+    (If you don't think these variables are really necessary, think again about it)
+     */
+    private int scaledWidth;//  <--
+    private int scaledHeight;//  <--
 
     public float width;  //Right
     public float height; //Down
-
-    public final DecimalFormat decimal = new DecimalFormat("0.00");
 
     public HudComponent(String name, float x, float y, boolean autoToggled) {
         super(name, "", KeyboardUtils.RELEASE, Categories.HUD, autoToggled);
@@ -47,9 +50,13 @@ public abstract class HudComponent extends Module {
         return (mc.getWindow().getScaledWidth() / 100f) * factor;
     }
 
+    @Override
+    protected final void addToArrayList() {}
+
+    @Override
+    protected final void removeFromArrayList() {}
+
     public float getY() {
-        //float factor = (this.y / scaledHeight) * 100;
-        //return (mc.getWindow().getScaledHeight() / 100f) * factor;
         return this.y;
     }
 
@@ -73,11 +80,11 @@ public abstract class HudComponent extends Module {
 
     public void tick() {}
 
-    public void drawText(String text, int x, int y, int color) {
-        BThackRender.drawString(text, x, y, color);
+    public void drawText(String text, float x, float y, int color) {
+        BThackRender.drawString(text, x, y, color, true);
     }
 
-    public void drawText(String text, int x, int y) {
+    public void drawText(String text, float x, float y) {
         drawText(text, x, y, HUD.getHUDColor());
     }
 
@@ -96,3 +103,4 @@ public abstract class HudComponent extends Module {
         //No action
     }
 }
+

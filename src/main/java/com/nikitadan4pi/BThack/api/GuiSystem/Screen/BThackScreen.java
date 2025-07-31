@@ -6,6 +6,7 @@ import com.nikitadan4pi.BThack.api.Animation.Animation;
 import com.nikitadan4pi.BThack.api.Gui.Screen.TransitionScreen;
 import com.nikitadan4pi.BThack.api.Interfaces.Mc;
 import com.nikitadan4pi.BThack.api.GuiSystem.buttons.Button;
+import com.nikitadan4pi.BThack.api.Shader.Shaders;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -37,6 +38,7 @@ public class BThackScreen extends Screen implements Mc {
 
     @Override
     public void tick() {
+        if (mc.world == null) Shaders.INSTANCE.updateTime();
         widgetManage.tick();
     }
 

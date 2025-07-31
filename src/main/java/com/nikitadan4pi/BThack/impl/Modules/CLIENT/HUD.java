@@ -1,27 +1,49 @@
 package com.nikitadan4pi.BThack.impl.Modules.CLIENT;
 
-import com.nikitadan4pi.BThack.Core.Client.Client;
-import com.nikitadan4pi.BThack.Core.Client.ModuleList;
-import com.nikitadan4pi.BThack.Core.Render.BThackRender;
-import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
-import com.nikitadan4pi.BThack.api.Events.Render.RenderHudPostEvent;
-import com.nikitadan4pi.BThack.api.Events.ClientTickEvent;
-import com.nikitadan4pi.BThack.api.Gui.Screen.HudEditor.HudEditorScreen;
-import com.nikitadan4pi.BThack.api.HudComponent.HudComponent;
-import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.BooleanSetting;
-import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
-import com.nikitadan4pi.BThack.api.Module.Module;
-import com.nikitadan4pi.BThack.api.Utils.KeyboardUtils;
-import com.nikitadan4pi.BThack.api.Utils.SpeedMathThread;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
 import com.ferra13671.TextureUtils.GLTexture;
 import com.ferra13671.TextureUtils.PathMode;
+import com.nikitadan4pi.BThack.Core.Client.Client;
+import com.nikitadan4pi.BThack.Core.Client.ModuleList;
+import com.nikitadan4pi.BThack.Core.Render.BThackRender;
+import com.nikitadan4pi.BThack.Core.Render.Utils.BThackRenderUtils;
+import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
+import com.nikitadan4pi.BThack.api.Events.ClientTickEvent;
+import com.nikitadan4pi.BThack.api.Events.Render.RenderHudPostEvent;
+import com.nikitadan4pi.BThack.api.Gui.Screen.HudEditor.HudEditorScreen;
+import com.nikitadan4pi.BThack.api.HudComponent.HudComponent;
+import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.*;
+import com.nikitadan4pi.BThack.api.Module.Module;
+import com.nikitadan4pi.BThack.api.Utils.KeyboardUtils;
+import com.nikitadan4pi.BThack.api.Utils.SpeedMathThread;
+import com.nikitadan4pi.BThack.impl.HudComponents.ArrayListComponent;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.function.Consumer;
 
 public class HUD extends Module {
 
+    public static GLTexture bthack_logo = GLTexture.fromPath("assets/bthack/bthacklogo.png", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA, true);
+
     public static BooleanSetting rainbow;
-    public static NumberSetting rainbowType;
-    public static NumberSetting scale;
+
+    public BooleanSetting gradient;
+    public ColorSetting textColor;
+    public ColorSetting color1;
+    public ColorSetting color2;
+
+
+    public NumberSetting speed;
+    public NumberSetting scale;
+
+
+    public ColorSetting color;
+
+    public final ModeSetting style = new ModeSetting("Style", this, Arrays.asList("Rounded New", "Rounded Old", "Primitive", "Old"));
+    public final NumberSetting roundScale = new NumberSetting("Round Scale", this, 5, 3, 10, false, () -> style.getValue().contains("Rounded"));
+
+    public final ColorSetting backGroundColor = new ColorSetting("BackGround Color", this, new Color(0, 0, 0, 150));
 
     public HUD() {
         super("HUD",
@@ -34,30 +56,66 @@ public class HUD extends Module {
         ModuleList.HUD = this;
 
         allowRemapKeyCode = false;
+        allowRemapVisible = false;
+        setVisible(false);
 
         mc.getWindow().swapBuffers();
 
-        rainbow = new BooleanSetting("Rainbow", this, true);
-        rainbowType = new NumberSetting("Rainbow type", this, 3, 1, 8, true, () -> rainbow.getValue());
-        scale = new NumberSetting("Scale", this, 1, 0.5, 1.5, false);
+        rainbow = new BooleanSetting("Rainbow", this, false, () -> !gradient.getValue());
+
+        gradient = new BooleanSetting("Gradient", this, true, () -> !(rainbow.getValue() && !this.gradient.getValue()));
+        textColor = new ColorSetting("Text Color", this, new Color(213, 142, 253), gradient::getValue).withBlockedAlpha();
+        color1 = new ColorSetting("Color1", this, new Color(213, 142, 253), gradient::getValue).withBlockedAlpha();
+        color2 = new ColorSetting("Color2", this, new Color(61, 0, 96), gradient::getValue).withBlockedAlpha();
+
+        speed = new NumberSetting("Speed", this, 2, 0.1, 10, false, () -> rainbow.getValue() || gradient.getValue());
+        scale = new NumberSetting("Scale", this, 1, 0.1, 10, false, () -> rainbow.getValue() || gradient.getValue());
+
+        color = new ColorSetting("Color", this, new Color(213, 142, 253), () -> !rainbow.getValue() && !gradient.getValue()).withBlockedAlpha();
 
         initSettings(
                 rainbow,
-                rainbowType
+
+                gradient,
+                textColor,
+                color1,
+                color2,
+
+                speed,
+                scale,
+
+                color,
+
+                style,
+                roundScale,
+
+                backGroundColor
         );
     }
+    public HudStyle hudStyle = HudStyle.valueOf(style.getValue().toUpperCase().replace(" ", "_"));
 
-    public static final GLTexture bthack_logo = GLTexture.fromPath("assets/bthack/bthacklogo.png", PathMode.INSIDEJAR, GLTexture.ColorMode.RGBA, true);
+    private int updateTickDelay = 0;
+
+    @Override
+    public void onChangeSetting(Setting<?> setting) {
+        if (setting == style)
+            hudStyle = HudStyle.valueOf(style.getValue().toUpperCase().replace(" ", "_"));
+    }
 
     @Override
     public void onDisable() {
         super.onDisable();
+        updateTickDelay = 0;
     }
 
     @EventSubscriber
     public void onTick(ClientTickEvent e) {
         if (nullCheck()) return;
         if (mc.currentScreen instanceof HudEditorScreen) return;
+
+        updateTickDelay++;
+        if (updateTickDelay < 3) return;
+        updateTickDelay = 0;
 
         for (HudComponent hudComponent : Client.hudComponents) {
             if (hudComponent.isEnabled()) {
@@ -70,7 +128,7 @@ public class HUD extends Module {
         }
     }
 
-    @EventSubscriber(priority = Integer.MAX_VALUE)
+    @EventSubscriber(priority = Integer.MIN_VALUE)
     public void onRender(RenderHudPostEvent e) {
         if (mc.currentScreen instanceof HudEditorScreen) return;
         BThackRender.guiGraphics.getMatrices().push();
@@ -78,6 +136,7 @@ public class HUD extends Module {
 
         for (HudComponent hudComponent : Client.hudComponents) {
             if (hudComponent.isEnabled()) {
+                if (!(hudComponent.name.equals("Companion") | hudComponent.name.equals("ArrayList"))) BThackRender.drawHudPlate(hudComponent.getX() - 1, hudComponent.getY() - 1, hudComponent.getX() + hudComponent.width + 1, hudComponent.getY() + hudComponent.height + 1);
                 hudComponent.render();
             }
         }
@@ -86,10 +145,44 @@ public class HUD extends Module {
     }
 
     public static int getHUDColor() {
-        if (rainbow.getValue()) {
-            return ColorUtils.rainbowType(rainbowType.getValue().intValue());
+        if (ModuleList.HUD.gradient.getValue()) {
+            return ModuleList.HUD.textColor.getValue().hashCode();
+        } else if (ModuleList.HUD.rainbow.getValue()) {
+            return ColorUtils.rainbow(1, ModuleList.HUD.speed.getValue().floatValue());
         } else {
-            return ClickGui.getClickGuiColor(false);
+            return ModuleList.HUD.color.getValue().hashCode();
+        }
+    }
+
+    public enum HudStyle {
+        ROUNDED_NEW(pos -> {
+            BThackRenderUtils.applyBlend();
+            if (ModuleList.HUD.gradient.getValue())
+                BThackRender.drawGradientRoundedRectWithOutline(pos[0], pos[1], pos[2], pos[3], ModuleList.HUD.roundScale.getValue().floatValue(), ModuleList.HUD.backGroundColor.getValue().hashCode(), ModuleList.HUD.color1.getValue().hashCode(), ModuleList.HUD.color2.getValue().hashCode(), 2f / BThackRenderUtils.getGuiScale(), ModuleList.HUD.scale.getValue().floatValue(), ModuleList.HUD.speed.getValue().floatValue());
+            else
+                BThackRender.drawRoundedRectWithOutline(pos[0], pos[1], pos[2], pos[3], ModuleList.HUD.roundScale.getValue().floatValue(), ModuleList.HUD.backGroundColor.getValue().hashCode(), HUD.getHUDColor(), 2f / BThackRenderUtils.getGuiScale());
+        }),
+        ROUNDED_OLD(pos -> {
+            BThackRenderUtils.applyBlend();
+            BThackRender.drawRoundedRectOld(pos[0], pos[1], pos[2], pos[3], ModuleList.HUD.roundScale.getValue().floatValue() / 2, ModuleList.HUD.gradient.getValue() ? ColorUtils.gradient(ModuleList.HUD.color1.getValue().hashCode(), ModuleList.HUD.color2.getValue().hashCode(), 1, ModuleList.HUD.scale.getValue().floatValue(), ModuleList.HUD.speed.getValue().floatValue()) : HUD.getHUDColor());
+            float step = 2f / BThackRenderUtils.getGuiScale();
+            BThackRender.drawRoundedRectOld(pos[0] + step, pos[1] + step, pos[2] - step, pos[3] - step, ModuleList.HUD.roundScale.getValue().floatValue() / 2, ModuleList.HUD.backGroundColor.getValue().hashCode());
+        }),
+        PRIMITIVE(pos -> {
+            BThackRenderUtils.applyBlend();
+            BThackRender.drawRect(pos[0], pos[1], pos[2], pos[3], ModuleList.HUD.backGroundColor.getValue().hashCode());
+            BThackRender.drawOutlineRect(pos[0], pos[1], pos[2], pos[3], 1f / BThackRenderUtils.getGuiScale(), ModuleList.HUD.gradient.getValue() ? ColorUtils.gradient(ModuleList.HUD.color1.getValue().hashCode(), ModuleList.HUD.color2.getValue().hashCode(), 1, ModuleList.HUD.scale.getValue().floatValue(), ModuleList.HUD.speed.getValue().floatValue()) : HUD.getHUDColor());
+        }),
+        OLD(pos -> {});
+
+        private final Consumer<Float[]> consumer;
+
+        HudStyle(Consumer<Float[]> consumer) {
+            this.consumer = consumer;
+        }
+
+        public void draw(float x1, float y1, float x2, float y2) {
+            consumer.accept(new Float[]{x1, y1, x2, y2});
         }
     }
 }

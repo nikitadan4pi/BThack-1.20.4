@@ -1,8 +1,8 @@
 package com.nikitadan4pi.BThack.api.Shader;
 
-import baritone.api.event.events.RenderEvent;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
 import com.nikitadan4pi.BThack.api.Events.DisconnectEvent;
+import com.nikitadan4pi.BThack.api.Shader.MainMenu.MainMenuShader;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
 
@@ -12,7 +12,26 @@ public class Shaders {
     public static Shaders INSTANCE;
     public static ShaderTicker shaderTicker = new ShaderTicker();
 
+
     public final ShaderProgram POSITION = ShaderProgram.of("render/position", VertexFormats.POSITION);
+
+    public final ShaderProgram ROUNDED_RECT = ShaderProgram.of("render/rounded_rect", VertexFormats.POSITION);
+    public final ShaderProgram ROUNDED_RECT_WITH_OUTLINE = ShaderProgram.of("render/rounded_rect_with_outline", VertexFormats.POSITION);
+    public final ShaderProgram XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE = new ShaderProgram(Identifier.of("bthack", "render/xy_gradient_rounded_rect_with_outline"), VertexFormats.POSITION) {
+        @Override
+        public void use() {
+            this.setUniformValue("time", shaderTicker.getPassedTime() / 1000f);
+            this.setUniformValue("resolution", (float) mc.getWindow().getWidth(), mc.getWindow().getHeight());
+            super.use();
+        }
+
+        @Override
+        public void release() {
+            this.setUniformValue("scale", 1f);
+            this.setUniformValue("speed", 1f);
+            super.release();
+        }
+    };
     public final ShaderProgram X_RAINBOW = new ShaderProgram(Identifier.of("bthack", "render/x_rainbow"), VertexFormats.POSITION) {
         @Override
         public void use() {
@@ -45,22 +64,15 @@ public class Shaders {
             this.setUniformValue("speed", 1f);
             super.release();
         }
-
-        @EventSubscriber
-        public void onDisconnect(DisconnectEvent e) {
-            shaderTicker.reset();
-        }
-
-        @EventSubscriber
-        public void onRender(RenderEvent e) {
-            this.updateTime();
-        }
-
-        public static void updateTime() {
-            shaderTicker.update(1);
-        }
     };
-    public static void updateTime() {
+    public final MainMenuShader SNOW = MainMenuShader.of("render/snow");
+
+    @EventSubscriber
+    public void onDisconnect(DisconnectEvent e) {
+        shaderTicker.reset();
+    }
+
+    public void updateTime() {
         shaderTicker.update(1);
     }
 }
