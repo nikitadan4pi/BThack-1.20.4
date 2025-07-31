@@ -21,6 +21,7 @@ import com.nikitadan4pi.BThack.api.GuiSystem.Screen.BThackScreen;
 import com.nikitadan4pi.BThack.api.Utils.Ticker;
 import com.nikitadan4pi.BThack.impl.Modules.CLIENT.ClickGui;
 import com.google.common.collect.Sets;
+import com.nikitadan4pi.BThack.impl.Modules.CLIENT.HUD;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
@@ -63,8 +64,11 @@ public class HudEditorScreen extends BThackScreen {
             ticker.reset();
         }
 
+        //TODO fix none rendering plates :)
+
         for (HudComponentButton button : hudComponentButtons) {
             if (button.hudComponent.isEnabled()) {
+                BThackRender.drawHudPlate(button.x - 1, button.y - 1, button.y + button.getWidth() + 1, button.x + button.getHeight() + 1);
                 button.updateButton(mouseX, mouseY);
                 button.renderButton();
             }

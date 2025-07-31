@@ -1,33 +1,30 @@
 package com.nikitadan4pi.BThack.impl.HudComponents;
 
+import com.ferra13671.TextureUtils.GLGif;
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
+import com.nikitadan4pi.BThack.api.HudComponent.HudComponent;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.ModeSetting;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.NumberSetting;
 import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.Setting;
-import com.nikitadan4pi.BThack.api.Module.HudComponent;
-import com.ferra13671.TextureUtils.GLGif;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.Arrays;
 
 
+
 public class CompanionComponent extends HudComponent {
 
-    public static final GLGif CAIPIRINHA = GLGif.fromInputStream(CompanionComponent.class.getClassLoader().getResourceAsStream("assets/bthack/gifs/caipirinha.gif"), GLGif.DecompileMode.DELTAS, 150);
-    public static final GLGif CUTIE1 = GLGif.fromInputStream(CompanionComponent.class.getClassLoader().getResourceAsStream("assets/bthack/gifs/cutie.gif"), GLGif.DecompileMode.DELTAS, 50);
-    public static final GLGif CUTIE2 = GLGif.fromInputStream(CompanionComponent.class.getClassLoader().getResourceAsStream("assets/bthack/gifs/cutie2.gif"), GLGif.DecompileMode.DELTAS, 100);
-    public static ModeSetting mode;
-    public static NumberSetting size;
-    public static NumberSetting speed;
 
+    private final ModeSetting mode;
+    private final NumberSetting size;
+    private final NumberSetting speed;
 
-    public CompanionComponent() {
+    public CompanionComponent(){
         super("Companion",
                 MinecraftClient.getInstance().getWindow().getScaledWidth() / 1.8f,
                 MinecraftClient.getInstance().getWindow().getScaledHeight() / 1.8f,
                 false
         );
-
         mode = new ModeSetting("Mode", this, Arrays.asList("Caipirinha", "Cutie1", "Cutie2"));
         size = new NumberSetting("Size", this, 40, 20, 100, true);
         speed = new NumberSetting("Speed", this, 1, 0.5, 3, false);
@@ -39,14 +36,12 @@ public class CompanionComponent extends HudComponent {
         );
     }
 
-    @Override
-    public void onChangeSetting(Setting<?> setting) {
-        CAIPIRINHA.setUpdateDelayMillis((int) (150 / speed.getValue()));
-        CUTIE1.setUpdateDelayMillis((int) (50 / speed.getValue()));
-    }
+    private final GLGif CAIPIRINHA = GLGif.fromInputStream(CompanionComponent.class.getClassLoader().getResourceAsStream("assets/bthack/gifs/caipirinha.gif"), GLGif.DecompileMode.DELTAS, 150);
+    private final GLGif CUTIE1 = GLGif.fromInputStream(CompanionComponent.class.getClassLoader().getResourceAsStream("assets/bthack/gifs/cutie.gif"), GLGif.DecompileMode.DELTAS, 50);
+    private final GLGif CUTIE2 = GLGif.fromInputStream(CompanionComponent.class.getClassLoader().getResourceAsStream("assets/bthack/gifs/cutie2.gif"), GLGif.DecompileMode.DELTAS, 100);
 
     @Override
-    public void render() {
+    public void render(){
         switch (mode.getValue()) {
             case "Caipirinha" -> {
                 CAIPIRINHA.update();
@@ -71,6 +66,11 @@ public class CompanionComponent extends HudComponent {
                 BThackRender.drawTextureRect(CUTIE2, getX(), getY(), getX() + size.getValue().floatValue(), getY() + size.getValue().floatValue());
             }
         }
+    }
+    @Override
+    public void onChangeSetting(Setting<?> setting) {
+        CAIPIRINHA.setUpdateDelayMillis((int) (150 / speed.getValue()));
+        CUTIE1.setUpdateDelayMillis((int) (50 / speed.getValue()));
     }
 
     @Override

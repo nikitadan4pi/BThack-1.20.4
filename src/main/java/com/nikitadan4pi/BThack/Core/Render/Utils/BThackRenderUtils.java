@@ -107,6 +107,12 @@ public final class BThackRenderUtils implements Mc {
         return camera.getPos();
     }
 
+    public static int getGuiScale() {
+        int value = mc.options.getGuiScale().getValue();
+        if (value <= 0) value = mc.getWindow().calculateScaleFactor(0, mc.forcesUnicodeFont());
+        return value;
+    }
+
     public static RegionPos getCameraRegion() {
         return RegionPos.of(getCameraBlockPos());
     }

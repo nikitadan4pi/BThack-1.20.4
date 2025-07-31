@@ -10,6 +10,7 @@ import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.Setting;
 import com.nikitadan4pi.BThack.api.SoundSystem.SoundSystem;
 import com.nikitadan4pi.BThack.api.SoundSystem.Sounds;
 import com.nikitadan4pi.BThack.api.Utils.ChatUtils;
+import com.nikitadan4pi.BThack.impl.HudComponents.ArrayListComponent;
 import com.nikitadan4pi.BThack.impl.Modules.CLIENT.ChatNotifications;
 import com.nikitadan4pi.BThack.impl.Modules.CLIENT.ClientSetting;
 import com.ferra13671.SimpleLanguageSystem.LanguageSystem;
@@ -83,6 +84,17 @@ public class Module {
             SoundSystem.playSound(Sounds.MODULE_OFF, ClientSetting.volume.getValue().floatValue());
     }
 
+    protected void addToArrayList() {
+        ArrayListComponent.addModule(this);
+    }
+
+    public String getArrayListName() {
+        return name + (arrayListInfo.isEmpty() ? "" : Formatting.GRAY + "[" + Formatting.WHITE +  arrayListInfo + Formatting.GRAY + "]");
+    }
+
+    protected void removeFromArrayList() {
+        ArrayListComponent.removeModule(this);
+    }
 
     public void setKey(int key) {
         this.keyCode = key;
@@ -135,10 +147,12 @@ public class Module {
         if (toggled) {
             sendToggleMessage();
             playOnSound();
+            addToArrayList();
             onEnable();
         } else {
             sendToggleMessage();
             playOffSound();
+            removeFromArrayList();
             onDisable();
         }
     }
@@ -149,17 +163,22 @@ public class Module {
         if (this.toggled) {
             sendToggleMessage();
             playOnSound();
+            addToArrayList();
             onEnable();
         } else {
             sendToggleMessage();
             playOffSound();
+            removeFromArrayList();
             onDisable();
         }
     }
 
     public boolean isVisible(){return this.visible;}
 
-    public void setVisible(boolean visible){this.visible = visible;}
+    public void setVisible(boolean visible){
+        this.visible = visible;
+        if (this.isVisible()) addToArrayList();
+    }
 
     public void setQuietlyToggled(boolean toggled) {
         if (this.toggled == toggled) return;

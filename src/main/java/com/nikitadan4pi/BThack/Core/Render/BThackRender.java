@@ -1,5 +1,6 @@
 package com.nikitadan4pi.BThack.Core.Render;
 
+import com.nikitadan4pi.BThack.Core.Client.ModuleList;
 import com.nikitadan4pi.BThack.Core.Render.Box.BThackBoxRender;
 import com.nikitadan4pi.BThack.Core.Render.Line.BThackLineRender;
 import com.nikitadan4pi.BThack.Core.Render.Utils.*;
@@ -136,6 +137,30 @@ public final class BThackRender implements Mc {
         draw();
     }
 
+    public static void drawRoundedRectOld(float x1, float y1, float x2, float y2, float radius, int color) {
+        float[] rgba = ColorUtils.hashCodeToRGBA(color);
+        Matrix4f matrix = BThackMatrix.peek().getPositionMatrix();
+        BThackRenderUtils.resetShader();
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+        float[][] map = new float[][]{new float[]{x2 - radius, y2 - radius, radius}, new float[]{x2 - radius, y1 + radius, radius}, new float[]{x1 + radius, y1 + radius, radius}, new float[]{x1 + radius, y2 - radius, radius}};
+        for (int i = 0; i < 4; i++) {
+            float[] current = map[i];
+            double rad = current[2];
+            for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / 10f)) {
+                float rad1 = (float) Math.toRadians(r);
+                float sin = (float) (Math.sin(rad1) * rad);
+                float cos = (float) (Math.cos(rad1) * rad);
+                bufferBuilder.vertex(matrix, current[0] + sin, current[1] + cos, 0.0F).color(rgba[0], rgba[1], rgba[2], rgba[3]);
+            }
+            float rad1 = (float) Math.toRadians((360 / 4d + i * 90d));
+            float sin = (float) (Math.sin(rad1) * rad);
+            float cos = (float) (Math.cos(rad1) * rad);
+            bufferBuilder.vertex(matrix, current[0] + sin, current[1] + cos, 0.0F).color(rgba[0], rgba[1], rgba[2], rgba[3]);
+        }
+        BThackRenderUtils.drawNoReset(bufferBuilder.end());
+    }
+
     public static void drawRoundedRectWithOutline(float x1, float y1, float x2, float y2, float radius, int color, int outlineColor, float depth) {
         BufferBuilder buffer = BThackRenderUtils.prepareToDraw(() -> Shaders.INSTANCE.ROUNDED_RECT_WITH_OUTLINE.shader.getProgram());
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
@@ -187,10 +212,10 @@ public final class BThackRender implements Mc {
         Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("scale", scale);
         Shaders.INSTANCE.XY_GRADIENT_ROUNDED_RECT_WITH_OUTLINE.setUniformValue("speed", speed);
 
-        buffer.vertex(matrix4f, x1 - 1, y1 - 1, 0);
-        buffer.vertex(matrix4f, x1 - 1, y2 + 1, 0);
-        buffer.vertex(matrix4f, x2 + 1, y2 + 1, 0);
-        buffer.vertex(matrix4f, x2 + 1, y1 - 1, 0);
+        buffer.vertex(matrix4f, x1 - 1, y1 - 1, 0).next();
+        buffer.vertex(matrix4f, x1 - 1, y2 + 1, 0).next();
+        buffer.vertex(matrix4f, x2 + 1, y2 + 1, 0).next();
+        buffer.vertex(matrix4f, x2 + 1, y1 - 1, 0).next();
 
         draw();
     }
@@ -438,11 +463,11 @@ public final class BThackRender implements Mc {
         buffer = BThackRenderUtils.prepareToDraw(GameRenderer::getPositionTexProgram);
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
         Matrix4f matrix4f = BThackRender.guiGraphics.getMatrices().peek().getPositionMatrix();
-        buffer.vertex(matrix4f, x1, y2, 0.0f).texture(0, 1);
-        buffer.vertex(matrix4f, x2, y2, 0.0f).texture(1, 1);
-        buffer.vertex(matrix4f, x2, y1, 0.0f).texture(1, 0);
-        buffer.vertex(matrix4f, x1, y1, 0.0f).texture(0, 0);
-        buffer.end();
+        buffer.vertex(matrix4f, x1, y2, 0.0f).texture(0, 1).next();
+        buffer.vertex(matrix4f, x2, y2, 0.0f).texture(1, 1).next();
+        buffer.vertex(matrix4f, x2, y1, 0.0f).texture(1, 0).next();
+        buffer.vertex(matrix4f, x1, y1, 0.0f).texture(0, 0).next();
+        //buffer.end();
         draw();
         buffer = null;
     }
@@ -533,5 +558,9 @@ public final class BThackRender implements Mc {
 
     public static DrawContext getGuiGraphics() {
         return guiGraphics;
+    }
+
+    public static void drawHudPlate(float x1, float y1, float x2, float y2) {
+        ModuleList.HUD.hudStyle.draw(x1, y1, x2, y2);
     }
 }

@@ -1,6 +1,7 @@
 package com.nikitadan4pi.BThack.mixins.render;
 
 import com.nikitadan4pi.BThack.Core.Client.ModuleList;
+import com.nikitadan4pi.BThack.api.Shader.Shaders;
 import com.nikitadan4pi.BThack.impl.Modules.RENDER.NoOverlay;
 import com.nikitadan4pi.BThack.impl.Modules.RENDER.NoRender;
 import net.minecraft.client.gui.DrawContext;
@@ -33,5 +34,10 @@ public abstract class MixinGameRenderer {
     public void modifyRenderNausea(DrawContext context, float distortionStrength, CallbackInfo ci) {
         if (ModuleList.noRender.isEnabled() && NoRender.nausea.getValue())
             ci.cancel();
+    }
+
+    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+    public void modifyTick(CallbackInfo ci) {
+        Shaders.INSTANCE.updateTime();
     }
 }

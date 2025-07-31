@@ -1,7 +1,6 @@
 package com.nikitadan4pi.BThack.api.GuiSystem;
 
 import com.nikitadan4pi.BTbot.api.Utils.Generate.NumberGenerator;
-import com.nikitadan4pi.BThack.BThack;
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
 import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
 import com.nikitadan4pi.BThack.api.GuiSystem.Screen.BThackScreen;
@@ -29,6 +28,10 @@ public class ScreenWidget extends BThackScreen {
 
     public void setParent(BThackScreen parent) {
         this.parent = parent;
+    }
+
+    public BThackScreen getParent() {
+        return parent;
     }
 
     @Override

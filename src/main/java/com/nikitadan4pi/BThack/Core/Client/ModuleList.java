@@ -222,25 +222,6 @@ public final class ModuleList {
         criticals = register(new Criticals());
         crystalAura = register(new CrystalAura());
         fastBow = register(new FastBow());
-        //customFont = register(new CustomFont());
-        discordRPC = register(new DiscordRPC());
-        fpsReducer = register(new FPSReducer());
-        HUD = register(new HUD());
-        hudEditor = register(new HudEditor());
-        memoryCleaner = register(new MemoryCleaner());
-
-        //COMBAT
-        aimBot = register(new AimBot());
-        autoArmor = register(new AutoArmor());
-        autoClicker = register(new AutoClicker());
-        autoOffhand = register(new AutoOffhand());
-        autoShield = register(new AutoShield());
-        autoSoup = register(new AutoSoup());
-        autoSword = register(new AutoSword());
-        autoTotemFall = register(new AutoTotemFall());
-        criticals = register(new Criticals());
-        crystalAura = register(new CrystalAura());
-        fastBow = register(new FastBow());
         fireBallAura = register(new FireBallAura());
         hitSound = register(new HitSound());
         holeFill = register(new HoleFill());
@@ -395,7 +376,7 @@ public final class ModuleList {
 
         Client.hudComponents.addAll(Arrays.asList(
                 new WatermarkComponent(),
-                //new CompanionComponent(),
+                new CompanionComponent(),
                 new FPSComponent(),
                 new CoordinatesComponent(),
                 new RotationComponent(),

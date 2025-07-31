@@ -1,5 +1,7 @@
 package com.nikitadan4pi.BThack.impl.HudComponents;
 
+import com.nikitadan4pi.BThack.Constants;
+import com.nikitadan4pi.BThack.Core.Render.BThackRender;
 import com.nikitadan4pi.BThack.api.HudComponent.HudComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Formatting;
@@ -16,22 +18,29 @@ public class TextRadarComponent extends HudComponent {
 
     @Override
     public void render() {
-        int y = 0;
-        int maxWidth = 0;
+        float y = 0;
+        float maxWidth = 0;
+        int count = 0;
+
+        if (width > 0 && height > 0)
+            BThackRender.drawHudPlate(getX(), getY(), getX() + width, getY() + height);
+
         for (PlayerEntity player : mc.world.getPlayers()) {
             if (player.getDisplayName().getString().equals(mc.player.getDisplayName().getString())) continue;
-            String text = player.getDisplayName().getString() + " " + Formatting.GRAY + "[" + Formatting.WHITE + decimal.format(player.distanceTo(mc.player)) + "m." + Formatting.GRAY + "]";
+            String text = player.getDisplayName().getString() + " " + Formatting.GRAY + "[" + Formatting.WHITE + Constants.DECIMAL_FORMAT.format(player.distanceTo(mc.player)) + "m." + Formatting.GRAY + "]";
 
-            drawText(text, (int) getX(), (int) getY() + y);
+            BThackRender.drawString(text, (int) getX() + 3, (int) (getY() + y + 3), ArrayListComponent.INSTANCE.getArrayColor(count), true);
 
 
-            if (maxWidth < mc.textRenderer.getWidth(text)) {
-                maxWidth = mc.textRenderer.fontHeight;
+            float textWidth = mc.textRenderer.getWidth(text);
+            if (textWidth > maxWidth) {
+                maxWidth = textWidth;
             }
-            y += mc.textRenderer.fontHeight + 1;
+            y += mc.textRenderer.fontHeight + 5;
+            count++;
         }
 
-        this.width = maxWidth;
-        this.height = y;
+        width = maxWidth > 0 ? (maxWidth + 6) : 0;
+        height = y;
     }
 }
