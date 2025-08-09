@@ -51,7 +51,7 @@ BThack это беспланый ПВЕ чит клиент с открытым 
 <details>
     <summary>How do I change the language BThack uses?</summary>
 
-  > Use the settings in the `Language` module, which is under the CLIENT category. <p>
+  > Use the settings in the `ClientSetting` module, which is under the CLIENT category. <p>
   > **There are languages to choose from:** EN, RU, PL.
 </details>
 
@@ -68,4 +68,4 @@ BThack это беспланый ПВЕ чит клиент с открытым 
 </details>
 
 ## Support
-If you have a bug or want to suggest a feature, create an issue on Github or contact me through the [Discord](https://discord.gg/YmGUCFYRtG) server.
+If you have a bug or want to suggest a feature, create an issue on Github.
