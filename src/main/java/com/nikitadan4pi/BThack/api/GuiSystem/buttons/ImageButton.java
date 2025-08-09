@@ -15,7 +15,8 @@ public class ImageButton extends Button {
 
     @Override
     public void renderButton() {
-        drawPlate();
+        float animationDelta = getAnimationDelta();
+        drawPlate(animationDelta);
         BThackRender.drawTextureRect(texture, getCenterX() - getWidth() + 2, getCenterY() - getHeight() + 2, getCenterX() + getWidth() - 2, getCenterY() + getHeight() - 2);
     }
 }

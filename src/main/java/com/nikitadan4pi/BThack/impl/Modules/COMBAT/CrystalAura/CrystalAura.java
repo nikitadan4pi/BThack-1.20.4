@@ -36,7 +36,6 @@ import java.util.stream.Stream;
 @Deprecated
 public class CrystalAura extends Module {
 
-    public static ModeSetting page;
 
     //---------Place---------//
     public static NumberSetting placeDelay;
@@ -99,43 +98,42 @@ public class CrystalAura extends Module {
                 false
         );
 
-        page = new ModeSetting("Page", this, Arrays.asList("Interact", "Misc", "Render"));
 
         //---------Place---------//
-        placeDelay = new NumberSetting("Place Delay", this, 1, 0, 10, true, () -> page.getValue().equals("Interact"));
-        placeRange = new NumberSetting("Place Range", this, 4, 2, 7, false, () -> page.getValue().equals("Interact"));
-        placeMode = new ModeSetting("Place Mode", this, Arrays.asList("Client", "Packet"), () -> page.getValue().equals("Interact"));
+        placeDelay = new NumberSetting("Place Delay", this, 1, 0, 10, true);
+        placeRange = new NumberSetting("Place Range", this, 4, 2, 7, false);
+        placeMode = new ModeSetting("Place Mode", this, Arrays.asList("Client", "Packet", "Build", "Kissman"));
 
-        placeSwing = new BooleanSetting("Place Swing", this, false, () -> page.getValue().equals("Interact"));
-        pSwingMode = new ModeSetting("PSwingMode", this, Arrays.asList("Normal", "Spam"), () -> placeSwing.getValue() && page.getValue().equals("Interact"));
+        placeSwing = new BooleanSetting("Place Swing", this, false);
+        pSwingMode = new ModeSetting("PSwingMode", this, Arrays.asList("Normal", "Spam"), () -> placeSwing.getValue());
 
-        allowSwap = new BooleanSetting("Allow Swap", this, true, () -> page.getValue().equals("Misc"));
-        allowInventory = new BooleanSetting("Allow Inventory", this, true, () -> allowSwap.getValue() && page.getValue().equals("Misc"));
+        allowSwap = new BooleanSetting("Allow Swap", this, true);
+        allowInventory = new BooleanSetting("Allow Inventory", this, true, () -> allowSwap.getValue());
         //-----------------------//
 
         //---------Break---------//
-        breakDelay = new NumberSetting("Break Delay", this, 1, 0, 10, true, () -> page.getValue().equals("Interact"));
-        breakRange = new NumberSetting("Break Range", this, 4, 2, 7, false, () -> page.getValue().equals("Interact"));
-        breakMode = new ModeSetting("Break Mode", this, Arrays.asList("Client", "Packet"), () -> page.getValue().equals("Interact"));
-        breakAttempts = new NumberSetting("Break Attempts", this, 1, 1, 5, true, () -> page.getValue().equals("Interact"));
-        checkPlayers = new BooleanSetting("Check Players", this, true, () -> page.getValue().equals("Interact"));
+        breakDelay = new NumberSetting("Break Delay", this, 1, 0, 10, true);
+        breakRange = new NumberSetting("Break Range", this, 4, 2, 7, false);
+        breakMode = new ModeSetting("Break Mode", this, Arrays.asList("Client", "Packet", "Meme"));
+        breakAttempts = new NumberSetting("Break Attempts", this, 1, 1, 5, true);
+        checkPlayers = new BooleanSetting("Check Players", this, true);
 
-        breakSwing = new BooleanSetting("Break Swing", this, false, () -> page.getValue().equals("Misc"));
-        bSwingMode = new ModeSetting("BSwingMode", this, Arrays.asList("Normal", "Spam"), () -> page.getValue().equals("Misc"));
+        breakSwing = new BooleanSetting("Break Swing", this, false);
+        bSwingMode = new ModeSetting("BSwingMode", this, Arrays.asList("Normal", "Spam"));
         //-----------------------//
 
         //---------Logic---------//
-        crMode = new ModeSetting("CrMode", this, Arrays.asList("BreakPlace", "PlaceBreak"), () -> page.getValue().equals("Misc"));
-        ignoreWalls = new BooleanSetting("Ignore Walls", this, true, () -> page.getValue().equals("Misc"));
-        resetWait = new NumberSetting("Reset Wait", this, 20, 5, 60, true, () -> page.getValue().equals("Misc"));
+        crMode = new ModeSetting("CrMode", this, Arrays.asList("BreakPlace", "PlaceBreak"));
+        ignoreWalls = new BooleanSetting("Ignore Walls", this, true);
+        resetWait = new NumberSetting("Reset Wait", this, 20, 5, 60, true);
         checkTheSequence = new BooleanSetting("Check The Sequence", this, true);
 
-        rotate = new BooleanSetting("Rotate", this, true, () -> page.getValue().equals("Misc"));
-        rotateMode = new ModeSetting("Rotate Mode", this, Arrays.asList("Grim", "Packet", "Client", "None"), () -> rotate.getValue() && page.getValue().equals("Misc"));
-        postRotate = new BooleanSetting("Post Rotate", this, false, () -> rotate.getValue() && page.getValue().equals("Misc"));
-        rotateTo = new ModeSetting("Rotate To", this, Arrays.asList("All", "Place", "Break"), () -> rotate.getValue() && !rotateMode.getValue().equals("None") && page.getValue().equals("Misc"));
-        rotateMath = new BooleanSetting("Rotate Math", this, true, () -> rotate.getValue() && page.getValue().equals("Misc"));
-        rMathMode = new ModeSetting("RMath Mode", this, Arrays.asList("New", "Old"), () -> rotate.getValue() && rotateMath.getValue() && page.getValue().equals("Misc"));
+        rotate = new BooleanSetting("Rotate", this, true);
+        rotateMode = new ModeSetting("Rotate Mode", this, Arrays.asList("Grim", "Packet", "Client", "None"), () -> rotate.getValue());
+        postRotate = new BooleanSetting("Post Rotate", this, false, () -> rotate.getValue());
+        rotateTo = new ModeSetting("Rotate To", this, Arrays.asList("All", "Place", "Break"), () -> rotate.getValue() && !rotateMode.getValue().equals("None"));
+        rotateMath = new BooleanSetting("Rotate Math", this, true, () -> rotate.getValue());
+        rMathMode = new ModeSetting("RMath Mode", this, Arrays.asList("New", "Old"), () -> rotate.getValue() && rotateMath.getValue());
 
         filterMode = new ModeSetting("Filter", this, Arrays.asList("Combined", "Max Attack", "Min Self"));
         targetRange = new NumberSetting("Target Range", this, 4, 2, 7, false);
@@ -155,7 +153,6 @@ public class CrystalAura extends Module {
 
 
         initSettings(
-                page,
                 //---------Place---------//
                 placeDelay,
                 placeRange,
@@ -345,12 +342,8 @@ public class CrystalAura extends Module {
                     mc.interactionManager.attackEntity(mc.player, endCrystalEntity);
                     mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
                 }
-                case "Packet" -> {
-                    mc.interactionManager.syncSelectedSlot();
-                    mc.player.networkHandler.sendPacket(PlayerInteractEntityC2SPacket.attack(target, mc.player.isSneaking()));
-                    mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
-                    mc.player.resetLastAttackedTicks();
-                }
+                case "Packet" -> EntityUtils.leftClickEntity(endCrystalEntity, Hand.MAIN_HAND, true, false);
+                case "Meme" -> mc.interactionManager.attackEntity(mc.player, endCrystalEntity);
             }
             if (breakSwing.getValue()) {
                 switch (bSwingMode.getValue()) {
@@ -405,9 +398,8 @@ public class CrystalAura extends Module {
         for (BlockPos pos : getCrystalPositions()) {
             if (MathUtils.getDistance(mc.player.getPos(), pos.toCenterPos()) >= placeRange.getValue()) continue;
 
-            double targetDamage = CrystalUtils.calculateDamage(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, target);
-            double selfDamage = mc.player.getAbilities().creativeMode ? 0 : CrystalUtils.calculateDamage(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, mc.player);
-
+            double targetDamage = CrystalUtils.damageByCrystal(pos, (PlayerEntity) target, false, true);
+            double selfDamage = mc.player.getAbilities().creativeMode ? 0 : CrystalUtils.damageByCrystal(pos, mc.player, false, true);
             if (targetDamage < minDamage.getValue()) continue;
             if (selfDamage > maxSelfDmg.getValue()) continue;
 
@@ -449,6 +441,8 @@ public class CrystalAura extends Module {
         switch (placeMode.getValue()) {
             case "Client" -> mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, hitResult);
             case "Packet" -> mc.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, hitResult, 0));
+            case "Build" -> ItemUtils.useItemOnBlock(pos);
+            case "Kissman" -> EntityUtils.rightClickBlock(pos, Hand.MAIN_HAND, false, mc.player.getHorizontalFacing(), false);
         }
     }
 

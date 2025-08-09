@@ -170,6 +170,9 @@ public class ClickGuiScreen extends BThackScreen implements Mc {
                     return false;
                 }
             }
+            switch (activeButton.getId()){
+                case 1 -> widgetManage.addWidget(new ConfigsWidget());
+            }
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);

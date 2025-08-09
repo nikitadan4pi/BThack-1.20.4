@@ -34,6 +34,19 @@ public class SaveConfigWidget extends ScreenWidget {
     }
 
     @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        switch (activeButton.getId()){
+            case 2 -> {
+                try {
+                    ConfigSystem.saveConfigFile(getButtonFromId(1).getText());
+                } catch (IOException ignored) {}
+                close();
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
         drawPlate();
         super.render(context, mouseX, mouseY, partialTicks);

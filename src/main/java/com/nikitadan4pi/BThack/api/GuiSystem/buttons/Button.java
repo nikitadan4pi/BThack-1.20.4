@@ -1,5 +1,6 @@
 package com.nikitadan4pi.BThack.api.GuiSystem.buttons;
 
+import com.nikitadan4pi.BThack.Constants;
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
 import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
 import com.nikitadan4pi.BThack.api.Animation.Animation;
@@ -165,6 +166,23 @@ public class Button implements Mc {
     public Button withAction(Consumer<ButtonClickInfo> clickConsumer) {
         this.clickConsumer = clickConsumer;
         return this;
+    }
+
+    protected void drawPlate(float animationDelta) {
+        animationDelta *= 2;
+        if (!hovered && hoveredAnimation.getEase() >= 1) {
+            BThackRender.drawRoundedRectWithOutline(getCenterX() - width, getCenterY() - height, getCenterX() + width, getCenterY() + height, 10f, Constants.GUISYSTEM_BUTTON_RECT_COLOR, selected ? ColorUtils.rainbow(2) : -1, 1);
+        } else {
+            BThackRender.drawRoundedRectWithOutline(getCenterX() - width - animationDelta, getCenterY() - height - animationDelta, getCenterX() + width + animationDelta, getCenterY() + height + animationDelta, 10f, Constants.GUISYSTEM_BUTTON_RECT_COLOR, selected ? ColorUtils.rainbow(2) : -1, 1);
+
+            drawHoveredLight(animationDelta / 2);
+        }
+    }
+
+
+    protected void drawHoveredLight(float animationDelta) {
+        BThackRender.drawHorizontalGradientRect((int)(getCenterX() - (width * 0.8 * animationDelta)), getCenterY() + height - 4, getCenterX(), getCenterY() + height - 2, ColorUtils.TRANSPARENT, ColorUtils.integrateAlpha(Constants.GUISYSTEM_BUTTON_HOVERED_LIGHT_COLOR, (int) (animationDelta * 255)));
+        BThackRender.drawHorizontalGradientRect(getCenterX(), getCenterY() + height - 4, (int)(getCenterX() + (width * 0.8 * animationDelta)), getCenterY() + height - 2, ColorUtils.integrateAlpha(Constants.GUISYSTEM_BUTTON_HOVERED_LIGHT_COLOR, (int) (animationDelta * 255)), ColorUtils.TRANSPARENT);
     }
 
     public static Button of(int id, int x, int y, int width, int height, String text) {

@@ -32,7 +32,8 @@ public class ConfigsWidget extends ScreenWidget {
 
     private double maxYScroll;
 
-    private Animation configButtonsAnimation;
+    private Animation configButtonsAnimation = new Animation(Easing.BACK_IN_OUT, 1000);
+
     private boolean closing = false;
 
     private String errorMessage = "";
@@ -46,7 +47,6 @@ public class ConfigsWidget extends ScreenWidget {
     public void onDisplayed() {
         super.onDisplayed();
         refreshConfigs();
-        configButtonsAnimation = new Animation(Easing.BACK_IN_OUT, 1000);
         closing = false;
     }
 
@@ -171,6 +171,22 @@ public class ConfigsWidget extends ScreenWidget {
             } else button.setSelected(false);
         }
 
+        switch (activeButton.getId()){
+            case 1 -> loadCurrentConfig();
+            case 2 -> {
+                selectedConfig = null;
+                init();
+            }
+            case 3 -> {
+                close();
+                parent.widgetManage.addWidget(new SaveConfigWidget());
+            }
+            case 4 -> {
+                deleteCurrentConfig();
+                init();
+            }
+        }
+
         if (selectedConfig != null) {
             init();
         }
@@ -216,7 +232,7 @@ public class ConfigsWidget extends ScreenWidget {
 
         @Override
         public void renderButton() {
-            drawPlate();
+            drawPlate(getAnimationDelta());
 
             BThackRender.drawTextureRect(CONFIG_FILE, getCenterX() - textureSize, getCenterY() - getHeight() + 3, getCenterX() + textureSize + 3, getCenterY() + textureSize);
             BThackRender.drawString(getText(), getCenterX() - (mc.textRenderer.getWidth(getText()) / 2f), getCenterY() + (getHeight() - 3 - mc.textRenderer.fontHeight), -1, true);
