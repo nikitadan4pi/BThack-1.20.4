@@ -16,6 +16,7 @@ public class ClientSetting extends OneActionModule {
     public static BooleanSetting playStartMusic;
     public static BooleanSetting toggleSound;
     public static NumberSetting volume;
+    public static BooleanSetting movementFix;
 
     public ClientSetting(){
         super("Client Setting",
@@ -30,13 +31,15 @@ public class ClientSetting extends OneActionModule {
         playStartMusic = new BooleanSetting("Play Start Music", this, true);
         toggleSound = new BooleanSetting("ToggleSound", this, true);
         volume = new NumberSetting("Volume", this, 0.25, 0.1, 1, false);
+        movementFix = new BooleanSetting("Movement Fix", this, false);
 
         initSettings(
                 bthackMainMenu,
                 language,
                 playStartMusic,
                 toggleSound,
-                volume
+                volume,
+                movementFix
         );
     }
 }

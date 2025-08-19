@@ -28,6 +28,7 @@ public final class FileSystem {
         registerFolder("DefaultConfig", "/ActionBot");
         registerFolder("Wallpapers", "");
         registerFolder("Configs", "");
+        registerFolder("customGifs", "");
         registerFile("AutoAuthPasswords", "", "json");
         registerFile("VersionInfo", "", "json");
         registerFile("Prefix", "", "txt");

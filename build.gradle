@@ -11,10 +11,10 @@ plugins {
  */
 project.ext.withBaritone = WithBaritone.YES
 // Version under which BThack jar file will be created and customized
-project.ext.version = "devel-1.5"
+project.ext.version = "1.5"
 
 version = project.ext.version + (project.ext.withBaritone == WithBaritone.YES ? "" : "-NoBaritone")
-group = "com.ferra13671"
+group = "com.nikitadan4pi"
 
 void includeBaritone() {
     if (project.ext.withBaritone == WithBaritone.YES) {

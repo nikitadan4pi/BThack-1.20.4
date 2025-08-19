@@ -10,10 +10,15 @@ public enum RotateMode implements Mc {
     @SuppressWarnings("DataFlowIssue") PACKET(RotateUtils::packetRotate, () -> RotateUtils.packetRotate(mc.player.getYaw(), mc.player.getPitch())),
     PACKET2(RotateUtils::packetRotate, () -> {}),
     GRIM(GrimUtils::sendPreActionGrimPackets, GrimUtils::sendPostActionGrimPackets),
-    VANILLA((yaw, pitch) -> RotateUtils.rotate(yaw, pitch, 1), () -> {});
+    VANILLA((yaw, pitch) -> {
+        RotateUtils.pyaw = mc.player.getYaw();
+        RotateUtils.ppitch = mc.player.getPitch();
+        RotateUtils.rotate(yaw, pitch, 1);
+    }, () -> RotateUtils.rotate(RotateUtils.pyaw, RotateUtils.ppitch));
 
     private final BiConsumer<Float, Float> preRotate;
     private final Runnable postRotate;
+
 
     RotateMode(BiConsumer<Float, Float> preRotate, Runnable postRotate) {
         this.preRotate = preRotate;
@@ -27,4 +32,5 @@ public enum RotateMode implements Mc {
     public void postRotate() {
         postRotate.run();
     }
+
 }

@@ -22,6 +22,7 @@ public class WidgetManage implements Mc {
     }
 
     public void addWidget(ScreenWidget screenWidget) {
+        if(widgets.size() > 1) return;
         widgets.add(new WidgetInfo(screenWidget));
         screenWidget.setParent(parent);
         screenWidget.init();
