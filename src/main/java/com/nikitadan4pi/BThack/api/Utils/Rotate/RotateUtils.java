@@ -1,11 +1,17 @@
 package com.nikitadan4pi.BThack.api.Utils.Rotate;
 
 
+import com.ferra13671.MegaEvents.Base.EventSubscriber;
 import com.nikitadan4pi.BThack.Core.Client.ModuleList;
+import com.nikitadan4pi.BThack.api.Events.InputEvent;
 import com.nikitadan4pi.BThack.api.Interfaces.Mc;
 import com.nikitadan4pi.BThack.api.Managers.Managers;
+import com.nikitadan4pi.BThack.api.Utils.Grim.GrimUtils;
 import com.nikitadan4pi.BThack.api.Utils.Modules.NoRotateMathUtils;
+import com.nikitadan4pi.BThack.impl.Modules.CLIENT.ClientSetting;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -13,6 +19,25 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public final class RotateUtils implements Mc {
+
+    private static Entity rotation = null;
+    public static float pyaw;
+    public static float ppitch;
+
+    @EventSubscriber
+    public void onKeyboardTick(InputEvent.KeyInputEvent  e) {
+        if (rotation != null && mc.player != null
+                && ClientSetting.movementFix.getValue()) {
+            float forward = mc.player.input.movementForward;
+            float sideways = mc.player.input.movementSideways;
+            float delta = (mc.player.getYaw() - rotation.getYaw()) * MathHelper.RADIANS_PER_DEGREE;
+            float cos = MathHelper.cos(delta);
+            float sin = MathHelper.sin(delta);
+            mc.player.input.movementSideways = Math.round(sideways * cos - forward * sin);
+            mc.player.input.movementForward = Math.round(forward * cos + sideways * sin);
+        }
+    }
+
     public static void rotateToEntity(Entity target) {
         rotate(rotations(target)[0], rotations(target)[1]);
     }
@@ -36,6 +61,34 @@ public final class RotateUtils implements Mc {
         mc.player.lastYaw = yaw;
         mc.player.lastPitch = pitch;
         mc.player.lastOnGround = mc.player.onGround;
+        
+        rotation = new Entity(EntityType.PLAYER, mc.world) {
+            float pyaw = yaw;
+            float ppitch = pitch;
+            @Override
+            protected void initDataTracker() {}
+            @Override
+            protected void readCustomDataFromNbt(NbtCompound nbt) {}
+            @Override
+            protected void writeCustomDataToNbt(NbtCompound nbt) {}
+        };
+    }
+
+    public static void sendPreActionGrimPackets(float yaw, float pitch) {
+
+        GrimUtils.sendPreActionGrimPackets(yaw, pitch);
+        if(rotation == null){
+        rotation = new Entity(EntityType.PLAYER, mc.world) {
+            float pyaw = yaw;
+            float ppitch = pitch;
+            @Override
+            protected void initDataTracker() {}
+            @Override
+            protected void readCustomDataFromNbt(NbtCompound nbt) {}
+            @Override
+            protected void writeCustomDataToNbt(NbtCompound nbt) {}
+        };
+        }
     }
 
     public static float[] rotations(Entity entity) {

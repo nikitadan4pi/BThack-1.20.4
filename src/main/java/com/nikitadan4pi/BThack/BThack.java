@@ -20,6 +20,7 @@ import com.nikitadan4pi.BThack.api.Social.SocialManager;
 import com.nikitadan4pi.BThack.api.Social.SocialManagers;
 import com.nikitadan4pi.BThack.api.SoundSystem.Sounds;
 import com.nikitadan4pi.BThack.api.SoundSystem.yaw.TinySound;
+import com.nikitadan4pi.BThack.impl.HudComponents.CompanionComponent;
 import com.nikitadan4pi.BThack.impl.Modules.PLAYER.ActionBot.Config.ActionBotConfig;
 import com.ferra13671.MegaEvents.Base.IEventBus;
 import com.ferra13671.MegaEvents.Base.UpdatedEventBus;
@@ -210,7 +211,7 @@ public final class BThack implements ClientModInitializer, Mc {
     private void checkForOutdate() {
         try {
             initLog("outdate check");
-            String text = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/Ferra13671/BThack/" + MC_VERSION + "/currentVersion.txt").openStream())).readLine();
+            String text = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/nikitadan4pi/BThack-1.20.4/currentVersion.txt").openStream())).readLine();
             if (!text.equals(VERSION)) {
                 versionInfo.setOutdated(true);
                 versionInfo.setNewVersion(text);

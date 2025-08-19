@@ -12,6 +12,7 @@ import com.nikitadan4pi.BThack.api.Utils.*;
 import com.nikitadan4pi.BThack.api.Utils.Modules.AimBotUtils;
 import com.nikitadan4pi.BThack.api.Utils.Grim.GrimUtils;
 import com.ferra13671.MegaEvents.Base.EventSubscriber;
+import com.nikitadan4pi.BThack.api.Utils.Rotate.RotateMode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -102,7 +103,7 @@ public class CrystalAura extends Module {
         //---------Place---------//
         placeDelay = new NumberSetting("Place Delay", this, 1, 0, 10, true);
         placeRange = new NumberSetting("Place Range", this, 4, 2, 7, false);
-        placeMode = new ModeSetting("Place Mode", this, Arrays.asList("Client", "Packet", "Build", "Kissman"));
+        placeMode = new ModeSetting("Place Mode", this, Arrays.asList("Client", "Packet", "Build", "Kissman", "KissPacket"));
 
         placeSwing = new BooleanSetting("Place Swing", this, false);
         pSwingMode = new ModeSetting("PSwingMode", this, Arrays.asList("Normal", "Spam"), () -> placeSwing.getValue());
@@ -443,6 +444,7 @@ public class CrystalAura extends Module {
             case "Packet" -> mc.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, hitResult, 0));
             case "Build" -> ItemUtils.useItemOnBlock(pos);
             case "Kissman" -> EntityUtils.rightClickBlock(pos, Hand.MAIN_HAND, false, mc.player.getHorizontalFacing(), false);
+            case "KissPacket" -> EntityUtils.rightClickBlock(pos, Hand.MAIN_HAND, true, mc.player.getHorizontalFacing(), false);
         }
     }
 
@@ -459,10 +461,10 @@ public class CrystalAura extends Module {
     public void rotatePre(float yaw, float pitch) {
         switch (rotateMode.getValue()) {
             case "Grim" -> {
-                GrimUtils.sendPreActionGrimPackets(yaw, pitch);
-                mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(yaw, pitch, mc.player.onGround));
+                RotateMode.GRIM.preRotate(yaw, pitch);
+                RotateMode.GRIM.postRotate();
             }
-            case "Packet" -> mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(yaw, pitch, mc.player.onGround));
+            case "Packet" -> RotateMode.PACKET2.preRotate(yaw, pitch);
             case "Client" -> {
                 mc.player.setYaw(yaw);
                 mc.player.setPitch(pitch);

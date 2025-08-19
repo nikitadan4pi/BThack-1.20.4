@@ -6,6 +6,7 @@ import com.nikitadan4pi.BThack.Core.Client.ModuleList;
 import com.nikitadan4pi.BThack.Core.Render.BThackRender;
 import com.nikitadan4pi.BThack.Core.Render.Utils.ColorUtils;
 import com.nikitadan4pi.BThack.api.Gui.Screen.MainMenu.SelectWallpaper.SelectWallpaperScreen;
+import com.nikitadan4pi.BThack.api.Gui.Widget.Account.AccountsWidget;
 import com.nikitadan4pi.BThack.api.GuiSystem.BThackScreens;
 import com.nikitadan4pi.BThack.api.GuiSystem.BThackWidgets;
 import com.nikitadan4pi.BThack.api.Managers.Managers;
@@ -93,6 +94,8 @@ public class BThackMainMenuScreen extends BThackScreen {
 
         buttons.add(Button.of(7, 104, mc.getWindow().getScaledHeight() - 12, 38, 10, "ClickGui"));
 
+        buttons.add(Button.of(8, 182, mc.getWindow().getScaledHeight() - 12, 38, 10, "Accounts"));
+
         buttons.forEach(button -> button.outline = true);
 
         if (firstEntered) {
@@ -122,6 +125,9 @@ public class BThackMainMenuScreen extends BThackScreen {
                 });
                 //BThackScreens.CLICK_GUI.setInstanceScreen(() -> BThackMainMenuScreen.this);
                 mc.setScreen(BThackScreens.CLICK_GUI);
+            }
+            case 8 -> {
+                if(widgetManage.widgets.size() == 0) widgetManage.addWidget(new AccountsWidget());
             }
         }
 

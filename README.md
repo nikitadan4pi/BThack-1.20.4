@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/Ferra13671/BThack/1.21.1/src/main/resources/assets/bthack/bthacklogo.png" style="width: 69%" alt="logo">
+    <img src="https://raw.githubusercontent.com/Ferra13671/BThack/1.21.1/src/main/resources/assets/bthack/textures/bthacklogo.png" style="width: 69%" alt="logo">
 </p>
 
 ![All Downloads](https://img.shields.io/github/downloads/nikitadan4pi/BThack-1.20.4/total)
@@ -15,6 +15,8 @@ The cheat client also has a plugin system that allows you to add your own module
 
 
 BThack это беспланый ПВЕ чит клиент с открытым исходным кодом созданный для игры на анархических серверах. Включает в себя более 150 модулей для улучшения вашего игрового опыта. Данный клиент имеет систему плагинов, позволяющюю добовлять свои модули, команды, категории и Худ компоненты, менять визуальные темы и многое другое.
+
+## Client have some problems when eorking in TLauncher, olease, use Prism ot TLlegacy
 
 ## My Discord server
 <div align="center">

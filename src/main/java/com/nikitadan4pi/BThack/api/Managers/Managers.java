@@ -18,4 +18,5 @@ public class Managers {
     public static final SettingsManager SETTINGS_MANAGER = new SettingsManager();
     public static final MemoryManager MEMORY_MANAGER = new MemoryManager();
     public static final TravelChangeManager TRAVEL_CHANGE_MANAGER = new TravelChangeManager();
+    public static final AccountManager ACCOUNT_MANAGER = new AccountManager();
 }

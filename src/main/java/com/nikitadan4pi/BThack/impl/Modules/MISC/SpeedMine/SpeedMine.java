@@ -20,6 +20,7 @@ import com.nikitadan4pi.BThack.api.Managers.managers.Setting.Settings.NumberSett
 import com.nikitadan4pi.BThack.api.Social.SocialManagers;
 import com.nikitadan4pi.BThack.api.Utils.BlockUtils;
 import com.nikitadan4pi.BThack.api.Utils.Grim.GrimUtils;
+import com.nikitadan4pi.BThack.api.Utils.InventoryUtils;
 import com.nikitadan4pi.BThack.api.Utils.KeyboardUtils;
 import com.nikitadan4pi.BThack.api.Utils.MathUtils;
 import com.nikitadan4pi.BThack.api.Utils.Modules.AimBotUtils;
@@ -255,10 +256,15 @@ public class SpeedMine extends Module {
     private void checkDestroyDelta() {
         int bestSlot = AutoTool.getBestSlot(mc.world.getBlockState(currentBreakingBlock.blockPos), inventoryMode.getValue() ? 36 : 9);
         ItemStack stack = mc.player.getInventory().getStack(mc.player.getInventory().selectedSlot);
+        int oldSlot = mc.player.getInventory().selectedSlot;
         if (bestSlot != -1) {
-            stack = mc.player.getInventory().getStack(bestSlot);
-        }
 
+            if (bestSlot < 9) {
+                InventoryUtils.swapItem(bestSlot);
+            } else {
+                InventoryUtils.swapItemOnInventory(oldSlot, bestSlot);
+            }
+        }
         destroyDelta = mc.world.getBlockState(currentBreakingBlock.blockPos).calcBlockBreakingDelta(mc.player, mc.player.getWorld(), currentBreakingBlock.blockPos);
 
     }

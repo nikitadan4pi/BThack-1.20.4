@@ -50,6 +50,7 @@ public final class ConfigSystem {
             saveModules();
             saveFrames();
             saveClans();
+            Managers.ACCOUNT_MANAGER.save();
             BlockLists.forEach(blockList -> {
                 try {
                     blockList.saveInFile();
@@ -104,6 +105,7 @@ public final class ConfigSystem {
             loadActionBotTasks();
             loadPrefix();
             loadAutoAuthPasswords();
+            Managers.ACCOUNT_MANAGER.load();
         } catch (IOException e) {
             BThack.error(e.getMessage());
         }
@@ -350,7 +352,7 @@ public final class ConfigSystem {
     /** Will need to remove this in the next versions */
     @Deprecated
     private static void loadOldHudInfo() throws IOException {
-        ConfigUtils.loadFromJson("HUD", "Modules", jsonObject -> {
+        ConfigUtils.loadFromJson("HUD", "`Modules`", jsonObject -> {
             for (Module module : Client.getModulesInCategory(Categories.HUD)) {
                 HudComponent hudComponent = (HudComponent) module;
                 JsonObject settingsObject = jsonObject.get("Settings").getAsJsonObject();
