@@ -211,7 +211,7 @@ public final class BThack implements ClientModInitializer, Mc {
     private void checkForOutdate() {
         try {
             initLog("outdate check");
-            String text = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/nikitadan4pi/BThack-1.20.4/currentVersion.txt").openStream())).readLine();
+            String text = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/nikitadan4pi/BThack-1.20.4/" + MC_VERSION + "/currentVersion.txt").openStream())).readLine();
             if (!text.equals(VERSION)) {
                 versionInfo.setOutdated(true);
                 versionInfo.setNewVersion(text);
